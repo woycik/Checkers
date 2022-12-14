@@ -12,7 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 
 
-public class Main extends Application {
+public class LaunchApp extends Application {
     @Override
     public void start(Stage stage) {
         final BorderPane borderPane=new BorderPane();
