@@ -1,11 +1,12 @@
 package View;
 
+import Model.Pawn;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 public class BoardGui extends GridPane{
     Pane pane[][];
-    BoardGui() {
+    public BoardGui() {
         super();
         this.setGridLinesVisible(true);
         this.setGermanBoard();
@@ -49,7 +50,7 @@ public class BoardGui extends GridPane{
     }
 
     public void setStartingPosition(){
-        pane[1][0].getChildren().add(new Pawn(30,10,10,Color.rgb(0,0,0)));
+
     }
 
 
