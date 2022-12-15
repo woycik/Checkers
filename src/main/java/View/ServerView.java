@@ -1,5 +1,6 @@
 package View;
 
+import Controller.Server;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -11,8 +12,14 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-public class ServerView extends Stage {
-    public ServerView() {
+public class ServerView {
+    Server server;
+
+    public ServerView(Server server) {
+        this.server = server;
+    }
+
+    public void init(Stage stage) {
         final BorderPane borderPane=new BorderPane();
 
         //select mode
@@ -47,14 +54,14 @@ public class ServerView extends Stage {
             }
         });
 
-        setOnCloseRequest(new EventHandler<WindowEvent>() {
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent e) {
                 System.exit(0);
             }
         });
-        setTitle("Checkers server");
-        setScene(scene);
-        show();
+        stage.setTitle("Checkers server");
+        stage.setScene(scene);
+        stage.show();
     }
 }
