@@ -1,8 +1,7 @@
 package View;
 
 import Controller.Server;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,16 +9,17 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class ServerView {
     Server server;
+    Stage stage;
 
-    public ServerView(Server server) {
+    public ServerView(Server server, Stage stage) {
         this.server = server;
+        this.stage = stage;
     }
 
-    public void init(Stage stage) {
+    public void init() {
         final BorderPane borderPane=new BorderPane();
 
         //select mode
@@ -28,9 +28,9 @@ public class ServerView {
         Button englishButton = new Button("English mode");
 
         //adding labels and buttons into gridpane
-        Label text=new Label("Choose mode: ");
+        Label chooseModeLabel = new Label("Choose mode: ");
         GridPane menu = new GridPane();
-        menu.add(text,1,0);
+        menu.add(chooseModeLabel,1,0);
         menu.add(polishButton,0,1);
         menu.add(russianButton,1,1);
         menu.add(englishButton,2,1);
@@ -46,22 +46,42 @@ public class ServerView {
         borderPane.setCenter(menu);
         final Scene scene = new Scene(borderPane, 500, 500);
 
-        polishButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event){
-                BoardGui boardGui =new BoardGui();
-                scene.setRoot(boardGui);
-            }
+        polishButton.setOnAction(event -> {
+            final BorderPane borderPane13 = new BorderPane();
+            Label serverStatusLabel = new Label("Selected Polish Checkers. Waiting for players to connect.");
+            serverStatusLabel.setId("serverStatusLabel");
+            borderPane13.setCenter(serverStatusLabel);
+            scene.setRoot(borderPane13);
+            server.prepareGame("Polish");
         });
 
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent e) {
-                System.exit(0);
-            }
+        russianButton.setOnAction(event -> {
+            final BorderPane borderPane12 = new BorderPane();
+            Label serverStatusLabel = new Label("Selected Russian Checkers. Waiting for players to connect.");
+            serverStatusLabel.setId("serverStatusLabel");
+            borderPane12.setCenter(serverStatusLabel);
+            scene.setRoot(borderPane12);
+            server.prepareGame("Russian");
         });
+
+        englishButton.setOnAction(event -> {
+            final BorderPane borderPane1 = new BorderPane();
+            Label serverStatusLabel = new Label("Selected English Checkers. Waiting for players to connect.");
+            serverStatusLabel.setId("serverStatusLabel");
+            borderPane1.setCenter(serverStatusLabel);
+            scene.setRoot(borderPane1);
+            server.prepareGame("English");
+        });
+
+        stage.setOnCloseRequest(e -> Platform.exit());
         stage.setTitle("Checkers server");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void bothPlayersConnected() {
+        Scene scene = stage.getScene();
+        Label serverStatusLabel = (Label)scene.lookup("#serverStatusLabel");
+        serverStatusLabel.setText("Both players connected. Starting game.");
     }
 }
