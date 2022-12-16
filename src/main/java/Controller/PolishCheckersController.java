@@ -24,8 +24,8 @@ public class PolishCheckersController extends GameController {
     private boolean correctMove=false;
 
 
-    public PolishCheckersController(Board board) {
-        this.board=board;//stwóż klienta i jakis enum na to czy moze grac
+    public PolishCheckersController() {
+        this.board=new Board(10,4);//stwóż klienta i jakis enum na to czy moze grac
         field=board.getField();
     }
     public boolean play(int x, int y,int i, int j,String color) {
