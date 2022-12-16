@@ -2,38 +2,36 @@ package Controller;
 
 import Model.Board;
 import Model.Field;
-import Model.Pawn;
 
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
 public class PolishCheckersController extends GameController {
-    private Board board;
-    private Field[][] field;
-
-    private ArrayList<Field> blackPawns=new ArrayList<>();
-
-    private ArrayList<Field> whitePawns=new ArrayList<>();
-    private ArrayList<Field> available=new ArrayList<>(); //lista pionków które mogą wykonać bicie
-    private ArrayList<Field> capturePossible=new ArrayList<>();//lista pól w które może wskoczyc pionek w ramach bicia
-    private int size=10;
+    private Field[][] fields;
+    private ArrayList<Field> blackPawns;
+    private ArrayList<Field> whitePawns;
+    private ArrayList<Field> available; //lista pionków które mogą wykonać bicie
+    private ArrayList<Field> capturePossible; //lista pól w które może wskoczyc pionek w ramach bicia
+    private final int size = 10;
     private boolean captureHasBeenDone=false;
-    private int numberOfWhitePawns=20;
-    private int numberOfBlackPawns=20;
-    private boolean correctMove=false;
-
+    private int numberOfWhitePawns = 20;
+    private int numberOfBlackPawns = 20;
 
     public PolishCheckersController() {
-        this.board=new Board(10,4);//stwóż klienta i jakis enum na to czy moze grac
-        field=board.getField();
+        super(10, 4);
+        this.fields = board.getFields();
+        this.blackPawns = new ArrayList<>();
+        this.whitePawns = new ArrayList<>();
+        this.available = new ArrayList<>();
+        this.capturePossible = new ArrayList<>();
     }
+
     public boolean play(int x, int y,int i, int j,String color) {
-        this.setMyPaws();                                                       //poznajemy położenie pionków
+        this.setMyPawns();                                                       //poznajemy położenie pionków
         if(color.equals("BLACK")){this.captureFieldList(blackPawns);}           //zapisz czarne pola z których mozliwe jest bicie
         else{this.captureFieldList(whitePawns);}                                //zapisz biale pola z których mozliwe jest bicie
-        if(this.isCapturePossible()){                                           //sprawdz czy mozliwe jest bicie dla (bialego/czarnego)
-
+        if(this.isCapturePossible()) {                                           //sprawdz czy mozliwe jest bicie dla (bialego/czarnego)
             this.getAvailableFields(x,y);                                       //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
             this.capturePawn(x,y,i,j);                                          //czy doszlo do wykonania bicia?
             if(captureHasBeenDone) {
@@ -59,16 +57,16 @@ public class PolishCheckersController extends GameController {
     //zwraca fields na których możliwe jest bicie
 
     //do listy myPaws przypisuje (jak narazie) wszytkie pionki o kolorze czarnym.
-    public void setMyPaws(){
+    public void setMyPawns(){
         for(int i=0;i<size;i++){
             for(int j=0;j<size;j++) {
-                if (field[i][j].getPawn() != null) {
+                if (fields[i][j].getPawn() != null) {
 
-                    if (field[i][j].getPawn().getStoneColour().equals(Color.rgb(0, 0, 0))) {
-                        blackPawns.add(field[i][j]);
+                    if (fields[i][j].getPawn().getStoneColour().equals(Color.rgb(0, 0, 0))) {
+                        blackPawns.add(fields[i][j]);
                     }
-                    else if (field[i][j].getPawn().getStoneColour().equals(Color.rgb(255, 255, 255))){
-                      whitePawns.add(field[i][j]);
+                    else if (fields[i][j].getPawn().getStoneColour().equals(Color.rgb(255, 255, 255))){
+                      whitePawns.add(fields[i][j]);
                     }
                 }
             }
@@ -81,23 +79,23 @@ public class PolishCheckersController extends GameController {
             int y = boardField.getY();
             if ((x + 2 < size) && (x - 2) > 0 && (y - 2) > 0 && (y + 2) < size) {
 
-                if (field[x + 1][y + 1].isOccupied() && !field[x + 2][y + 2].isOccupied()) {
-                    if (field[x + 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                if (fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
+                    if (fields[x + 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                         capturePossible.add(boardField);
                     }
                 }
-                if (field[x + 1][y - 1].isOccupied() && !field[x + 2][y - 2].isOccupied()) {
-                    if (field[x + 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                if (fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
+                    if (fields[x + 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                         capturePossible.add(boardField);
                     }
                 }
-                if (field[x - 1][y - 1].isOccupied() && !field[x - 2][y - 2].isOccupied()) {
-                    if (field[x - 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                if (fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
+                    if (fields[x - 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                         capturePossible.add(boardField);
                     }
                 }
-                if (field[x - 1][y + 1].isOccupied() && !field[x - 2][y + 2].isOccupied()) {
-                    if (field[x - 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                if (fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
+                    if (fields[x - 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                         capturePossible.add(boardField);
                     }
                 }
@@ -117,32 +115,32 @@ public class PolishCheckersController extends GameController {
     //Jesleli isCapturePossible==true => lista możliwych bić dla wybranego pionka, po zakoczeniu ustaw jaka sflage czy cos
     public void getAvailableFields(int x,int y) {
 
-        if(capturePossible.contains(field[x][y])) {
+        if(capturePossible.contains(fields[x][y])) {
             if(x+2<size && y+2<size){
-                if (field[x + 1][y + 1].isOccupied() && !field[x + 2][y + 2].isOccupied()) {
-                    if (field[x + 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
-                        available.add(field[x + 2][y + 2]);
+                if (fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
+                    if (fields[x + 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                        available.add(fields[x + 2][y + 2]);
                     }
                 }
                 }
             if(x+2<size && y-2>0){
-                if (field[x + 1][y - 1].isOccupied() && !field[x + 2][y - 2].isOccupied()) {
-                    if (field[x + 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
-                        available.add(field[x + 2][y - 2]);
+                if (fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
+                    if (fields[x + 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                        available.add(fields[x + 2][y - 2]);
                     }
                 }
                 }
             if((x-2)>0 && (y-2)>0){
-                if (field[x - 1][y - 1].isOccupied() && !field[x - 2][y - 2].isOccupied()) {
-                    if (field[x - 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
-                        available.add(field[x - 2][y - 2]);
+                if (fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
+                    if (fields[x - 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                        available.add(fields[x - 2][y - 2]);
                     }
                 }
                 }
             if((x-2)>0 && (y+2)<size) {
-                if (field[x - 1][y + 1].isOccupied() && !field[x - 2][y + 2].isOccupied()) {
-                    if (field[x - 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
-                        available.add(field[x - 2][y + 2]);
+                if (fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
+                    if (fields[x - 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                        available.add(fields[x - 2][y + 2]);
                     }
                 }
             }
@@ -151,30 +149,30 @@ public class PolishCheckersController extends GameController {
 
     public void fieldsWhereCaptureIsPossibleAgain(int x,int y){
         if(x+2<size && y+2<size){
-            if (field[x + 1][y + 1].isOccupied() && !field[x + 2][y + 2].isOccupied()) {
-                if (field[x + 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
-                    available.add(field[x + 2][y + 2]);
+            if (fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
+                if (fields[x + 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    available.add(fields[x + 2][y + 2]);
                 }
             }
         }
         if(x+2<size && y-2>0){
-            if (field[x + 1][y - 1].isOccupied() && !field[x + 2][y - 2].isOccupied()) {
-                if (field[x + 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
-                    available.add(field[x + 2][y - 2]);
+            if (fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
+                if (fields[x + 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    available.add(fields[x + 2][y - 2]);
                 }
             }
         }
         if((x-2)>0 && (y-2)>0){
-            if (field[x - 1][y - 1].isOccupied() && !field[x - 2][y - 2].isOccupied()) {
-                if (field[x - 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
-                    available.add(field[x - 2][y - 2]);
+            if (fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
+                if (fields[x - 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    available.add(fields[x - 2][y - 2]);
                 }
             }
         }
         if((x-2)>0 && (y+2)<size) {
-            if (field[x - 1][y + 1].isOccupied() && !field[x - 2][y + 2].isOccupied()) {
-                if (field[x - 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
-                    available.add(field[x - 2][y + 2]);
+            if (fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
+                if (fields[x - 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    available.add(fields[x - 2][y + 2]);
                 }
             }
         }
@@ -184,8 +182,8 @@ public class PolishCheckersController extends GameController {
     //sprawdzenie czy zwykły ruch jest możliwy
     @Override
     public boolean isMoveLegal(int i,int j, int m, int n) {
-        if(field[i][j].getPawn()!=null) {
-            if (!field[m][n].isOccupied()) {
+        if(fields[i][j].getPawn()!=null) {
+            if (!fields[m][n].isOccupied()) {
                 return (i + 1 == m && (j + 1 == n || j - 1 == n)) || (i - 1 == m && (j + 1 == n || j - 1 == n));
             }
         }
@@ -207,9 +205,9 @@ public class PolishCheckersController extends GameController {
 
     //zmiana lokalizacji pionka
     public boolean movePawn(int x,int y,int m,int n) {
-        if (field[x][y].isOccupied()) {
-            field[m][n].setPawn(field[x][y].getPawn());
-            field[x][y].setPawn(null);
+        if (fields[x][y].isOccupied()) {
+            fields[m][n].setPawn(fields[x][y].getPawn());
+            fields[x][y].setPawn(null);
             return true;
         }
         return false;
@@ -217,11 +215,11 @@ public class PolishCheckersController extends GameController {
 
     //bicie
     public void capturePawn(int x,int y,int m,int n){
-            if(available.contains(field[m][n])){
-                field[m][n].setPawn(field[x][y].getPawn());
-                field[x][y].setPawn(null);
-                field[(x+m)/2][(y+n)/2].setPawn(null);
-                if(field[m][n].getColor().equals(Color.rgb(0,0,0))){
+            if(available.contains(fields[m][n])){
+                fields[m][n].setPawn(fields[x][y].getPawn());
+                fields[x][y].setPawn(null);
+                fields[(x+m)/2][(y+n)/2].setPawn(null);
+                if(fields[m][n].getColor().equals(Color.rgb(0,0,0))){
                     numberOfBlackPawns--;
                 }
                 else{

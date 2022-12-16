@@ -9,7 +9,10 @@ public abstract class GameController {
     public abstract boolean play(int x, int y,int i, int j,String color);
     public abstract boolean isMoveLegal(int i, int j, int m, int n);
     public abstract int getPawnRows();
+    public GameController(int boardSize, int pawnRows) {
+        this.board = new Board(boardSize, pawnRows);
+    }
     public int getBoardSize() {
-        return board.size;
+        return board.getSize();
     }
 }

@@ -2,13 +2,11 @@ package Controller;
 
 import Model.Board;
 import Model.Field;
-import Model.Pawn;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
 public class EnglishCheckersController extends GameController {
-    private Board board;
     private Field[][] field;
 
     private ArrayList<Field> blackPawns=new ArrayList<>();
@@ -20,12 +18,11 @@ public class EnglishCheckersController extends GameController {
     private boolean captureHasBeenDone=false;
     private int numberOfWhitePawns=12;
     private int numberOfBlackPawns=12;
-    private boolean correctMove=false;
 
 
     public EnglishCheckersController() {
-        this.board=new Board(8,3);//stwóż klienta i jakis enum na to czy moze grac
-        field=board.getField();
+        super(8, 3);
+        field=board.getFields();
     }
     public boolean play(int x, int y,int i, int j,String color) {
         this.setMyPaws();                                                       //poznajemy położenie pionków

@@ -12,7 +12,7 @@ import java.net.Socket;
 public class ClientThread extends Thread {
     int port;
     ClientView view;
-    public Socket socket;
+    Socket socket;
     PrintWriter out;
     BufferedReader in;
 
@@ -36,14 +36,17 @@ public class ClientThread extends Thread {
                 if(line.equals("ping")) { // if server sends ping, respond with pong
                     out.println("pong");
                 }
-            } while(!line.split(" ")[0].equals("start"));
+            } while(!line.split(";")[0].equals("start"));
 
             // arguments to displaying board
             String[] gameArgs = line.split(";");
-            int boardSize = Integer.parseInt(gameArgs[0]);
-            int rows = Integer.parseInt(gameArgs[1]);
+            int boardSize = Integer.parseInt(gameArgs[1]);
+            int pawnRows = Integer.parseInt(gameArgs[2]);
 
-            Platform.runLater( () -> view.showBoard());
+            System.out.println("Board size: " + boardSize);
+            System.out.println("Number of rows with pawns: " + pawnRows);
+
+            Platform.runLater( () -> view.showBoard(boardSize, pawnRows));
         }
         catch(IOException ioe) {
             Platform.runLater( () -> view.connectionFailed());
@@ -65,6 +68,17 @@ public class ClientThread extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
             return "Error connecting with server";
+        }
+    }
+
+    public void closeSocket() {
+        try {
+            if(socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
         }
     }
 }

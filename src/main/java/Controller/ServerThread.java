@@ -8,11 +8,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ServerThread extends Thread {
     int port;
     ServerView view;
     GameController gameController;
+    ServerSocket serverSocket;
     Socket firstPlayerSocket;
     Socket secondPlayerSocket;
 
@@ -28,7 +30,8 @@ public class ServerThread extends Thread {
     public void run() {
         System.out.println("Server is listening on port " + port);
 
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+        try {
+            serverSocket = new ServerSocket(port);
             do
             {
                 if(!isConnected(firstPlayerSocket)) {
@@ -51,9 +54,13 @@ public class ServerThread extends Thread {
             // sending message to start displaying board
             int boardSize = gameController.getBoardSize();
             int pawnRows = gameController.getPawnRows();
-            String gameArguments = "start " + boardSize + " " + pawnRows;
+            String gameArguments = "start;" + boardSize + ";" + pawnRows;
             firstOut.println(gameArguments);
             secondOut.println(gameArguments);
+            System.out.println("Sent game start arguments to both players");
+        }
+        catch(SocketException se) {
+            System.out.println("Server socket closed");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -74,6 +81,17 @@ public class ServerThread extends Thread {
         }
         catch(Exception e) {
             return false;
+        }
+    }
+
+    public void closeServerSocket() {
+        try {
+            if(serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
         }
     }
 }
