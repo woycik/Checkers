@@ -23,8 +23,8 @@ public class EnglishCheckersController extends GameController {
     private boolean correctMove=false;
 
 
-    public EnglishCheckersController(Board board) {
-        this.board=board;//stwóż klienta i jakis enum na to czy moze grac
+    public EnglishCheckersController() {
+        this.board=new Board(8,3);//stwóż klienta i jakis enum na to czy moze grac
         field=board.getField();
     }
     public boolean play(int x, int y,int i, int j,String color) {
