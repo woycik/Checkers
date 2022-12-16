@@ -49,10 +49,9 @@ public class ServerThread extends Thread {
             PrintWriter secondOut = new PrintWriter(secondPlayerSocket.getOutputStream(), true);
 
             // sending message to start displaying board
-            int boardSize = 8; // TODO: get from gameController
-            int pawnRows = 2; // TODO: get from gameController
+            int boardSize = gameController.getBoardSize();
+            int pawnRows = gameController.getPawnRows();
             String gameArguments = "start " + boardSize + " " + pawnRows;
-
             firstOut.println(gameArguments);
             secondOut.println(gameArguments);
         }

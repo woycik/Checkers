@@ -233,6 +233,10 @@ public class PolishCheckersController extends GameController {
             }
     }
 
+    @Override
+    public int getPawnRows() {
+        return 4;
+    }
 
     //sprawdzenie czy białe wygrały
     public boolean isWhiteWinner(){

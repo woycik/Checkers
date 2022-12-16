@@ -3,8 +3,8 @@ package Model;
 import static javafx.scene.paint.Color.rgb;
 
 public class Board {
-    Field[][] field;
-    int size;
+    public Field[][] field;
+    public int size;
 
 
     public Board(Field[][] field) {

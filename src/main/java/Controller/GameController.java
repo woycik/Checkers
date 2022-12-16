@@ -7,4 +7,8 @@ public abstract class GameController {
     Checkers checkers;
     public abstract boolean play(int x, int y,int i, int j,String color);
     public abstract boolean isMoveLegal(int i, int j, int m, int n);
+    public abstract int getPawnRows();
+    public int getBoardSize() {
+        return checkers.board.size;
+    }
 }

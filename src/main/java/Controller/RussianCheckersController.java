@@ -192,6 +192,11 @@ public class RussianCheckersController extends GameController {
         return false;
     }
 
+    @Override
+    public int getPawnRows() {
+        return 3;
+    }
+
 
     //Jesli zwykły ruch nie został wykonany, sprawdx czy można wykonać bicie
 
