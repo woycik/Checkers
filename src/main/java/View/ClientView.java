@@ -1,26 +1,49 @@
 package View;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
+import Controller.Client;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
-public class ClientView extends Stage {
-    public ClientView() {
-        final BorderPane borderPane=new BorderPane();
+public class ClientView {
+    Client client;
+    Stage stage;
 
-        Label text = new Label("Waiting for the other player");
-        borderPane.setCenter(text);
+    public ClientView(Client client, Stage stage) {
+        this.client = client;
+        this.stage = stage;
+    }
+    public void init() {
+        final BorderPane borderPane = new BorderPane();
+
+        Label clientStatusLabel = new Label("Trying to connect with server.");
+        clientStatusLabel.setId("clientStatusLabel");
+        borderPane.setCenter(clientStatusLabel);
 
         final Scene scene = new Scene(borderPane, 500, 500);
-        setTitle("Checkers client");
-        setScene(scene);
-        show();
+        stage.setOnCloseRequest(e -> Platform.exit());
+        stage.setTitle("Checkers client");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void waitingForOpponent() {
+        Scene scene = stage.getScene();
+        Label clientStatusLabel = (Label)scene.lookup("#clientStatusLabel");
+        clientStatusLabel.setText("Connected succesfully. Waiting for the oponent.");
+    }
+
+    public void connectionFailed() {
+        Scene scene = stage.getScene();
+        Label clientStatusLabel = (Label)scene.lookup("#clientStatusLabel");
+        clientStatusLabel.setText("Could not connect with the server. Please try again later.");
+    }
+
+    public void showBoard() {
+        Scene scene = stage.getScene();
+        BoardGui boardGui = new BoardGui();
+        scene.setRoot(boardGui);
     }
 }
