@@ -41,9 +41,9 @@ public class ClientView {
         clientStatusLabel.setText("Could not connect with the server. Please try again later.");
     }
 
-    public void showBoard() {
+    public void showBoard(int boardSize, int pawnRows) {
         Scene scene = stage.getScene();
-        BoardGui boardGui = new BoardGui();
-        scene.setRoot(boardGui);
+        BoardView boardView = new BoardView(boardSize, pawnRows);
+        scene.setRoot(boardView);
     }
 }

@@ -1,18 +1,13 @@
 package Controller;
 
-import Model.Board;
 import Model.Field;
-import Model.Pawn;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
 public class EnglishCheckersController extends GameController {
-    private Board board;
-    private Field[][] field;
-
+    private Field[][] fields;
     private ArrayList<Field> blackPawns=new ArrayList<>();
-
     private ArrayList<Field> whitePawns=new ArrayList<>();
     private ArrayList<Field> capturePossible=new ArrayList<>();//lista pól w które może wskoczyc pionek w ramach bicia
     private int size=8;
@@ -22,8 +17,8 @@ public class EnglishCheckersController extends GameController {
 
 
     public EnglishCheckersController() {
-        this.board=new Board(10,4);
-        field=board.getField();
+        super(8, 3);
+        fields=board.getFields();
     }
     public boolean play(int x, int y,int i, int j,String color) {
         this.setMyPaws();                                                                       //poznajemy położenie pionków
@@ -36,7 +31,7 @@ public class EnglishCheckersController extends GameController {
                     this.capturePawn(x, y, i, j); //jak tak to zbij
                     this.capturePossible.clear();
                     if (this.canICaptureOneMoreTime(i, j)) {
-                        capturePossible.add(field[i][j]);
+                        capturePossible.add(fields[i][j]);
                         dokonczBicie = true;
                         return false;
                     }
@@ -54,7 +49,7 @@ public class EnglishCheckersController extends GameController {
                 this.capturePawn(x, y, i, j); //jak tak to zbij
                 this.capturePossible.clear();
                 if (this.canICaptureOneMoreTime(i, j)) {
-                    capturePossible.add(field[i][j]);
+                    capturePossible.add(fields[i][j]);
                     dokonczBicie = true;
                     return false;
                 }
@@ -77,13 +72,13 @@ public class EnglishCheckersController extends GameController {
     public void setMyPaws(){
         for(int i=0;i<size;i++){
             for(int j=0;j<size;j++) {
-                if (field[i][j].getPawn() != null) {
+                if (fields[i][j].getPawn() != null) {
 
-                    if (field[i][j].getPawn().getStoneColour().equals(Color.rgb(0, 0, 0))) {
-                        blackPawns.add(field[i][j]);
+                    if (fields[i][j].getPawn().getStoneColour().equals(Color.rgb(0, 0, 0))) {
+                        blackPawns.add(fields[i][j]);
                     }
-                    else if (field[i][j].getPawn().getStoneColour().equals(Color.rgb(255, 255, 255))){
-                        whitePawns.add(field[i][j]);
+                    else if (fields[i][j].getPawn().getStoneColour().equals(Color.rgb(255, 255, 255))){
+                        whitePawns.add(fields[i][j]);
                     }
                 }
             }
@@ -95,31 +90,31 @@ public class EnglishCheckersController extends GameController {
             int x = boardField.getX();
             int y = boardField.getY();
 
-            if(!field[x][y].getPawn().isQueen()) {
+            if(!fields[x][y].getPawn().isQueen()) {
                 if ((x + 2 < size) && (y + 2) < size) {
-                    if (field[x + 1][y + 1].isOccupied() && !field[x + 2][y + 2].isOccupied()) {
-                        if (field[x + 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                    if (fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
+                        if (fields[x + 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                             capturePossible.add(boardField);
                         }
                     }
                 }
                 if ((x + 2 < size) && (y - 2) > 0) {
-                    if (field[x + 1][y - 1].isOccupied() && !field[x + 2][y - 2].isOccupied()) {
-                        if (field[x + 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                    if (fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
+                        if (fields[x + 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                             capturePossible.add(boardField);
                         }
                     }
                 }
                 if ((x - 2) > 0 && (y - 2) > 0) {
-                    if (field[x - 1][y - 1].isOccupied() && !field[x - 2][y - 2].isOccupied()) {
-                        if (field[x - 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                    if (fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
+                        if (fields[x - 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                             capturePossible.add(boardField);
                         }
                     }
                 }
                 if ((x - 2) > 0 && (y + 2) < size) {
-                    if (field[x - 1][y + 1].isOccupied() && !field[x - 2][y + 2].isOccupied()) {
-                        if (field[x - 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                    if (fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
+                        if (fields[x - 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                             capturePossible.add(boardField);
                         }
                     }
@@ -129,10 +124,10 @@ public class EnglishCheckersController extends GameController {
 
                 int i=1;
                 while(x+i+1<size && y+1+i<size){
-                    if(field[x+i][y+i].getColor()!=field[x][y].getColor()){
-                        if(!field[x+i+1][y+i+1].isOccupied()){
-                            if(capturePossible.contains(field[x][y])) {
-                                capturePossible.add(field[x][y]);
+                    if(fields[x+i][y+i].getColor()!=fields[x][y].getColor()){
+                        if(!fields[x+i+1][y+i+1].isOccupied()){
+                            if(capturePossible.contains(fields[x][y])) {
+                                capturePossible.add(fields[x][y]);
                             }
                         }
                     }
@@ -143,10 +138,10 @@ public class EnglishCheckersController extends GameController {
                 }
                 i=1;
                 while(x+i+1<size && y-1-i>0){
-                    if(field[x+i][y-i].getPawn().getStoneColour()!=field[x][y].getPawn().getStoneColour()){
-                        if(!field[x+i+1][y-i-1].isOccupied()){
-                            if(!capturePossible.contains(field[x][y])) {
-                                capturePossible.add(field[x][y]);
+                    if(fields[x+i][y-i].getPawn().getStoneColour()!=fields[x][y].getPawn().getStoneColour()){
+                        if(!fields[x+i+1][y-i-1].isOccupied()){
+                            if(!capturePossible.contains(fields[x][y])) {
+                                capturePossible.add(fields[x][y]);
                             }
                         }
                     }
@@ -157,10 +152,10 @@ public class EnglishCheckersController extends GameController {
                 }
                 i=1;
                 while(x-i-1>0 && y-1-i>0){
-                    if(field[x-i][y-i].getPawn().getStoneColour()!=field[x][y].getPawn().getStoneColour()){
-                        if(!field[x-i-1][y-i-1].isOccupied()){
-                            if(!capturePossible.contains(field[x][y])) {
-                                capturePossible.add(field[x][y]);
+                    if(fields[x-i][y-i].getPawn().getStoneColour()!=fields[x][y].getPawn().getStoneColour()){
+                        if(!fields[x-i-1][y-i-1].isOccupied()){
+                            if(!capturePossible.contains(fields[x][y])) {
+                                capturePossible.add(fields[x][y]);
                             }
                         }
                     }
@@ -171,10 +166,10 @@ public class EnglishCheckersController extends GameController {
                 }
                 i=1;
                 while(x-i-1>0 && y+1+i<size){
-                    if(field[x-i][y+i].getColor()!=field[x][y].getColor()){
-                        if(!field[x-i-1][y+i+1].isOccupied()){
-                            if(!capturePossible.contains(field[x][y])) {
-                                capturePossible.add(field[x][y]);
+                    if(fields[x-i][y+i].getColor()!=fields[x][y].getColor()){
+                        if(!fields[x-i-1][y+i+1].isOccupied()){
+                            if(!capturePossible.contains(fields[x][y])) {
+                                capturePossible.add(fields[x][y]);
                             }
                         }
                     }
@@ -201,14 +196,14 @@ public class EnglishCheckersController extends GameController {
     //Sprawdzam czy mozliwe jest bicie dla podanych lokalizacji
 
     public boolean checkCapture(int x, int y, int m, int n){
-        if(capturePossible.contains(field[x][y])){
-            if(!field[x][y].getPawn().isQueen()){
-                if(Math.abs(x-m)==2 && Math.abs(y-n)==2 && field[(x+m)/2][(y+n)/2].isOccupied() && !field[m][n].isOccupied()){
-                    return field[(x + m) / 2][(y + n) / 2].getColor() != field[x][y].getColor();
+        if(capturePossible.contains(fields[x][y])){
+            if(!fields[x][y].getPawn().isQueen()){
+                if(Math.abs(x-m)==2 && Math.abs(y-n)==2 && fields[(x+m)/2][(y+n)/2].isOccupied() && !fields[m][n].isOccupied()){
+                    return fields[(x + m) / 2][(y + n) / 2].getColor() != fields[x][y].getColor();
                 }
             }
             else{
-                if(!field[m][n].isOccupied()){
+                if(!fields[m][n].isOccupied()){
                     int diffX;
                     int diffY;
 
@@ -218,28 +213,28 @@ public class EnglishCheckersController extends GameController {
                     if(diffY==diffX || -diffY==diffX){
                         if(diffY>0 && diffX>0){
                             for(int i=1;i<diffX;i++){
-                                if(field[x+i][y+1].getColor()!=field[x][y].getColor()){
+                                if(fields[x+i][y+1].getColor()!=fields[x][y].getColor()){
                                     count++;
                                 }
                             }
                         }
                         if(diffY>0 && diffX<0){
                             for(int i=1;i<Math.abs(diffX);i++){
-                                if(field[x-i][y+i].getColor()!=field[x][y].getColor()){
+                                if(fields[x-i][y+i].getColor()!=fields[x][y].getColor()){
                                     count++;
                                 }
                             }
                         }
                         if(diffY<0 && diffX<0){
                             for(int i=1;i<Math.abs(diffX);i++){
-                                if(field[x-i][y-i].getColor()!=field[x][y].getColor()){
+                                if(fields[x-i][y-i].getColor()!=fields[x][y].getColor()){
                                     count++;
                                 }
                             }
                         }
                         if(diffY<0 && diffX>0){
                             for(int i=1;i<diffX;i++){
-                                if(field[x-i][y+1].getColor()!=field[x][y].getColor()){
+                                if(fields[x-i][y+1].getColor()!=fields[x][y].getColor()){
                                     count++;
                                 }
                             }
@@ -255,31 +250,31 @@ public class EnglishCheckersController extends GameController {
 
 
     public boolean canICaptureOneMoreTime(int x,int y){
-        if(!field[x][y].getPawn().isQueen()) {
+        if(!fields[x][y].getPawn().isQueen()) {
             if (x + 2 < size && y + 2 < size) {
-                if (field[x + 1][y + 1].isOccupied() && !field[x + 2][y + 2].isOccupied()) {
-                    if (field[x + 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                if (fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
+                    if (fields[x + 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                         return true;
                     }
                 }
             }
             if (x + 2 < size && y - 2 > 0) {
-                if (field[x + 1][y - 1].isOccupied() && !field[x + 2][y - 2].isOccupied()) {
-                    if (field[x + 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                if (fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
+                    if (fields[x + 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                         return true;
                     }
                 }
             }
             if ((x - 2) > 0 && (y - 2) > 0) {
-                if (field[x - 1][y - 1].isOccupied() && !field[x - 2][y - 2].isOccupied()) {
-                    if (field[x - 1][y - 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                if (fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
+                    if (fields[x - 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                         return true;
                     }
                 }
             }
             if ((x - 2) > 0 && (y + 2) < size) {
-                if (field[x - 1][y + 1].isOccupied() && !field[x - 2][y + 2].isOccupied()) {
-                    if (field[x - 1][y + 1].getPawn().getStoneColour() != field[x][y].getPawn().getStoneColour()) {
+                if (fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
+                    if (fields[x - 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
                         return true;
                     }
                 }
@@ -288,8 +283,8 @@ public class EnglishCheckersController extends GameController {
         else{
             int i=1;
             while(x+i+1<size && y+1+i<size){
-                if(field[x+i][y+i].getColor()!=field[x][y].getColor()){
-                    if(!field[x+i+1][y+i+1].isOccupied()){
+                if(fields[x+i][y+i].getColor()!=fields[x][y].getColor()){
+                    if(!fields[x+i+1][y+i+1].isOccupied()){
                         return true;
                     }
                 }
@@ -300,8 +295,8 @@ public class EnglishCheckersController extends GameController {
             }
             i=1;
             while(x+i+1<size && y-1-i>0){
-                if(field[x+i][y-i].getPawn().getStoneColour()!=field[x][y].getPawn().getStoneColour()){
-                    if(!field[x+i+1][y-i-1].isOccupied()){
+                if(fields[x+i][y-i].getPawn().getStoneColour()!=fields[x][y].getPawn().getStoneColour()){
+                    if(!fields[x+i+1][y-i-1].isOccupied()){
                         return true;
                     }
                 }
@@ -312,8 +307,8 @@ public class EnglishCheckersController extends GameController {
             }
             i=1;
             while(x-i-1>0 && y-1-i>0){
-                if(field[x-i][y-i].getPawn().getStoneColour()!=field[x][y].getPawn().getStoneColour()){
-                    if(!field[x-i-1][y-i-1].isOccupied()){
+                if(fields[x-i][y-i].getPawn().getStoneColour()!=fields[x][y].getPawn().getStoneColour()){
+                    if(!fields[x-i-1][y-i-1].isOccupied()){
                         return true;
                     }
                 }
@@ -324,8 +319,8 @@ public class EnglishCheckersController extends GameController {
             }
             i=1;
             while(x-i-1>0 && y+1+i<size){
-                if(field[x-i][y+i].getColor()!=field[x][y].getColor()){
-                    if(!field[x-i-1][y+i+1].isOccupied()){
+                if(fields[x-i][y+i].getColor()!=fields[x][y].getColor()){
+                    if(!fields[x-i-1][y+i+1].isOccupied()){
                         return true;
 
                     }
@@ -344,9 +339,9 @@ public class EnglishCheckersController extends GameController {
     //sprawdzenie czy zwykły ruch jest możliwy i dla damki tez
     @Override
     public boolean isMoveLegal(int x,int y, int m, int n) {
-        if(field[x][y].getPawn()!=null) {
-            if (!field[m][n].isOccupied()) {
-                if (!field[x][y].getPawn().isQueen()) {
+        if(fields[x][y].getPawn()!=null) {
+            if (!fields[m][n].isOccupied()) {
+                if (!fields[x][y].getPawn().isQueen()) {
                     return (x + 1 == m && (y + 1 == n || y - 1 == n)) || (x - 1 == m && (y + 1 == n || y - 1 == n));
 
                 } else {                                //do tej sytuacji nie dojdzie jesli będzie jakiekolwiek bicie, tzn wystarczy sprawdzic cze pola miedzy poczatkiem a konczem są puste.
@@ -358,28 +353,28 @@ public class EnglishCheckersController extends GameController {
                     if (diffY == diffX || -diffY == diffX) {
                         if (diffY > 0 && diffX > 0) {
                             for (int i = 1; i < diffX; i++) {
-                                if (field[x + i][y + i].isOccupied()) {
+                                if (fields[x + i][y + i].isOccupied()) {
                                     return false;
                                 }
                             }
                         }
                         if (diffY > 0 && diffX < 0) {
                             for (int i = 1; i < Math.abs(diffX); i++) {
-                                if (field[x - i][y + i].isOccupied()) {
+                                if (fields[x - i][y + i].isOccupied()) {
                                     return false;
                                 }
                             }
                         }
                         if (diffY < 0 && diffX < 0) {
                             for (int i = 1; i < Math.abs(diffX); i++) {
-                                if (field[x - i][y - i].isOccupied()) {
+                                if (fields[x - i][y - i].isOccupied()) {
                                     return false;
                                 }
                             }
                         }
                         if (diffY < 0 && diffX > 0) {
                             for (int i = 1; i < diffX; i++) {
-                                if (field[x + i][y - i].isOccupied()) {
+                                if (fields[x + i][y - i].isOccupied()) {
                                     return false;
                                 }
                             }
@@ -398,9 +393,9 @@ public class EnglishCheckersController extends GameController {
 
     //zmiana lokalizacji pionka, juz nie trzeba sprawdzac poprawnosci
     public boolean movePawn(int x,int y,int m,int n) {
-        if (field[x][y].isOccupied()) {
-            field[m][n].setPawn(field[x][y].getPawn());
-            field[x][y].setPawn(null);
+        if (fields[x][y].isOccupied()) {
+            fields[m][n].setPawn(fields[x][y].getPawn());
+            fields[x][y].setPawn(null);
             return true;
         }
         return false;
@@ -408,12 +403,12 @@ public class EnglishCheckersController extends GameController {
 
     //bicie i dla damek tez
     public void capturePawn(int x,int y,int m,int n){           //pozycje mn dla pionka zostaly zaakceptowane przez poprzednia funkcje wiec mozna wykonac bez sprawdzenia
-        if(capturePossible.contains(field[x][x])) {
-            if (field[x][y].getPawn().isQueen()) {
-                field[m][n].setPawn(field[x][y].getPawn());
-                field[x][y].setPawn(null);
-                field[(x + m) / 2][(y + n) / 2].setPawn(null);
-                if (field[m][n].getColor().equals(Color.rgb(0, 0, 0))) {
+        if(capturePossible.contains(fields[x][x])) {
+            if (fields[x][y].getPawn().isQueen()) {
+                fields[m][n].setPawn(fields[x][y].getPawn());
+                fields[x][y].setPawn(null);
+                fields[(x + m) / 2][(y + n) / 2].setPawn(null);
+                if (fields[m][n].getColor().equals(Color.rgb(0, 0, 0))) {
                     numberOfBlackPawns--;
                 } else {
                     numberOfWhitePawns--;
@@ -421,7 +416,7 @@ public class EnglishCheckersController extends GameController {
                 capturePossible.clear();
             }
             else {
-                field[m][n].setPawn(field[x][y].getPawn());
+                fields[m][n].setPawn(fields[x][y].getPawn());
                 int diffX;
                 int diffY;
 
@@ -432,32 +427,32 @@ public class EnglishCheckersController extends GameController {
                 if (diffY == diffX || -diffY == diffX) {
                     if (diffY > 0 && diffX > 0) {
                         for (int i = 1; i < diffX; i++) {
-                            if (field[x + i][y + i].isOccupied()) {
-                                field[x+i][y+i].setPawn(null);
+                            if (fields[x + i][y + i].isOccupied()) {
+                                fields[x+i][y+i].setPawn(null);
                                 break;
                             }
                         }
                     }
                     if (diffY > 0 && diffX < 0) {
                         for (int i = 1; i < Math.abs(diffX); i++) {
-                            if (field[x - i][y + i].isOccupied()) {
-                                field[x-i][y+i].setPawn(null);
+                            if (fields[x - i][y + i].isOccupied()) {
+                                fields[x-i][y+i].setPawn(null);
                                 break;
                             }
                         }
                     }
                     if (diffY < 0 && diffX < 0) {
                         for (int i = 1; i < Math.abs(diffX); i++) {
-                            if (field[x - i][y - i].isOccupied()) {
-                                field[x-i][y-i].setPawn(null);
+                            if (fields[x - i][y - i].isOccupied()) {
+                                fields[x-i][y-i].setPawn(null);
                                 break;
                             }
                         }
                     }
                     if (diffY < 0 && diffX > 0) {
                         for (int i = 1; i < diffX; i++) {
-                            if (field[x + i][y - i].isOccupied()) {
-                                field[x+i][y-i].setPawn(null);
+                            if (fields[x + i][y - i].isOccupied()) {
+                                fields[x+i][y-i].setPawn(null);
                                 break;
                             }
                         }

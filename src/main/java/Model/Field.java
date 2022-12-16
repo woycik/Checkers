@@ -5,12 +5,9 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class Field {
-
     private Pawn pawn;
-    private int x;
-    private int y;
-
-
+    private final int x;
+    private final int y;
 
     public Field(int x, int y) {
         this.x = x;
@@ -18,18 +15,16 @@ public class Field {
         this.pawn = null;
     }
 
+    public int getX() {
+        return x;
+    }
 
-    public int getX() { return x; }
-
-
-    public int getY() { return y; }
-
+    public int getY() {
+        return y;
+    }
 
     public boolean isOccupied() {
-        if (pawn == null) return false;
-        else {
-            return true;
-        }
+        return pawn != null;
     }
 
     public Color getColor(){
@@ -41,7 +36,7 @@ public class Field {
     }
 
     public void setPawn(Pawn pawn){
-        this.pawn=pawn;
+        this.pawn = pawn;
     }
 
     public void addToPossibleFields(Pawn pawn){

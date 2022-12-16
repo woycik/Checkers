@@ -21,14 +21,7 @@ public class Client extends Application {
 
     @Override
     public void stop() {
-        try {
-            if(thread.socket != null) {
-                thread.socket.close();
-            }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+        thread.closeSocket();
     }
 
     public static void main(String[] args) {
