@@ -10,11 +10,10 @@ public class RussianCheckersController extends GameController {
     private ArrayList<Field> blackPawns;
     private ArrayList<Field> whitePawns;
     private ArrayList<Field> capturePossible; //lista pól w które może wskoczyc pionek w ramach bicia
-    private int size=8;
+    private final int size=8;
     boolean dokonczBicie=false;
     private int numberOfWhitePawns=12;
     private int numberOfBlackPawns=12;
-
 
     public RussianCheckersController() {
         super(8, 3);

@@ -7,19 +7,22 @@ import java.util.ArrayList;
 
 public class EnglishCheckersController extends GameController {
     private Field[][] fields;
-    private ArrayList<Field> blackPawns=new ArrayList<>();
-    private ArrayList<Field> whitePawns=new ArrayList<>();
-    private ArrayList<Field> capturePossible=new ArrayList<>();//lista pól w które może wskoczyc pionek w ramach bicia
-    private int size=8;
+    private ArrayList<Field> blackPawns;
+    private ArrayList<Field> whitePawns;
+    private ArrayList<Field> capturePossible; //lista pól w które może wskoczyc pionek w ramach bicia
+    private final int size=8;
     boolean dokonczBicie=false;
     private int numberOfWhitePawns=12;
     private int numberOfBlackPawns=12;
 
-
     public EnglishCheckersController() {
         super(8, 3);
         fields=board.getFields();
+        blackPawns = new ArrayList<>();
+        whitePawns = new ArrayList<>();
+        capturePossible = new ArrayList<>();
     }
+
     public boolean play(int x, int y,int i, int j,String color) {
         this.setMyPaws();                                                                       //poznajemy położenie pionków
         if(!dokonczBicie) {

@@ -12,7 +12,7 @@ public class PolishCheckersController extends GameController {
     private ArrayList<Field> blackPawns;
     private ArrayList<Field> whitePawns;
     private ArrayList<Field> capturePossible; //lista pól w które może wskoczyc pionek w ramach bicia
-    private int size=10;
+    private final int size=10;
     boolean dokonczBicie=false;
     private int numberOfWhitePawns=20;
     private int numberOfBlackPawns=20;
@@ -20,9 +20,9 @@ public class PolishCheckersController extends GameController {
     public PolishCheckersController() {
         super(10, 4);
         fields=board.getFields();
-        blackPawns = new ArrayList<Field>();
-        whitePawns = new ArrayList<Field>();
-        capturePossible = new ArrayList<Field>();
+        blackPawns = new ArrayList<>();
+        whitePawns = new ArrayList<>();
+        capturePossible = new ArrayList<>();
     }
 
     public boolean play(int x, int y,int i, int j,String color) {
