@@ -1,6 +1,7 @@
 package View;
 
 import Controller.Client;
+import Model.Board;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -10,6 +11,7 @@ import javafx.stage.Stage;
 public class ClientView {
     Client client;
     Stage stage;
+    BoardView boardView;
 
     public ClientView(Client client, Stage stage) {
         this.client = client;
@@ -41,9 +43,13 @@ public class ClientView {
         clientStatusLabel.setText("Could not connect with the server. Please try again later.");
     }
 
-    public void showBoard(int boardSize, int pawnRows) {
+    public void showBoard(int boardSize) {
         Scene scene = stage.getScene();
-        BoardView boardView = new BoardView(boardSize, pawnRows);
+        BoardView boardView = new BoardView(boardSize);
         scene.setRoot(boardView);
+    }
+
+    public void updateBoard(Board board) {
+        boardView.update(board);
     }
 }

@@ -1,7 +1,11 @@
 package Controller;
 
+import Model.Board;
+import Model.Field;
+import Model.Pawn;
 import View.ClientView;
 import javafx.application.Platform;
+import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,7 +50,18 @@ public class ClientThread extends Thread {
             System.out.println("Board size: " + boardSize);
             System.out.println("Number of rows with pawns: " + pawnRows);
 
-            Platform.runLater( () -> view.showBoard(boardSize, pawnRows));
+            Board board = new Board(boardSize, pawnRows);
+            // mock board creation
+            Field field = new Field(0, 0);
+            field.setPawn(new Pawn(Color.BLACK));
+            board.getFields()[0][0] = field;
+            // end of mock board creation
+
+            // TODO: fill the board with an actual state
+
+            Platform.runLater( () -> view.showBoard(boardSize));
+
+            // TODO: game loop with Platform.runLater( () -> view.updateBoard(board));
         }
         catch(IOException ioe) {
             Platform.runLater( () -> view.connectionFailed());

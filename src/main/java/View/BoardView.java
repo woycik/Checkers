@@ -1,12 +1,13 @@
 package View;
 
+import Model.Board;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 public class BoardView extends GridPane{
     Pane[][] pane;
 
-    public BoardView(int boardSize, int pawnRows) {
+    public BoardView(int boardSize) {
         super();
         this.setGridLinesVisible(true);
 
@@ -35,5 +36,9 @@ public class BoardView extends GridPane{
                 this.add(pane[i][j], i, j);
             }
         }
+    }
+
+    public void update(Board board) {
+        // TODO: update view with an acutal board state
     }
 }
