@@ -5,6 +5,10 @@ import static javafx.scene.paint.Color.rgb;
 public class Board {
     private Field[][] fields;
 
+    public Board(int size) {
+        this.fields = new Field[size][size];
+    }
+
     public Board(int size, int pawnRows) {
         this.fields = new Field[size][size];
         for(int i = 0; i < size; i++) {

@@ -58,11 +58,13 @@ public class ServerThread extends Thread {
 
             // sending message to start displaying board
             int boardSize = gameController.getBoardSize();
-            int pawnRows = gameController.getPawnRows();
-            String gameArguments = "start;" + boardSize + ";" + pawnRows;
+            String gameArguments = "start;" + boardSize;
             firstOut.println(gameArguments);
             secondOut.println(gameArguments);
-            System.out.println("Sent game start arguments to both players");
+            System.out.println("Sent game start message to both players");
+
+            Thread.sleep(2000);
+            firstOut.println("win;White");
 
             String clientMessage = "";
             String boardString;
@@ -76,13 +78,13 @@ public class ServerThread extends Thread {
                 }
 
                 if(!clientMessage.isEmpty()) {
-                    String[] split = clientMessage.split(";");
-                    if(split[0].equals("move")) { // player wants to make a move
+                    String[] messageSplit = clientMessage.split(";");
+                    if(messageSplit[0].equals("move")) { // player wants to make a move
                         // move;x1;y1;x2;y2
-                        x1 = Integer.parseInt(split[1]);
-                        y1 = Integer.parseInt(split[2]);
-                        x2 = Integer.parseInt(split[3]);
-                        y2 = Integer.parseInt(split[4]);
+                        x1 = Integer.parseInt(messageSplit[1]);
+                        y1 = Integer.parseInt(messageSplit[2]);
+                        x2 = Integer.parseInt(messageSplit[3]);
+                        y2 = Integer.parseInt(messageSplit[4]);
 
                         if(gameController.isMoveLegal(x1, y1, x2, y2)) {
                             gameController.makeMove(x1, y1, x2, y2);
@@ -101,16 +103,15 @@ public class ServerThread extends Thread {
                         }
                     }
                 }
-
                 clientMessage = "";
             }
 
             String winnerInfo;
             if(gameController.isWhiteWinner()) {
-                winnerInfo = "win;white";
+                winnerInfo = "win;White";
             }
             else {
-                winnerInfo = "win;black";
+                winnerInfo = "win;Black";
             }
 
             firstOut.println(winnerInfo);
