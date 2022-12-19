@@ -34,6 +34,7 @@ public abstract class GameController {
         this.capturePossible = new ArrayList<>();
         this.finishCapture = false;
         this.fields = board.getFields();
+        this.playerTurn = PlayerTurn.White;
     }
 
     public boolean isCapturePossible() {
@@ -58,5 +59,14 @@ public abstract class GameController {
             return true;
         }
         return false;
+    }
+
+    public void nextTurn() {
+        if(playerTurn == PlayerTurn.White) {
+            playerTurn = PlayerTurn.Black;
+        }
+        else {
+            playerTurn = PlayerTurn.White;
+        }
     }
 }

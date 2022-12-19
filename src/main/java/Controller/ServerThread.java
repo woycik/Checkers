@@ -1,7 +1,12 @@
 package Controller;
 
+import Model.Board;
+import Model.Field;
+import Model.Pawn;
+import Model.PlayerTurn;
 import View.ServerView;
 import javafx.application.Platform;
+import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -58,6 +63,58 @@ public class ServerThread extends Thread {
             firstOut.println(gameArguments);
             secondOut.println(gameArguments);
             System.out.println("Sent game start arguments to both players");
+
+            String clientMessage = "";
+            String boardString;
+            int x1, x2, y1, y2;
+            while(!gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
+                if(gameController.playerTurn == PlayerTurn.Black) {
+                    clientMessage = firstIn.readLine();
+                }
+                else if(gameController.playerTurn == PlayerTurn.White) {
+                    clientMessage = secondIn.readLine();
+                }
+
+                if(!clientMessage.isEmpty()) {
+                    String[] split = clientMessage.split(";");
+                    if(split[0].equals("move")) { // player wants to make a move
+                        // move;x1;y1;x2;y2
+                        x1 = Integer.parseInt(split[1]);
+                        y1 = Integer.parseInt(split[2]);
+                        x2 = Integer.parseInt(split[3]);
+                        y2 = Integer.parseInt(split[4]);
+
+                        if(gameController.isMoveLegal(x1, y1, x2, y2)) {
+                            gameController.makeMove(x1, y1, x2, y2);
+                            gameController.nextTurn();
+                            boardString = getSocketPrintableFormat(gameController.board);
+                            firstOut.println("update;" + boardString);
+                            secondOut.println("update;" + boardString);
+                        }
+                        else { // inform client about illegal move
+                            if(gameController.playerTurn == PlayerTurn.Black) {
+                                firstOut.println("illegalmove");
+                            }
+                            else if(gameController.playerTurn == PlayerTurn.White) {
+                                secondOut.println("illegalmove");
+                            }
+                        }
+                    }
+                }
+
+                clientMessage = "";
+            }
+
+            String winnerInfo;
+            if(gameController.isWhiteWinner()) {
+                winnerInfo = "win;white";
+            }
+            else {
+                winnerInfo = "win;black";
+            }
+
+            firstOut.println(winnerInfo);
+            secondOut.println(winnerInfo);
         }
         catch(SocketException se) {
             System.out.println("Server socket closed");
@@ -65,6 +122,37 @@ public class ServerThread extends Thread {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getSocketPrintableFormat(Board board) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        Field[][] fields = board.getFields();
+        Pawn pawn;
+        char ch;
+        for(int i = 0; i < board.getSize(); i++) {
+            for(int j = 0; j < board.getSize(); j++) {
+                pawn = fields[i][j].getPawn();
+                if(pawn == null) {
+                    ch = '0';
+                }
+                else {
+                    if(pawn.getStoneColour() == Color.WHITE) {
+                        ch = 'w';
+                    }
+                    else {
+                        ch = 'b';
+                    }
+
+                    if(pawn.isQueen()) {
+                        ch = Character.toUpperCase(ch);
+                    }
+                }
+                stringBuilder.append(ch).append(";");
+            }
+        }
+
+        return stringBuilder.toString();
     }
 
     private boolean isConnected(Socket socket) {
