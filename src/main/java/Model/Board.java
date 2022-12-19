@@ -11,14 +11,14 @@ public class Board {
 
     public Board(int size, int pawnRows) {
         this.fields = new Field[size][size];
-        for(int i = 0; i < size; i++) {
-            for(int j = 0; j < size; j++) {
-                fields[i][j] = new Field(i, j);
-                if((i + j) % 2 == 0 && i < pawnRows) {
-                    fields[i][j].setPawn(new Pawn(rgb(0,0,0)));
+        for(int x = 0; x < size; x++) {
+            for(int y = 0; y < size; y++) {
+                fields[x][y] = new Field(x, y);
+                if((x + y) % 2 == 0 && y < pawnRows) {
+                    fields[x][y].setPawn(new Pawn(rgb(0,0,0)));
                 }
-                else if((i + j) % 2 == 0 && i > (size - pawnRows)) {
-                    fields[i][j].setPawn(new Pawn(rgb(255,255,255)));
+                else if((x + y) % 2 == 0 && y > size - pawnRows - 1) {
+                    fields[x][y].setPawn(new Pawn(rgb(255,255,255)));
                 }
             }
         }
