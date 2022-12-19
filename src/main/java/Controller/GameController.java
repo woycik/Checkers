@@ -7,7 +7,7 @@ import Model.PlayerTurn;
 import java.util.ArrayList;
 
 public abstract class GameController {
-    public Board board;
+    protected Board board;
     protected Field[][] fields;
     public PlayerTurn playerTurn;
     protected ArrayList<Field> blackPawns;
@@ -16,13 +16,9 @@ public abstract class GameController {
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
-
     public abstract boolean makeMove(int x1, int y1, int x2, int y2);
-
     public abstract boolean isMoveLegal(int x1, int y1, int x2, int y2);
-
     public abstract int getBoardSize();
-
     public abstract int getPawnRows();
 
     public GameController() {
@@ -49,6 +45,10 @@ public abstract class GameController {
     //sprawdzenie czy czarne wygrały
     public boolean isBlackWinner() {
         return numberOfWhitePawns == 0;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
     //zmiana lokalizacji pionka, juz nie trzeba sprawdzac poprawnosci

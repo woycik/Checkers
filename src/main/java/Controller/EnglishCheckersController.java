@@ -65,9 +65,9 @@ public class EnglishCheckersController extends GameController {
         for (int i = 0; i < getBoardSize(); i++) {
             for (int j = 0; j < getBoardSize(); j++) {
                 if (fields[i][j].getPawn() != null) {
-                    if (fields[i][j].getPawn().getStoneColour().equals(Color.rgb(0, 0, 0))) {
+                    if (fields[i][j].getPawn().getColor().equals(Color.rgb(0, 0, 0))) {
                         blackPawns.add(fields[i][j]);
-                    } else if (fields[i][j].getPawn().getStoneColour().equals(Color.rgb(255, 255, 255))) {
+                    } else if (fields[i][j].getPawn().getColor().equals(Color.rgb(255, 255, 255))) {
                         whitePawns.add(fields[i][j]);
                     }
                 }
@@ -84,28 +84,28 @@ public class EnglishCheckersController extends GameController {
             if (!fields[x][y].getPawn().isQueen()) {
                 if ((x + 2 < getBoardSize()) && (y + 2) < getBoardSize()) {
                     if (fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
-                        if (fields[x + 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                        if (fields[x + 1][y + 1].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                             capturePossible.add(boardField);
                         }
                     }
                 }
                 if ((x + 2 < getBoardSize()) && (y - 2) > 0) {
                     if (fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
-                        if (fields[x + 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                        if (fields[x + 1][y - 1].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                             capturePossible.add(boardField);
                         }
                     }
                 }
                 if ((x - 2) > 0 && (y - 2) > 0) {
                     if (fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
-                        if (fields[x - 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                        if (fields[x - 1][y - 1].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                             capturePossible.add(boardField);
                         }
                     }
                 }
                 if ((x - 2) > 0 && (y + 2) < getBoardSize()) {
                     if (fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
-                        if (fields[x - 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                        if (fields[x - 1][y + 1].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                             capturePossible.add(boardField);
                         }
                     }
@@ -127,7 +127,7 @@ public class EnglishCheckersController extends GameController {
                 }
                 i = 1;
                 while (x + i + 1 < getBoardSize() && y - 1 - i > 0) {
-                    if (fields[x + i][y - i].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    if (fields[x + i][y - i].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                         if (!fields[x + i + 1][y - i - 1].isOccupied()) {
                             if (!capturePossible.contains(fields[x][y])) {
                                 capturePossible.add(fields[x][y]);
@@ -140,7 +140,7 @@ public class EnglishCheckersController extends GameController {
                 }
                 i = 1;
                 while (x - i - 1 > 0 && y - 1 - i > 0) {
-                    if (fields[x - i][y - i].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    if (fields[x - i][y - i].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                         if (!fields[x - i - 1][y - i - 1].isOccupied()) {
                             if (!capturePossible.contains(fields[x][y])) {
                                 capturePossible.add(fields[x][y]);
@@ -224,28 +224,28 @@ public class EnglishCheckersController extends GameController {
         if (!fields[x][y].getPawn().isQueen()) {
             if (x + 2 < getBoardSize() && y + 2 < getBoardSize()) {
                 if (fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
-                    if (fields[x + 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    if (fields[x + 1][y + 1].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                         return true;
                     }
                 }
             }
             if (x + 2 < getBoardSize() && y - 2 > 0) {
                 if (fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
-                    if (fields[x + 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    if (fields[x + 1][y - 1].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                         return true;
                     }
                 }
             }
             if ((x - 2) > 0 && (y - 2) > 0) {
                 if (fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
-                    if (fields[x - 1][y - 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    if (fields[x - 1][y - 1].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                         return true;
                     }
                 }
             }
             if ((x - 2) > 0 && (y + 2) < getBoardSize()) {
                 if (fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
-                    if (fields[x - 1][y + 1].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                    if (fields[x - 1][y + 1].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                         return true;
                     }
                 }
@@ -264,7 +264,7 @@ public class EnglishCheckersController extends GameController {
             }
             i = 1;
             while (x + i + 1 < getBoardSize() && y - 1 - i > 0) {
-                if (fields[x + i][y - i].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                if (fields[x + i][y - i].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                     if (!fields[x + i + 1][y - i - 1].isOccupied()) {
                         return true;
                     }
@@ -275,7 +275,7 @@ public class EnglishCheckersController extends GameController {
             }
             i = 1;
             while (x - i - 1 > 0 && y - 1 - i > 0) {
-                if (fields[x - i][y - i].getPawn().getStoneColour() != fields[x][y].getPawn().getStoneColour()) {
+                if (fields[x - i][y - i].getPawn().getColor() != fields[x][y].getPawn().getColor()) {
                     if (!fields[x - i - 1][y - i - 1].isOccupied()) {
                         return true;
                     }
