@@ -7,6 +7,11 @@ public class Board {
 
     public Board(int size) {
         this.fields = new Field[size][size];
+        for(int x = 0; x < size; x++) {
+            for(int y = 0; y < size; y++) {
+                this.fields[x][y] = new Field(x, y);
+            }
+        }
     }
 
     public Board(int size, int pawnRows) {
