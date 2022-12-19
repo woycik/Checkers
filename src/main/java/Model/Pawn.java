@@ -16,6 +16,11 @@ public class Pawn {
             this.isQueen = false;
         }
 
+        public Pawn(Color colour, boolean isQueen) {
+            this.stoneColour = colour;
+            this.isQueen = isQueen;
+        }
+
         public Color getStoneColour() {
             return stoneColour;
         }
