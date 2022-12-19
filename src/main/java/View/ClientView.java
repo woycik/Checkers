@@ -17,9 +17,9 @@ public class ClientView {
         this.client = client;
         this.stage = stage;
     }
+
     public void init() {
         final BorderPane borderPane = new BorderPane();
-
         Label clientStatusLabel = new Label("Trying to connect with server.");
         clientStatusLabel.setId("clientStatusLabel");
         borderPane.setCenter(clientStatusLabel);
@@ -47,6 +47,14 @@ public class ClientView {
         Scene scene = stage.getScene();
         boardView = new BoardView(boardSize);
         scene.setRoot(boardView);
+    }
+
+    public void announceWinner(String winner) {
+        final BorderPane borderPane = new BorderPane();
+        Scene scene = stage.getScene();
+        Label clientStatusLabel = new Label(winner + " wins!");
+        borderPane.setCenter(clientStatusLabel);
+        scene.setRoot(borderPane);
     }
 
     public void updateBoard(Board board) {

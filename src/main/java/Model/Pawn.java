@@ -1,7 +1,6 @@
 package Model;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
@@ -14,6 +13,11 @@ public class Pawn {
         public Pawn(Color colour) {
             this.stoneColour = colour;
             this.isQueen = false;
+        }
+
+        public Pawn(Color colour, boolean isQueen) {
+            this.stoneColour = colour;
+            this.isQueen = isQueen;
         }
 
         public Color getStoneColour() {

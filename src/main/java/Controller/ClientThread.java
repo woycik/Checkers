@@ -45,24 +45,25 @@ public class ClientThread extends Thread {
             // arguments to displaying board
             String[] gameArgs = line.split(";");
             int boardSize = Integer.parseInt(gameArgs[1]);
-            int pawnRows = Integer.parseInt(gameArgs[2]);
-
-            System.out.println("Board size: " + boardSize);
-            System.out.println("Number of rows with pawns: " + pawnRows);
-
-            Board board = new Board(boardSize, pawnRows);
-            // mock board creation
-            Field field = new Field(0, 0);
-            field.setPawn(new Pawn(Color.BLACK));
-            board.getFields()[0][0] = field;
-            // end of mock board creation
-
-            // TODO: fill the board with an actual state
 
             Platform.runLater( () -> view.showBoard(boardSize));
 
-            // TODO: game loop with Platform.runLater( () -> view.updateBoard(board));
-            Platform.runLater( () -> view.updateBoard(board));
+            String serverMessage;
+            String[] messageSplit;
+            while(true) {
+                serverMessage = in.readLine();
+                messageSplit = serverMessage.split(";");
+
+                if(messageSplit[0].equals("update")) {
+                    Board board = getBoard(boardSize, messageSplit);
+                    Platform.runLater( () -> view.updateBoard(board));
+                }
+                else if(messageSplit[0].equals("win")) {
+                    String[] finalMessageSplit = messageSplit;
+                    Platform.runLater( () -> view.announceWinner(finalMessageSplit[1]));
+                    break;
+                }
+            }
         }
         catch(IOException ioe) {
             Platform.runLater( () -> view.connectionFailed());
@@ -75,6 +76,34 @@ public class ClientThread extends Thread {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private Board getBoard(int boardSize, String[] messageSplit) {
+        Board board = new Board(boardSize);
+        char pawn;
+        int n = 1;
+        for(int i = 0; i < board.getSize(); i++) {
+            for(int j = 0; j < board.getSize(); j++) {
+                pawn = messageSplit[n++].charAt(0);
+
+                if(pawn == '0') { // empty field
+                    board.getFields()[i][j].setPawn(null);
+                }
+                else if(pawn == 'w') { // white pawn
+                    board.getFields()[i][j].setPawn(new Pawn(Color.WHITE));
+                }
+                else if(pawn == 'b') { // black pawn
+                    board.getFields()[i][j].setPawn(new Pawn(Color.BLACK));
+                }
+                else if(pawn == 'W') { // white queen
+                    board.getFields()[i][j].setPawn(new Pawn(Color.WHITE, true));
+                }
+                else if(pawn == 'B') { // black queen
+                    board.getFields()[i][j].setPawn(new Pawn(Color.BLACK, true));
+                }
+            }
+        }
+        return board;
     }
 
     private String executeOnServer(String command) {
