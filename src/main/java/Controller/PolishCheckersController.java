@@ -1,6 +1,5 @@
 package Controller;
 
-import Model.Board;
 import Model.Field;
 
 import Model.PlayerTurn;
@@ -14,7 +13,7 @@ public class PolishCheckersController extends GameController {
     private ArrayList<Field> whitePawns;
     private ArrayList<Field> capturePossible; //lista pól w które może wskoczyc pionek w ramach bicia
     private final int size=10;
-    boolean dokonczBicie=false;
+    boolean finishCapture = false;
     private int numberOfWhitePawns=20;
     private int numberOfBlackPawns=20;
 
@@ -28,7 +27,7 @@ public class PolishCheckersController extends GameController {
 
     public boolean makeMove(int x, int y,int i, int j) {
         this.setMyPawns();                                                                       //poznajemy położenie pionków
-        if(!dokonczBicie) {
+        if(!finishCapture) {
             if (playerTurn== PlayerTurn.Black) {this.captureFieldList(blackPawns);}                     //zapisz czarne pola z których mozliwe jest bicie}
             else {this.captureFieldList(whitePawns);}                                                                           //zapisz biale pola z których mozliwe jest bicie
             if (this.isCapturePossible()) {                                                     //sprawdz czy mozliwe jest bicie dla (bialego/czarnego)
@@ -38,7 +37,7 @@ public class PolishCheckersController extends GameController {
                     this.capturePossible.clear();
                     if (this.canICaptureOneMoreTime(i, j)) {
                         capturePossible.add(fields[i][j]);
-                        dokonczBicie = true;
+                        finishCapture = true;
                         return false;
                     }
                 }
@@ -56,10 +55,10 @@ public class PolishCheckersController extends GameController {
                 this.capturePossible.clear();
                 if (this.canICaptureOneMoreTime(i, j)) {
                     capturePossible.add(fields[i][j]);
-                    dokonczBicie = true;
+                    finishCapture = true;
                     return false;
                 }
-                dokonczBicie=false;
+                finishCapture =false;
             }
             
         }
@@ -192,16 +191,13 @@ public class PolishCheckersController extends GameController {
 
     }
 
-
     //Sprawdzam czy istanieje możliwosć bicia poprzes sprawdzenie dluzgosci listy capturepossible
-    public boolean isCapturePossible(){
-        if(capturePossible.size()>0){ return true;}
-        return false;
+    public boolean isCapturePossible() {
+        return capturePossible.size() > 0;
     }
 
     //Sprawdzam czy mozliwe jest bicie dla podanych lokalizacji
-
-    public boolean checkCapture(int x, int y, int m, int n){
+    public boolean checkCapture(int x, int y, int m, int n) {
         if(capturePossible.contains(fields[x][y])){
             if(!fields[x][y].getPawn().isQueen()){
                 if(Math.abs(x-m)==2 && Math.abs(y-n)==2 && fields[(x+m)/2][(y+n)/2].isOccupied() && !fields[m][n].isOccupied()){
