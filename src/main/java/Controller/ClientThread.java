@@ -62,6 +62,7 @@ public class ClientThread extends Thread {
             Platform.runLater( () -> view.showBoard(boardSize));
 
             // TODO: game loop with Platform.runLater( () -> view.updateBoard(board));
+            Platform.runLater( () -> view.updateBoard(board));
         }
         catch(IOException ioe) {
             Platform.runLater( () -> view.connectionFailed());
