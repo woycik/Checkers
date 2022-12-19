@@ -27,22 +27,16 @@ public class PawnView extends Circle {
         setCenterY(getCenterY()+y);
     }
 
-    public int getX(int size){
-        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        double width=screenBounds.getWidth();
+    public int getFieldX(int size){
+        double width=500;
         double fieldWidth = width/size;
-        int positionX=(int)Math.floor(this.getCenterX()/fieldWidth);
-
-        return positionX;
+        return (int)Math.floor(this.getCenterX()/fieldWidth);
     }
 
-    public int getY(int size){
-        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        double height=screenBounds.getHeight();
+    public int getFieldY(int size){
+        double height=500;
         double fieldHeight = height/size;
-        int positionY=(int)Math.floor(this.getCenterY()/fieldHeight);
-
-        return positionY;
+        return (int)Math.floor(this.getCenterY()/fieldHeight);
     }
 
 

@@ -3,6 +3,7 @@ package Controller;
 import Model.Board;
 import Model.Field;
 
+import Model.PlayerTurn;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -25,10 +26,10 @@ public class PolishCheckersController extends GameController {
         capturePossible = new ArrayList<>();
     }
 
-    public boolean play(int x, int y,int i, int j,String color) {
+    public boolean makeMove(int x, int y,int i, int j) {
         this.setMyPawns();                                                                       //poznajemy położenie pionków
         if(!dokonczBicie) {
-            if (color.equals("BLACK")) {this.captureFieldList(blackPawns);}                     //zapisz czarne pola z których mozliwe jest bicie}          
+            if (playerTurn== PlayerTurn.Black) {this.captureFieldList(blackPawns);}                     //zapisz czarne pola z których mozliwe jest bicie}
             else {this.captureFieldList(whitePawns);}                                                                           //zapisz biale pola z których mozliwe jest bicie
             if (this.isCapturePossible()) {                                                     //sprawdz czy mozliwe jest bicie dla (bialego/czarnego)
                                                                                                 //czy doszloby do wykonania bicia?

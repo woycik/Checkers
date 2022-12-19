@@ -11,7 +11,7 @@ public class PolishCheckersControllerClassTest {
     @Test
     public void test() {
         PolishCheckersController polishCheckersController = new PolishCheckersController();
-        assertTrue(polishCheckersController.play(3,1,4,2,"WHITE"));
-        assertTrue(polishCheckersController.play(4,2,5,3,"WHITE"));
+        assertTrue(polishCheckersController.makeMove(3,1,4,2));
+        assertTrue(polishCheckersController.makeMove(4,2,5,3));
     }
 }
