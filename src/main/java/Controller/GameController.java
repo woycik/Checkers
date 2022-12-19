@@ -16,9 +16,13 @@ public abstract class GameController {
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
-    public abstract boolean makeMove(int x, int y,int i, int j);
-    public abstract boolean isMoveLegal(int i, int j, int m, int n);
+
+    public abstract boolean makeMove(int x1, int y1, int x2, int y2);
+
+    public abstract boolean isMoveLegal(int x1, int y1, int x2, int y2);
+
     public abstract int getBoardSize();
+
     public abstract int getPawnRows();
 
     public GameController() {
@@ -44,5 +48,15 @@ public abstract class GameController {
     //sprawdzenie czy czarne wygrały
     public boolean isBlackWinner() {
         return numberOfWhitePawns == 0;
+    }
+
+    //zmiana lokalizacji pionka, juz nie trzeba sprawdzac poprawnosci
+    public boolean movePawn(int x1, int y1, int x2, int y2) {
+        if (fields[x1][y1].isOccupied()) {
+            fields[x2][y2].setPawn(fields[x1][y1].getPawn());
+            fields[x1][y1].setPawn(null);
+            return true;
+        }
+        return false;
     }
 }
