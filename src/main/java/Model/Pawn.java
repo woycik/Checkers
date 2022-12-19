@@ -5,29 +5,31 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class Pawn {
-        private Color stoneColour;
-        private boolean isQueen;
+    public ArrayList<Pawn> possibleFields;
+    private final Color color;
+    private boolean isQueen;
 
-        public ArrayList<Pawn> possibleFields=new ArrayList<>();
+    public Pawn(Color color) {
+        this.color = color;
+        this.isQueen = false;
+        this.possibleFields = new ArrayList<>();
+    }
 
-        public Pawn(Color colour) {
-            this.stoneColour = colour;
-            this.isQueen = false;
-        }
+    public Pawn(Color color, boolean isQueen) {
+        this.color = color;
+        this.isQueen = isQueen;
+        this.possibleFields = new ArrayList<>();
+    }
 
-        public Pawn(Color colour, boolean isQueen) {
-            this.stoneColour = colour;
-            this.isQueen = isQueen;
-        }
+    public Color getColor() {
+        return color;
+    }
 
-        public Color getStoneColour() {
-            return stoneColour;
-        }
+    public boolean isQueen() {
+        return isQueen;
+    }
 
-        public boolean isQueen() {
-            return isQueen;
-        }
-        public void makeQueen() {
-            isQueen = true;
-        }
+    public void makeQueen() {
+        isQueen = true;
+    }
 }

@@ -15,6 +15,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
+import static javafx.scene.paint.Color.rgb;
+
 public class ServerThread extends Thread {
     int port;
     ServerView view;
@@ -58,13 +60,10 @@ public class ServerThread extends Thread {
 
             // sending message to start displaying board
             int boardSize = gameController.getBoardSize();
-            String gameArguments = "start;" + boardSize;
+            String gameArguments = "start;" + boardSize + ";" + getSocketPrintableFormat(gameController.getBoard());
             firstOut.println(gameArguments);
             secondOut.println(gameArguments);
             System.out.println("Sent game start message to both players");
-
-            Thread.sleep(2000);
-            firstOut.println("win;White");
 
             String clientMessage = "";
             String boardString;
@@ -77,7 +76,7 @@ public class ServerThread extends Thread {
                     clientMessage = secondIn.readLine();
                 }
 
-                if(!clientMessage.isEmpty()) {
+                if(clientMessage != null && !clientMessage.isEmpty()) {
                     String[] messageSplit = clientMessage.split(";");
                     if(messageSplit[0].equals("move")) { // player wants to make a move
                         // move;x1;y1;x2;y2
@@ -89,7 +88,7 @@ public class ServerThread extends Thread {
                         if(gameController.isMoveLegal(x1, y1, x2, y2)) {
                             gameController.makeMove(x1, y1, x2, y2);
                             gameController.nextTurn();
-                            boardString = getSocketPrintableFormat(gameController.board);
+                            boardString = getSocketPrintableFormat(gameController.getBoard());
                             firstOut.println("update;" + boardString);
                             secondOut.println("update;" + boardString);
                         }
@@ -138,7 +137,7 @@ public class ServerThread extends Thread {
                     ch = '0';
                 }
                 else {
-                    if(pawn.getStoneColour() == Color.WHITE) {
+                    if(pawn.getColor().equals(rgb(255, 255, 255))) {
                         ch = 'w';
                     }
                     else {
@@ -149,10 +148,9 @@ public class ServerThread extends Thread {
                         ch = Character.toUpperCase(ch);
                     }
                 }
-                stringBuilder.append(ch).append(";");
+                stringBuilder.append(ch).append(",");
             }
         }
-
         return stringBuilder.toString();
     }
 

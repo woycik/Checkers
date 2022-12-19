@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import static javafx.scene.paint.Color.rgb;
+
 public class ClientThread extends Thread {
     int port;
     ClientView view;
@@ -33,34 +35,34 @@ public class ClientThread extends Thread {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Platform.runLater( () -> view.waitingForOpponent());
 
-            String line;
-            do {
-                line = in.readLine();
-
-                if(line.equals("ping")) { // if server sends ping, respond with pong
-                    out.println("pong");
-                }
-            } while(!line.split(";")[0].equals("start"));
-
-            // arguments to displaying board
-            String[] gameArgs = line.split(";");
-            int boardSize = Integer.parseInt(gameArgs[1]);
-
-            Platform.runLater( () -> view.showBoard(boardSize));
-
             String serverMessage;
             String[] messageSplit;
+            do {
+                serverMessage = in.readLine();
+
+                if(serverMessage.equals("ping")) { // if server sends ping, respond with pong
+                    out.println("pong");
+                }
+            } while(!serverMessage.split(";")[0].equals("start"));
+
+            messageSplit = serverMessage.split(";");
+            int boardSize = Integer.parseInt(messageSplit[1]);
+
+            Platform.runLater( () -> view.showBoard(boardSize));
+            Board initBoard = getBoard(boardSize, messageSplit[2]);
+            Platform.runLater(() -> view.updateBoard(initBoard));
+
             while(true) {
                 serverMessage = in.readLine();
                 messageSplit = serverMessage.split(";");
 
                 if(messageSplit[0].equals("update")) {
-                    Board board = getBoard(boardSize, messageSplit);
+                    Board board = getBoard(boardSize, messageSplit[1]);
                     Platform.runLater( () -> view.updateBoard(board));
                 }
                 else if(messageSplit[0].equals("win")) {
-                    String[] finalMessageSplit = messageSplit;
-                    Platform.runLater( () -> view.announceWinner(finalMessageSplit[1]));
+                    String winner = messageSplit[1];
+                    Platform.runLater( () -> view.announceWinner(winner));
                     break;
                 }
             }
@@ -78,10 +80,11 @@ public class ClientThread extends Thread {
         }
     }
 
-    private Board getBoard(int boardSize, String[] messageSplit) {
+    private Board getBoard(int boardSize, String message) {
         Board board = new Board(boardSize);
+        String[] messageSplit = message.split(",");
         char pawn;
-        int n = 1;
+        int n = 0;
         for(int i = 0; i < board.getSize(); i++) {
             for(int j = 0; j < board.getSize(); j++) {
                 pawn = messageSplit[n++].charAt(0);
@@ -90,30 +93,20 @@ public class ClientThread extends Thread {
                     board.getFields()[i][j].setPawn(null);
                 }
                 else if(pawn == 'w') { // white pawn
-                    board.getFields()[i][j].setPawn(new Pawn(Color.WHITE));
+                    board.getFields()[i][j].setPawn(new Pawn(rgb(255, 255, 255)));
                 }
                 else if(pawn == 'b') { // black pawn
-                    board.getFields()[i][j].setPawn(new Pawn(Color.BLACK));
+                    board.getFields()[i][j].setPawn(new Pawn(rgb(0, 0, 0)));
                 }
                 else if(pawn == 'W') { // white queen
-                    board.getFields()[i][j].setPawn(new Pawn(Color.WHITE, true));
+                    board.getFields()[i][j].setPawn(new Pawn(rgb(255, 255, 255), true));
                 }
                 else if(pawn == 'B') { // black queen
-                    board.getFields()[i][j].setPawn(new Pawn(Color.BLACK, true));
+                    board.getFields()[i][j].setPawn(new Pawn(rgb(0, 0, 0), true));
                 }
             }
         }
         return board;
-    }
-
-    private String executeOnServer(String command) {
-        try {
-            out.println(command); // send command to server
-            return in.readLine(); // receive response
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error connecting with server";
-        }
     }
 
     public void closeSocket() {

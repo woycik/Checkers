@@ -28,7 +28,7 @@ public class Field {
     }
 
     public Color getColor(){
-        return pawn.getStoneColour();
+        return pawn.getColor();
     }
 
     public Pawn getPawn() {
