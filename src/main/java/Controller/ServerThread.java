@@ -18,6 +18,7 @@ import java.net.SocketException;
 import static javafx.scene.paint.Color.rgb;
 
 public class ServerThread extends Thread {
+    private boolean stopRequest;
     int port;
     ServerView view;
     GameController gameController;
@@ -31,6 +32,7 @@ public class ServerThread extends Thread {
         this.gameController = gameController;
         this.firstPlayerSocket = null;
         this.secondPlayerSocket = null;
+        this.stopRequest = false;
     }
 
     @Override
@@ -68,7 +70,7 @@ public class ServerThread extends Thread {
             String clientMessage = "";
             String boardString;
             int x1, x2, y1, y2;
-            while(!gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
+            while(!stopRequest && !gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
                 if(gameController.playerTurn == PlayerTurn.Black) {
                     clientMessage = firstIn.readLine();
                 }
@@ -180,5 +182,9 @@ public class ServerThread extends Thread {
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void requestStop() {
+        stopRequest = true;
     }
 }

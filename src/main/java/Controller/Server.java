@@ -37,6 +37,7 @@ public class Server extends Application {
     @Override
     public void stop() {
         thread.closeServerSocket();
+        thread.requestStop();
     }
 
     public static void main(String[] args) {
