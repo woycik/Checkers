@@ -6,7 +6,6 @@ import Model.Pawn;
 import Model.PlayerTurn;
 import View.ServerView;
 import javafx.application.Platform;
-import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -73,9 +72,11 @@ public class ServerThread extends Thread {
             while(!stopRequest && !gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
                 if(gameController.playerTurn == PlayerTurn.Black) {
                     clientMessage = firstIn.readLine();
+                    System.out.println("Received message from Black: " + clientMessage);
                 }
                 else if(gameController.playerTurn == PlayerTurn.White) {
                     clientMessage = secondIn.readLine();
+                    System.out.println("Received message from White: " + clientMessage);
                 }
 
                 if(clientMessage != null && !clientMessage.isEmpty()) {
@@ -87,12 +88,12 @@ public class ServerThread extends Thread {
                         x2 = Integer.parseInt(messageSplit[3]);
                         y2 = Integer.parseInt(messageSplit[4]);
 
-                        if(gameController.isMoveLegal(x1, y1, x2, y2)) {
-                            gameController.makeMove(x1, y1, x2, y2);
+                        if(gameController.isMoveLegal(x1, y1, x2, y2) && gameController.makeMove(x1, y1, x2, y2)) {
                             gameController.nextTurn();
                             boardString = getSocketPrintableFormat(gameController.getBoard());
                             firstOut.println("update;" + boardString);
                             secondOut.println("update;" + boardString);
+                            System.out.println("Legal move. Update sent.");
                         }
                         else { // inform client about illegal move
                             if(gameController.playerTurn == PlayerTurn.Black) {
@@ -101,6 +102,7 @@ public class ServerThread extends Thread {
                             else if(gameController.playerTurn == PlayerTurn.White) {
                                 secondOut.println("illegalmove");
                             }
+                            System.out.println("Illegal move. Player notified.");
                         }
                     }
                 }

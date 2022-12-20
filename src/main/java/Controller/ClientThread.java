@@ -60,6 +60,9 @@ public class ClientThread extends Thread {
                     Board board = getBoard(boardSize, messageSplit[1]);
                     Platform.runLater( () -> view.updateBoard(board));
                 }
+                else if(messageSplit[0].equals("illegal")) {
+                    System.out.println("Illegal move!");
+                }
                 else if(messageSplit[0].equals("win")) {
                     String winner = messageSplit[1];
                     Platform.runLater( () -> view.announceWinner(winner));
