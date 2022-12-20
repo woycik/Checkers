@@ -49,6 +49,7 @@ public class BoardView extends Pane {
 
     public void update(Board board) {
         getChildren().removeAll(pawnViews);
+        pawnViews.clear();
         Field[][] fields = board.getFields();
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
