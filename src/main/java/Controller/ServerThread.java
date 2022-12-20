@@ -6,7 +6,6 @@ import Model.Pawn;
 import Model.PlayerTurn;
 import View.ServerView;
 import javafx.application.Platform;
-import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,6 +17,7 @@ import java.net.SocketException;
 import static javafx.scene.paint.Color.rgb;
 
 public class ServerThread extends Thread {
+    private boolean stopRequest;
     int port;
     ServerView view;
     GameController gameController;
@@ -31,6 +31,7 @@ public class ServerThread extends Thread {
         this.gameController = gameController;
         this.firstPlayerSocket = null;
         this.secondPlayerSocket = null;
+        this.stopRequest = false;
     }
 
     @Override
@@ -60,20 +61,22 @@ public class ServerThread extends Thread {
 
             // sending message to start displaying board
             int boardSize = gameController.getBoardSize();
-            String gameArguments = "start;" + boardSize + ";" + getSocketPrintableFormat(gameController.getBoard());
-            firstOut.println(gameArguments);
-            secondOut.println(gameArguments);
+            String boardString = getSocketPrintableFormat(gameController.getBoard());
+            // start;color;boardSize;boardString
+            firstOut.println("start;White;" + boardSize + ";" + boardString);
+            secondOut.println("start;Black;" + boardSize + ";" + boardString);
             System.out.println("Sent game start message to both players");
 
             String clientMessage = "";
-            String boardString;
             int x1, x2, y1, y2;
-            while(!gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
+            while(!stopRequest && !gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
                 if(gameController.playerTurn == PlayerTurn.Black) {
                     clientMessage = firstIn.readLine();
+                    System.out.println("Received message from Black: " + clientMessage);
                 }
                 else if(gameController.playerTurn == PlayerTurn.White) {
                     clientMessage = secondIn.readLine();
+                    System.out.println("Received message from White: " + clientMessage);
                 }
 
                 if(clientMessage != null && !clientMessage.isEmpty()) {
@@ -88,17 +91,20 @@ public class ServerThread extends Thread {
                         if(gameController.isMoveLegal(x1, y1, x2, y2)) {
                             gameController.makeMove(x1, y1, x2, y2);
                             gameController.nextTurn();
-                            boardString = getSocketPrintableFormat(gameController.getBoard());
-                            firstOut.println("update;" + boardString);
-                            secondOut.println("update;" + boardString);
+                            firstOut.println(getUpdateMessage());
+                            secondOut.println(getUpdateMessage());
+                            System.out.println("Legal move. Update sent.");
                         }
                         else { // inform client about illegal move
                             if(gameController.playerTurn == PlayerTurn.Black) {
+                                firstOut.println(getUpdateMessage());
                                 firstOut.println("illegalmove");
                             }
                             else if(gameController.playerTurn == PlayerTurn.White) {
+                                secondOut.println(getUpdateMessage());
                                 secondOut.println("illegalmove");
                             }
+                            System.out.println("Illegal move. Player notified.");
                         }
                     }
                 }
@@ -154,6 +160,10 @@ public class ServerThread extends Thread {
         return stringBuilder.toString();
     }
 
+    private String getUpdateMessage() {
+        return "update;" + gameController.playerTurn.toString() + ";" + getSocketPrintableFormat(gameController.board);
+    }
+
     private boolean isConnected(Socket socket) {
         try {
             if(socket == null || socket.isClosed() || !socket.isConnected()
@@ -180,5 +190,9 @@ public class ServerThread extends Thread {
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void requestStop() {
+        stopRequest = true;
     }
 }

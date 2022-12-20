@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import static javafx.scene.paint.Color.color;
 import static javafx.scene.paint.Color.rgb;
 
 public class ClientThread extends Thread {
@@ -21,6 +22,7 @@ public class ClientThread extends Thread {
     Socket socket;
     PrintWriter out;
     BufferedReader in;
+    private String playerColor;
 
     public ClientThread(int port, ClientView view) {
         this.port = port;
@@ -46,7 +48,8 @@ public class ClientThread extends Thread {
             } while(!serverMessage.split(";")[0].equals("start"));
 
             messageSplit = serverMessage.split(";");
-            int boardSize = Integer.parseInt(messageSplit[1]);
+            playerColor = messageSplit[1];
+            int boardSize = Integer.parseInt(messageSplit[2]);
 
             Platform.runLater( () -> view.showBoard(boardSize));
             Board initBoard = getBoard(boardSize, messageSplit[2]);
@@ -57,8 +60,15 @@ public class ClientThread extends Thread {
                 messageSplit = serverMessage.split(";");
 
                 if(messageSplit[0].equals("update")) {
-                    Board board = getBoard(boardSize, messageSplit[1]);
+                    String playerTurn = messageSplit[1];
+                    if(playerTurn.equals(playerColor)) {
+                        // TODO: lock controls if it is not this player's turn
+                    }
+                    Board board = getBoard(boardSize, messageSplit[2]);
                     Platform.runLater( () -> view.updateBoard(board));
+                }
+                else if(messageSplit[0].equals("illegal")) {
+                    System.out.println("Illegal move!");
                 }
                 else if(messageSplit[0].equals("win")) {
                     String winner = messageSplit[1];
@@ -107,6 +117,11 @@ public class ClientThread extends Thread {
             }
         }
         return board;
+    }
+
+    public void makeMove(int x1, int y1, int x2, int y2) {
+        out.println("move;" + x1 + ";" + y1 + ";" + x2 + ";" + y2);
+        // TODO: check server response (legal/illegal)
     }
 
     public void closeSocket() {
