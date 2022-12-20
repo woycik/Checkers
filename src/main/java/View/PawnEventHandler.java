@@ -1,21 +1,34 @@
 package View;
 
+import Controller.ClientThread;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
 
 public class PawnEventHandler implements EventHandler<MouseEvent> {
-    PawnView pawn;
+    private PawnView pawnView;
+    private final ClientThread clientThread;
     private double x;
     private double y;
+    private final int startingFieldX;
+    private final int startingFieldY;
+
+
+    public PawnEventHandler(PawnView pawnView, ClientThread clientThread) {
+        super();
+        this.pawnView = pawnView;
+        this.startingFieldX = pawnView.getFieldX();
+        this.startingFieldY = pawnView.getFieldY();
+        this.clientThread = clientThread;
+    }
 
     private void changePosition(MouseEvent event) {
         double dx = event.getX() - x;
         double dy = event.getY() - y;
 
-        if (pawn.hit(x, y)) {
-            pawn.changeX(dx);
-            pawn.changeY(dy);
+        if (pawnView.hit(x, y)) {
+            pawnView.changeX(dx);
+            pawnView.changeY(dy);
         }
 
         x += dx;
@@ -24,10 +37,13 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
-        pawn = (PawnView) event.getSource();
-
-        if (event.getEventType()==MouseEvent.MOUSE_DRAGGED) {
+        if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
             changePosition(event);
+        }
+        else if(event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+            int fieldX = pawnView.getFieldX();
+            int fieldY = pawnView.getFieldY();
+            clientThread.makeMove(startingFieldX, startingFieldY, fieldX, fieldY);
         }
     }
 }

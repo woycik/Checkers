@@ -45,7 +45,7 @@ public class ClientView {
 
     public void showBoard(int boardSize) {
         Scene scene = stage.getScene();
-        boardView = new BoardView(boardSize);
+        boardView = new BoardView(boardSize, client);
         scene.setRoot(boardView);
     }
 

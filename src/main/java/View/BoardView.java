@@ -1,17 +1,29 @@
 package View;
 
+import Controller.Client;
+import Controller.ClientThread;
 import Model.Board;
 import Model.Field;
+import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import jdk.tools.jlink.internal.Platform;
+
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
 
 public class BoardView extends Pane {
-    public BoardView(int boardSize) {
-        super();
-        Rectangle[][] rectangles = new Rectangle[boardSize][boardSize];
+    private final Client client;
+    private ArrayList<PawnView> pawnViews;
 
+    public BoardView(int boardSize, Client client) {
+        super();
+        this.client = client;
+        this.pawnViews = new ArrayList<>();
+
+        Rectangle[][] rectangles = new Rectangle[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 rectangles[i][j] = new Rectangle();
@@ -36,12 +48,15 @@ public class BoardView extends Pane {
     }
 
     public void update(Board board) {
+        getChildren().removeAll(pawnViews);
         Field[][] fields = board.getFields();
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
                 if (fields[i][j].isOccupied()) {
-                    PawnView pawn = new PawnView(50 * i + 25, 50 * j + 25, 20, fields[i][j].getColor());
-                    this.getChildren().add(pawn);
+                    PawnView pawnView = new PawnView(50 * i + 25, 50 * j + 25, 20,
+                            fields[i][j].getColor(), board.getSize(), client.thread);
+                    pawnViews.add(pawnView);
+                    this.getChildren().add(pawnView);
                 }
             }
         }

@@ -109,6 +109,11 @@ public class ClientThread extends Thread {
         return board;
     }
 
+    public void makeMove(int x1, int y1, int x2, int y2) {
+        out.println("move;" + x1 + ";" + y1 + ";" + x2 + ";" + y2);
+        // TODO: check server response (legal/illegal)
+    }
+
     public void closeSocket() {
         try {
             if(socket != null && !socket.isClosed()) {
