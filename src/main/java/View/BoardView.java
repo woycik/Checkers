@@ -42,7 +42,7 @@ public class BoardView extends Pane {
         }
     }
 
-    public void update(Board board) {
+    public void update(Board board, String color) {
         getChildren().removeAll(pawnViews);
         pawnViews.clear();
         Field[][] fields = board.getFields();
@@ -56,9 +56,14 @@ public class BoardView extends Pane {
                 }
             }
         }
+        activateClientMovement(color);
     }
 
     public void activateClientMovement(String color) {
+        if(!color.equals(client.thread.playerColor)) {
+            return;
+        }
+
         for (PawnView pawn : pawnViews) {
             if (color.equals("Black")) {
                 if (pawn.getColor().equals(Color.rgb(0, 0, 0))) {
@@ -69,12 +74,6 @@ public class BoardView extends Pane {
                     pawn.setControlsEnabled(true);
                 }
             }
-        }
-    }
-
-    public void blockClientMovement() {
-        for (PawnView pawn : pawnViews) {
-            pawn.setControlsEnabled(false);
         }
     }
 }

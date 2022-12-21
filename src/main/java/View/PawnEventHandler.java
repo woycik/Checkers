@@ -1,12 +1,13 @@
 package View;
 
 import Controller.ClientThread;
+import Model.Pawn;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
 
 public class PawnEventHandler implements EventHandler<MouseEvent> {
-    private PawnView pawnView;
+    private final PawnView pawnView;
     private final ClientThread clientThread;
     private double x;
     private double y;
@@ -39,6 +40,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
+        PawnView pawnView = (PawnView)event.getSource();
         if(controlsEnabled) {
             if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                 changePosition(event);

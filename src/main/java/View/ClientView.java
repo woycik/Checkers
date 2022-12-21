@@ -57,15 +57,7 @@ public class ClientView {
         scene.setRoot(borderPane);
     }
 
-    public void updateBoard(Board board) {
-        boardView.update(board);
-    }
-
-    public void activateMovement(String color) {
-        boardView.activateClientMovement(color);
-    }
-
-    public void blockMovement(){
-        boardView.blockClientMovement();
+    public void updateBoard(Board board, String playerColor) {
+        boardView.update(board, playerColor);
     }
 }

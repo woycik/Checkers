@@ -7,7 +7,7 @@ import javafx.scene.shape.Circle;
 public class PawnView extends Circle {
     private final int boardSize;
     private final Color color;
-    private final PawnEventHandler pawnEventHandler;
+    public final PawnEventHandler pawnEventHandler;
 
     PawnView(int x, int y, int radius, Color color, int boardSize, ClientThread clientThread){
         super(x,y,radius,color);

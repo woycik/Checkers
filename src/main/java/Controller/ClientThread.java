@@ -18,11 +18,11 @@ import static javafx.scene.paint.Color.rgb;
 
 public class ClientThread extends Thread {
     int port;
+    public String playerColor;
     ClientView view;
     Socket socket;
     PrintWriter out;
     BufferedReader in;
-    private String playerColor;
 
     public ClientThread(int port, ClientView view) {
         this.port = port;
@@ -53,11 +53,7 @@ public class ClientThread extends Thread {
 
             Platform.runLater( () -> view.showBoard(boardSize));
             Board initBoard = getBoard(boardSize, messageSplit[3]);
-            Platform.runLater(() -> view.updateBoard(initBoard));
-
-            if(playerColor.equals("White")) { // white player makes a first move
-                Platform.runLater( () -> view.activateMovement(playerColor));
-            }
+            Platform.runLater(() -> view.updateBoard(initBoard, "White"));
 
             while(true) {
                 serverMessage = in.readLine();
@@ -65,16 +61,8 @@ public class ClientThread extends Thread {
 
                 if(messageSplit[0].equals("update")) {
                     String playerTurn = messageSplit[1];
-                    if(playerTurn.equals(playerColor)) {
-                        System.out.println("My turn :DDD");
-                        Platform.runLater( () -> view.activateMovement(playerColor));
-                    }
-                    else {
-                        System.out.println("Not my turn :((");
-                        Platform.runLater( () -> view.blockMovement());
-                    }
                     Board board = getBoard(boardSize, messageSplit[2]);
-                    Platform.runLater( () -> view.updateBoard(board));
+                    Platform.runLater( () -> view.updateBoard(board, playerTurn));
                 }
                 else if(messageSplit[0].equals("illegal")) {
                     System.out.println("Illegal move!");
