@@ -36,7 +36,6 @@ public abstract class GameController {
     }
 
     public boolean isCapturePossible() {
-        System.out.println(capturePossible.size());
         return capturePossible.size() > 0;
     }
 
