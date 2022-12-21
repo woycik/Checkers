@@ -60,4 +60,8 @@ public class ClientView {
     public void updateBoard(Board board, String playerColor) {
         boardView.update(board, playerColor);
     }
+
+    public void flipBoard(){
+        boardView.flipScene();
+    }
 }

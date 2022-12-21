@@ -21,7 +21,8 @@ public class Board {
                 fields[x][y] = new Field(x, y);
                 if ((x + y) % 2 == 0 && y < pawnRows) {
                     fields[x][y].setPawn(new Pawn(rgb(0, 0, 0)));
-                } else if ((x + y) % 2 == 0 && y > size - pawnRows - 1) {
+                }
+                else if ((x + y) % 2 == 0 && y > size - pawnRows - 1) {
                     fields[x][y].setPawn(new Pawn(rgb(255, 255, 255)));
                 }
             }
