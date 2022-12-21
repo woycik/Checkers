@@ -12,6 +12,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
     private double y;
     private final int startingFieldX;
     private final int startingFieldY;
+    public boolean controlsEnabled;
 
 
     public PawnEventHandler(PawnView pawnView, ClientThread clientThread) {
@@ -20,6 +21,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         this.startingFieldX = pawnView.getFieldX();
         this.startingFieldY = pawnView.getFieldY();
         this.clientThread = clientThread;
+        this.controlsEnabled = false;
     }
 
     private void changePosition(MouseEvent event) {
@@ -37,13 +39,15 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
-        if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-            changePosition(event);
-        }
-        else if(event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-            int fieldX = pawnView.getFieldX();
-            int fieldY = pawnView.getFieldY();
-            clientThread.makeMove(startingFieldX, startingFieldY, fieldX, fieldY);
+        if(controlsEnabled) {
+            if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+                changePosition(event);
+            }
+            else if(event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                int fieldX = pawnView.getFieldX();
+                int fieldY = pawnView.getFieldY();
+                clientThread.makeMove(startingFieldX, startingFieldY, fieldX, fieldY);
+            }
         }
     }
 }

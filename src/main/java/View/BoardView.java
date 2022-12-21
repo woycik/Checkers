@@ -34,8 +34,7 @@ public class BoardView extends Pane {
             for (int j = 0; j < boardSize; j++) {
                 if ((i + j) % 2 == 0) {
                     rectangles[i][j].setFill(Color.BROWN);
-                }
-                else {
+                } else {
                     rectangles[i][j].setFill(Color.BISQUE);
                 }
                 getChildren().add(rectangles[i][j]);
@@ -59,25 +58,23 @@ public class BoardView extends Pane {
         }
     }
 
-    public void activateClientMovement(String color){
-        for(PawnView pawn : pawnViews){
-            if(color.equals("Black")){
-                if(pawn.getColor().equals(Color.rgb(0,0,0))){
-                    pawn.setEventListener();
+    public void activateClientMovement(String color) {
+        for (PawnView pawn : pawnViews) {
+            if (color.equals("Black")) {
+                if (pawn.getColor().equals(Color.rgb(0, 0, 0))) {
+                    pawn.setControlsEnabled(true);
                 }
-            }
-            else if(color.equals("White")){
-                if(pawn.getColor().equals(Color.rgb(255,255,255))){
-                    pawn.setEventListener();
+            } else if (color.equals("White")) {
+                if (pawn.getColor().equals(Color.rgb(255, 255, 255))) {
+                    pawn.setControlsEnabled(true);
                 }
             }
         }
-
     }
 
-    public void blockClientMovement(){
-        for(PawnView pawn : pawnViews){
-            pawn.removeEventListener();
+    public void blockClientMovement() {
+        for (PawnView pawn : pawnViews) {
+            pawn.setControlsEnabled(false);
         }
     }
 }

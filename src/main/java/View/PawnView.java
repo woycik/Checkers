@@ -14,8 +14,8 @@ public class PawnView extends Circle {
         this.color=color;
         this.boardSize = boardSize;
         this.pawnEventHandler = new PawnEventHandler(this, clientThread);
-        setOnMouseDragged(null);
-        setOnMouseReleased(null);
+        setOnMouseDragged(pawnEventHandler);
+        setOnMouseReleased(pawnEventHandler);
     }
 
     public boolean hit(double x, double y) {
@@ -30,16 +30,8 @@ public class PawnView extends Circle {
         setCenterY(getCenterY()+y);
     }
 
-    public void setEventListener() {
-        System.out.println("Setting event listener for pawn " + getFieldX() + ";" + getFieldY());
-        setOnMouseDragged(pawnEventHandler);
-        setOnMouseReleased(pawnEventHandler);
-    }
-
-    public void removeEventListener() {
-        System.out.println("Removing event listener for pawn " + getFieldX() + ";" + getFieldY());
-        setOnMouseDragged(null);
-        setOnMouseReleased(null);
+    public void setControlsEnabled(boolean controlsEnabled) {
+        pawnEventHandler.controlsEnabled = controlsEnabled;
     }
 
     public int getFieldX() {
