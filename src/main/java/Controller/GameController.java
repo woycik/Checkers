@@ -16,9 +16,13 @@ public abstract class GameController {
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
+
     public abstract boolean makeMove(int x1, int y1, int x2, int y2);
+
     public abstract boolean isMoveLegal(int x1, int y1, int x2, int y2);
+
     public abstract int getBoardSize();
+
     public abstract int getPawnRows();
 
     public GameController() {
@@ -62,10 +66,9 @@ public abstract class GameController {
     }
 
     public void nextTurn() {
-        if(playerTurn == PlayerTurn.White) {
+        if (playerTurn == PlayerTurn.White) {
             playerTurn = PlayerTurn.Black;
-        }
-        else {
+        } else {
             playerTurn = PlayerTurn.White;
         }
     }

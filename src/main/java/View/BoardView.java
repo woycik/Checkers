@@ -1,17 +1,13 @@
 package View;
 
 import Controller.Client;
-import Controller.ClientThread;
 import Model.Board;
 import Model.Field;
-import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import jdk.tools.jlink.internal.Platform;
 
 import java.util.ArrayList;
-import java.util.function.Predicate;
 
 
 public class BoardView extends Pane {
@@ -38,8 +34,7 @@ public class BoardView extends Pane {
             for (int j = 0; j < boardSize; j++) {
                 if ((i + j) % 2 == 0) {
                     rectangles[i][j].setFill(Color.BROWN);
-                }
-                else {
+                } else {
                     rectangles[i][j].setFill(Color.BISQUE);
                 }
                 getChildren().add(rectangles[i][j]);
@@ -47,7 +42,7 @@ public class BoardView extends Pane {
         }
     }
 
-    public void update(Board board) {
+    public void update(Board board, String color) {
         getChildren().removeAll(pawnViews);
         pawnViews.clear();
         Field[][] fields = board.getFields();
@@ -58,6 +53,25 @@ public class BoardView extends Pane {
                             fields[i][j].getColor(), board.getSize(), client.thread);
                     pawnViews.add(pawnView);
                     this.getChildren().add(pawnView);
+                }
+            }
+        }
+        activateClientMovement(color);
+    }
+
+    public void activateClientMovement(String color) {
+        if (!color.equals(client.thread.playerColor)) {
+            return;
+        }
+
+        for (PawnView pawn : pawnViews) {
+            if (color.equals("Black")) {
+                if (pawn.getColor().equals(Color.rgb(0, 0, 0))) {
+                    pawn.setControlsEnabled(true);
+                }
+            } else if (color.equals("White")) {
+                if (pawn.getColor().equals(Color.rgb(255, 255, 255))) {
+                    pawn.setControlsEnabled(true);
                 }
             }
         }

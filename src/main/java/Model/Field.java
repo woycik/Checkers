@@ -27,7 +27,7 @@ public class Field {
         return pawn != null;
     }
 
-    public Color getColor(){
+    public Color getColor() {
         return pawn.getColor();
     }
 
@@ -35,15 +35,7 @@ public class Field {
         return pawn;
     }
 
-    public void setPawn(Pawn pawn){
+    public void setPawn(Pawn pawn) {
         this.pawn = pawn;
-    }
-
-    public void addToPossibleFields(Pawn pawn){
-        pawn.possibleFields.add(pawn);
-    }
-
-    public ArrayList<Pawn> getPossibleFields() {
-        return pawn.possibleFields;
     }
 }
