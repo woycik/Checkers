@@ -85,14 +85,14 @@ public class PolishCheckersController extends GameController {
             if(board.getFields()[x][y].isOccupied()) {
                 if (!board.getFields()[x][y].getPawn().isQueen()) {
 
-                    if ((x + 2 < getBoardSize()) && (y + 2) < getBoardSize()) {
+                    if ((x + 2 < (getBoardSize()-1)) && (y + 2) < (getBoardSize()-1)) {
                         if (board.getFields()[x + 1][y + 1].isOccupied() && !board.getFields()[x + 2][y + 2].isOccupied()) {
                             if (!board.getFields()[x + 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
                                 capturePossible.add(boardField);
                             }
                         }
                     }
-                    if ((x + 2 < getBoardSize()) && (y - 2) > 0) {
+                    if (((x + 2 < getBoardSize()-1)) && ((y - 2) >= 0)) {
                         if (board.getFields()[x + 1][y - 1].isOccupied() && !board.getFields()[x + 2][y - 2].isOccupied()) {
                             if (!board.getFields()[x + 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
                                 capturePossible.add(boardField);
@@ -100,14 +100,14 @@ public class PolishCheckersController extends GameController {
                         }
                     }
 
-                    if ((x - 2) > 0 && (y - 2) > 0) {
+                    if (((x - 2) >= 0) && ((y - 2) >= 0)) {
                         if (board.getFields()[x - 1][y - 1].isOccupied() && !board.getFields()[x - 2][y - 2].isOccupied()) {
                             if (!board.getFields()[x - 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
                                 capturePossible.add(boardField);
                             }
                         }
                     }
-                    if ((x - 2) > 0 && (y + 2) < getBoardSize()) {
+                    if (((x - 2) >= 0) && ((y + 2) < getBoardSize()-1)) {
                         if (board.getFields()[x - 1][y + 1].isOccupied() && !board.getFields()[x - 2][y + 2].isOccupied()) {
                             if (!board.getFields()[x - 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
                                 capturePossible.add(boardField);
@@ -237,28 +237,28 @@ public class PolishCheckersController extends GameController {
 
     public boolean canICaptureOneMoreTime(int x, int y) {
         if (!board.getFields()[x][y].getPawn().isQueen()) {
-            if (x + 2 < getBoardSize() && y + 2 < getBoardSize()) {
+            if ((x + 2) < (getBoardSize()-1) && (y + 2) < (getBoardSize()-1)) {
                 if (board.getFields()[x + 1][y + 1].isOccupied() && !board.getFields()[x + 2][y + 2].isOccupied()) {
                     if (!board.getFields()[x + 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
                         return true;
                     }
                 }
             }
-            if (x + 2 < getBoardSize() && y - 2 > 0) {
+            if ((x + 2) < (getBoardSize()-1) && (y - 2) >= 0) {
                 if (board.getFields()[x + 1][y - 1].isOccupied() && !board.getFields()[x + 2][y - 2].isOccupied()) {
                     if (!board.getFields()[x + 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
                         return true;
                     }
                 }
             }
-            if ((x - 2) > 0 && (y - 2) > 0) {
+            if ((x - 2) >= 0 && (y - 2) >= 0) {
                 if (board.getFields()[x - 1][y - 1].isOccupied() && !board.getFields()[x - 2][y - 2].isOccupied()) {
                     if (!board.getFields()[x - 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
                         return true;
                     }
                 }
             }
-            if ((x - 2) > 0 && (y + 2) < getBoardSize()) {
+            if ((x - 2) >= 0 && (y + 2) < (getBoardSize()-1)) {
                 if (board.getFields()[x - 1][y + 1].isOccupied() && !board.getFields()[x - 2][y + 2].isOccupied()) {
                     if (!board.getFields()[x - 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
                         return true;
@@ -427,8 +427,11 @@ public class PolishCheckersController extends GameController {
                 }
             }
             capturePossible.clear();
+            this.createNewQueen(x2,y2);
 
     }
+
+
 
     @Override
     public int getBoardSize() {
