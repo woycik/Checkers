@@ -60,7 +60,7 @@ public class BoardView extends Pane {
     }
 
     public void activateClientMovement(String color) {
-        if(!color.equals(client.thread.playerColor)) {
+        if (!color.equals(client.thread.playerColor)) {
             return;
         }
 

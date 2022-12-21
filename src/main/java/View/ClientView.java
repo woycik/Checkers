@@ -33,13 +33,13 @@ public class ClientView {
 
     public void waitingForOpponent() {
         Scene scene = stage.getScene();
-        Label clientStatusLabel = (Label)scene.lookup("#clientStatusLabel");
+        Label clientStatusLabel = (Label) scene.lookup("#clientStatusLabel");
         clientStatusLabel.setText("Connected succesfully. Waiting for the oponent.");
     }
 
     public void connectionFailed() {
         Scene scene = stage.getScene();
-        Label clientStatusLabel = (Label)scene.lookup("#clientStatusLabel");
+        Label clientStatusLabel = (Label) scene.lookup("#clientStatusLabel");
         clientStatusLabel.setText("Could not connect with the server. Please try again later.");
     }
 

@@ -13,8 +13,7 @@ public class EnglishCheckersController extends GameController {
         if (!finishCapture) {
             if (playerTurn == PlayerTurn.Black) {
                 this.captureFieldList(blackPawns); //zapisz czarne pola z których mozliwe jest bicie
-            }
-            else {
+            } else {
                 this.captureFieldList(whitePawns);
             }                                                                           //zapisz biale pola z których mozliwe jest bicie
             if (this.isCapturePossible()) {                                                     //sprawdz czy mozliwe jest bicie dla (bialego/czarnego)
@@ -30,14 +29,12 @@ public class EnglishCheckersController extends GameController {
                 }
 
                 return false;
-            }
-            else {
+            } else {
                 if (this.isMoveLegal(x1, y1, x2, y2)) {
                     return this.movePawn(x1, y1, x2, y2);                                           //koniec ruchu dla danego gracza o ile nie wybral niewlasciwego pola
                 }
             }
-        }
-        else {
+        } else {
             if (this.checkCapture(x1, y1, x2, y2)) {                                       //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
                 this.capturePawn(x1, y1, x2, y2); //jak tak to zbij
                 this.capturePossible.clear();
@@ -110,8 +107,7 @@ public class EnglishCheckersController extends GameController {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 int i = 1;
                 while (x + i + 1 < getBoardSize() && y + 1 + i < getBoardSize()) {
                     if (fields[x + i][y + i].getColor() != fields[x][y].getColor()) {

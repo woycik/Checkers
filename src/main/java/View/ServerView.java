@@ -20,7 +20,7 @@ public class ServerView {
     }
 
     public void init() {
-        final BorderPane borderPane=new BorderPane();
+        final BorderPane borderPane = new BorderPane();
 
         //select mode
         Button polishButton = new Button("Polish mode");
@@ -30,10 +30,10 @@ public class ServerView {
         //adding labels and buttons into gridpane
         Label chooseModeLabel = new Label("Choose mode: ");
         GridPane menu = new GridPane();
-        menu.add(chooseModeLabel,1,0);
-        menu.add(polishButton,0,1);
-        menu.add(russianButton,1,1);
-        menu.add(englishButton,2,1);
+        menu.add(chooseModeLabel, 1, 0);
+        menu.add(polishButton, 0, 1);
+        menu.add(russianButton, 1, 1);
+        menu.add(englishButton, 2, 1);
         menu.setHgap(10);
         menu.setVgap(20);
 
@@ -81,7 +81,7 @@ public class ServerView {
 
     public void bothPlayersConnected() {
         Scene scene = stage.getScene();
-        Label serverStatusLabel = (Label)scene.lookup("#serverStatusLabel");
+        Label serverStatusLabel = (Label) scene.lookup("#serverStatusLabel");
         serverStatusLabel.setText("Both players connected. Starting game.");
     }
 }

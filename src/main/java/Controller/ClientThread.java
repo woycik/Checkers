@@ -35,49 +35,45 @@ public class ClientThread extends Thread {
             socket = new Socket("localhost", port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            Platform.runLater( () -> view.waitingForOpponent());
+            Platform.runLater(() -> view.waitingForOpponent());
 
             String serverMessage;
             String[] messageSplit;
             do {
                 serverMessage = in.readLine();
 
-                if(serverMessage.equals("ping")) { // if server sends ping, respond with pong
+                if (serverMessage.equals("ping")) { // if server sends ping, respond with pong
                     out.println("pong");
                 }
-            } while(!serverMessage.split(";")[0].equals("start"));
+            } while (!serverMessage.split(";")[0].equals("start"));
 
             messageSplit = serverMessage.split(";");
             playerColor = messageSplit[1];
             int boardSize = Integer.parseInt(messageSplit[2]);
 
-            Platform.runLater( () -> view.showBoard(boardSize));
+            Platform.runLater(() -> view.showBoard(boardSize));
             Board initBoard = getBoard(boardSize, messageSplit[3]);
             Platform.runLater(() -> view.updateBoard(initBoard, "White"));
 
-            while(true) {
+            while (true) {
                 serverMessage = in.readLine();
                 messageSplit = serverMessage.split(";");
 
-                if(messageSplit[0].equals("update")) {
+                if (messageSplit[0].equals("update")) {
                     String playerTurn = messageSplit[1];
                     Board board = getBoard(boardSize, messageSplit[2]);
-                    Platform.runLater( () -> view.updateBoard(board, playerTurn));
-                }
-                else if(messageSplit[0].equals("illegal")) {
+                    Platform.runLater(() -> view.updateBoard(board, playerTurn));
+                } else if (messageSplit[0].equals("illegal")) {
                     System.out.println("Illegal move!");
-                }
-                else if(messageSplit[0].equals("win")) {
+                } else if (messageSplit[0].equals("win")) {
                     String winner = messageSplit[1];
-                    Platform.runLater( () -> view.announceWinner(winner));
+                    Platform.runLater(() -> view.announceWinner(winner));
                     break;
                 }
             }
-        }
-        catch(IOException ioe) {
-            Platform.runLater( () -> view.connectionFailed());
-        }
-        catch(Exception e) {
+        } catch (IOException ioe) {
+            Platform.runLater(() -> view.connectionFailed());
+        } catch (Exception e) {
             e.printStackTrace();
             try {
                 socket.close();
@@ -92,23 +88,19 @@ public class ClientThread extends Thread {
         String[] messageSplit = message.split(",");
         char pawn;
         int n = 0;
-        for(int i = 0; i < board.getSize(); i++) {
-            for(int j = 0; j < board.getSize(); j++) {
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j < board.getSize(); j++) {
                 pawn = messageSplit[n++].charAt(0);
 
-                if(pawn == '0') { // empty field
+                if (pawn == '0') { // empty field
                     board.getFields()[i][j].setPawn(null);
-                }
-                else if(pawn == 'w') { // white pawn
+                } else if (pawn == 'w') { // white pawn
                     board.getFields()[i][j].setPawn(new Pawn(rgb(255, 255, 255)));
-                }
-                else if(pawn == 'b') { // black pawn
+                } else if (pawn == 'b') { // black pawn
                     board.getFields()[i][j].setPawn(new Pawn(rgb(0, 0, 0)));
-                }
-                else if(pawn == 'W') { // white queen
+                } else if (pawn == 'W') { // white queen
                     board.getFields()[i][j].setPawn(new Pawn(rgb(255, 255, 255), true));
-                }
-                else if(pawn == 'B') { // black queen
+                } else if (pawn == 'B') { // black queen
                     board.getFields()[i][j].setPawn(new Pawn(rgb(0, 0, 0), true));
                 }
             }
@@ -122,11 +114,10 @@ public class ClientThread extends Thread {
 
     public void closeSocket() {
         try {
-            if(socket != null && !socket.isClosed()) {
+            if (socket != null && !socket.isClosed()) {
                 socket.close();
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

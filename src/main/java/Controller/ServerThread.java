@@ -40,19 +40,17 @@ public class ServerThread extends Thread {
 
         try {
             serverSocket = new ServerSocket(port);
-            do
-            {
-                if(!isConnected(firstPlayerSocket)) {
+            do {
+                if (!isConnected(firstPlayerSocket)) {
                     firstPlayerSocket = serverSocket.accept();
-                }
-                else if(!isConnected(secondPlayerSocket)) {
+                } else if (!isConnected(secondPlayerSocket)) {
                     secondPlayerSocket = serverSocket.accept();
                 }
                 System.out.println("Client connected");
-            } while(!isConnected(firstPlayerSocket) || !isConnected(secondPlayerSocket));
+            } while (!isConnected(firstPlayerSocket) || !isConnected(secondPlayerSocket));
 
             System.out.println("Both players connected");
-            Platform.runLater( () -> view.bothPlayersConnected());
+            Platform.runLater(() -> view.bothPlayersConnected());
 
             BufferedReader firstIn = new BufferedReader(new InputStreamReader(firstPlayerSocket.getInputStream()));
             PrintWriter firstOut = new PrintWriter(firstPlayerSocket.getOutputStream(), true);
@@ -69,44 +67,41 @@ public class ServerThread extends Thread {
 
             String clientMessage = "";
             int x1, x2, y1, y2;
-            while(!stopRequest && !gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
-                if(gameController.playerTurn == PlayerTurn.White) {
+            while (!stopRequest && !gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
+                if (gameController.playerTurn == PlayerTurn.White) {
                     clientMessage = firstIn.readLine();
-                    if(clientMessage == null) {
+                    if (clientMessage == null) {
                         continue;
                     }
                     System.out.println("Received message from White: " + clientMessage);
-                }
-                else if(gameController.playerTurn == PlayerTurn.Black) {
+                } else if (gameController.playerTurn == PlayerTurn.Black) {
                     clientMessage = secondIn.readLine();
-                    if(clientMessage == null) {
+                    if (clientMessage == null) {
                         continue;
                     }
                     System.out.println("Received message from Black: " + clientMessage);
                 }
 
-                if(clientMessage != null && !clientMessage.isEmpty()) {
+                if (clientMessage != null && !clientMessage.isEmpty()) {
                     String[] messageSplit = clientMessage.split(";");
-                    if(messageSplit[0].equals("move")) { // player wants to make a move
+                    if (messageSplit[0].equals("move")) { // player wants to make a move
                         // move;x1;y1;x2;y2
                         x1 = Integer.parseInt(messageSplit[1]);
                         y1 = Integer.parseInt(messageSplit[2]);
                         x2 = Integer.parseInt(messageSplit[3]);
                         y2 = Integer.parseInt(messageSplit[4]);
 
-                        if(gameController.isMoveLegal(x1, y1, x2, y2)) {
+                        if (gameController.isMoveLegal(x1, y1, x2, y2)) {
                             gameController.makeMove(x1, y1, x2, y2);
                             gameController.nextTurn();
                             System.out.println("Legal move. Sending update to both players.");
                             firstOut.println(getUpdateMessage());
                             secondOut.println(getUpdateMessage());
                             System.out.println(gameController.playerTurn.toString() + "'s move");
-                        }
-                        else { // inform client about illegal move
-                            if(gameController.playerTurn == PlayerTurn.White) {
+                        } else { // inform client about illegal move
+                            if (gameController.playerTurn == PlayerTurn.White) {
                                 firstOut.println(getUpdateMessage());
-                            }
-                            else if(gameController.playerTurn == PlayerTurn.Black) {
+                            } else if (gameController.playerTurn == PlayerTurn.Black) {
                                 secondOut.println(getUpdateMessage());
                             }
                             System.out.println("Illegal move. Player notified.");
@@ -117,20 +112,17 @@ public class ServerThread extends Thread {
             }
 
             String winnerInfo;
-            if(gameController.isWhiteWinner()) {
+            if (gameController.isWhiteWinner()) {
                 winnerInfo = "win;White";
-            }
-            else {
+            } else {
                 winnerInfo = "win;Black";
             }
 
             firstOut.println(winnerInfo);
             secondOut.println(winnerInfo);
-        }
-        catch(SocketException se) {
+        } catch (SocketException se) {
             System.out.println("Server socket closed");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -141,21 +133,19 @@ public class ServerThread extends Thread {
         Field[][] fields = board.getFields();
         Pawn pawn;
         char ch;
-        for(int i = 0; i < board.getSize(); i++) {
-            for(int j = 0; j < board.getSize(); j++) {
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j < board.getSize(); j++) {
                 pawn = fields[i][j].getPawn();
-                if(pawn == null) {
+                if (pawn == null) {
                     ch = '0';
-                }
-                else {
-                    if(pawn.getColor().equals(rgb(255, 255, 255))) {
+                } else {
+                    if (pawn.getColor().equals(rgb(255, 255, 255))) {
                         ch = 'w';
-                    }
-                    else {
+                    } else {
                         ch = 'b';
                     }
 
-                    if(pawn.isQueen()) {
+                    if (pawn.isQueen()) {
                         ch = Character.toUpperCase(ch);
                     }
                 }
@@ -167,10 +157,9 @@ public class ServerThread extends Thread {
 
     private String getUpdateMessage() {
         String playerColor = "";
-        if(gameController.playerTurn == PlayerTurn.White) {
+        if (gameController.playerTurn == PlayerTurn.White) {
             playerColor = "White";
-        }
-        else if(gameController.playerTurn == PlayerTurn.Black) {
+        } else if (gameController.playerTurn == PlayerTurn.Black) {
             playerColor = "Black";
         }
 
@@ -179,7 +168,7 @@ public class ServerThread extends Thread {
 
     private boolean isConnected(Socket socket) {
         try {
-            if(socket == null || socket.isClosed() || !socket.isConnected()
+            if (socket == null || socket.isClosed() || !socket.isConnected()
                     || socket.isInputShutdown() || socket.isOutputShutdown()) {
                 return false;
             }
@@ -188,19 +177,17 @@ public class ServerThread extends Thread {
             out.println("ping");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             return in.readLine().equals("pong");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
 
     public void closeServerSocket() {
         try {
-            if(serverSocket != null && !serverSocket.isClosed()) {
+            if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
