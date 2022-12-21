@@ -91,14 +91,14 @@ public class ServerThread extends Thread {
                         x2 = Integer.parseInt(messageSplit[3]);
                         y2 = Integer.parseInt(messageSplit[4]);
 
-                        if (gameController.isMoveLegal(x1, y1, x2, y2)) {
-                            gameController.makeMove(x1, y1, x2, y2);
-                            gameController.nextTurn();
-                            System.out.println("Legal move. Sending update to both players.");
-                            firstOut.println(getUpdateMessage());
-                            secondOut.println(getUpdateMessage());
-                            System.out.println(gameController.playerTurn.toString() + "'s move");
-                        } else { // inform client about illegal move
+                        if(gameController.makeMove(x1, y1, x2, y2)) {
+                                gameController.nextTurn();
+                                System.out.println("Legal move. Sending update to both players.");
+                                firstOut.println(getUpdateMessage());
+                                secondOut.println(getUpdateMessage());
+                                System.out.println(gameController.playerTurn.toString() + "'s move");
+                        }
+                            else { // inform client about illegal move
                             if (gameController.playerTurn == PlayerTurn.White) {
                                 firstOut.println(getUpdateMessage());
                             } else if (gameController.playerTurn == PlayerTurn.Black) {
