@@ -61,7 +61,7 @@ public class ClientView {
         boardView.update(board);
     }
 
-    public void activateMovement(String color){
+    public void activateMovement(String color) {
         boardView.activateClientMovement(color);
     }
 

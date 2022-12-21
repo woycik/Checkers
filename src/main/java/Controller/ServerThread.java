@@ -70,13 +70,19 @@ public class ServerThread extends Thread {
             String clientMessage = "";
             int x1, x2, y1, y2;
             while(!stopRequest && !gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
-                if(gameController.playerTurn == PlayerTurn.Black) {
+                if(gameController.playerTurn == PlayerTurn.White) {
                     clientMessage = firstIn.readLine();
-                    System.out.println("Received message from Black: " + clientMessage);
-                }
-                else if(gameController.playerTurn == PlayerTurn.White) {
-                    clientMessage = secondIn.readLine();
+                    if(clientMessage == null) {
+                        continue;
+                    }
                     System.out.println("Received message from White: " + clientMessage);
+                }
+                else if(gameController.playerTurn == PlayerTurn.Black) {
+                    clientMessage = secondIn.readLine();
+                    if(clientMessage == null) {
+                        continue;
+                    }
+                    System.out.println("Received message from Black: " + clientMessage);
                 }
 
                 if(clientMessage != null && !clientMessage.isEmpty()) {
@@ -91,18 +97,17 @@ public class ServerThread extends Thread {
                         if(gameController.isMoveLegal(x1, y1, x2, y2)) {
                             gameController.makeMove(x1, y1, x2, y2);
                             gameController.nextTurn();
+                            System.out.println("Legal move. Sending update to both players.");
                             firstOut.println(getUpdateMessage());
                             secondOut.println(getUpdateMessage());
-                            System.out.println("Legal move. Update sent.");
+                            System.out.println(gameController.playerTurn.toString() + "'s move");
                         }
                         else { // inform client about illegal move
-                            if(gameController.playerTurn == PlayerTurn.Black) {
+                            if(gameController.playerTurn == PlayerTurn.White) {
                                 firstOut.println(getUpdateMessage());
-                                firstOut.println("illegalmove");
                             }
-                            else if(gameController.playerTurn == PlayerTurn.White) {
+                            else if(gameController.playerTurn == PlayerTurn.Black) {
                                 secondOut.println(getUpdateMessage());
-                                secondOut.println("illegalmove");
                             }
                             System.out.println("Illegal move. Player notified.");
                         }
@@ -161,7 +166,15 @@ public class ServerThread extends Thread {
     }
 
     private String getUpdateMessage() {
-        return "update;" + gameController.playerTurn.toString() + ";" + getSocketPrintableFormat(gameController.board);
+        String playerColor = "";
+        if(gameController.playerTurn == PlayerTurn.White) {
+            playerColor = "White";
+        }
+        else if(gameController.playerTurn == PlayerTurn.Black) {
+            playerColor = "Black";
+        }
+
+        return "update;" + playerColor + ";" + getSocketPrintableFormat(gameController.board);
     }
 
     private boolean isConnected(Socket socket) {

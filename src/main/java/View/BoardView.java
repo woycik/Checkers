@@ -1,17 +1,13 @@
 package View;
 
 import Controller.Client;
-import Controller.ClientThread;
 import Model.Board;
 import Model.Field;
-import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import jdk.tools.jlink.internal.Platform;
 
 import java.util.ArrayList;
-import java.util.function.Predicate;
 
 
 public class BoardView extends Pane {
@@ -81,7 +77,7 @@ public class BoardView extends Pane {
 
     public void blockClientMovement(){
         for(PawnView pawn : pawnViews){
-            pawn.removeEvenetListener();
+            pawn.removeEventListener();
         }
     }
 }

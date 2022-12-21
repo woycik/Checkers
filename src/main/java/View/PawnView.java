@@ -30,12 +30,14 @@ public class PawnView extends Circle {
         setCenterY(getCenterY()+y);
     }
 
-    public void setEventListener(){
+    public void setEventListener() {
+        System.out.println("Setting event listener for pawn " + getFieldX() + ";" + getFieldY());
         setOnMouseDragged(pawnEventHandler);
         setOnMouseReleased(pawnEventHandler);
     }
 
-    public void removeEvenetListener(){
+    public void removeEventListener() {
+        System.out.println("Removing event listener for pawn " + getFieldX() + ";" + getFieldY());
         setOnMouseDragged(null);
         setOnMouseReleased(null);
     }

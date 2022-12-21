@@ -52,8 +52,12 @@ public class ClientThread extends Thread {
             int boardSize = Integer.parseInt(messageSplit[2]);
 
             Platform.runLater( () -> view.showBoard(boardSize));
-            Board initBoard = getBoard(boardSize, messageSplit[2]);
+            Board initBoard = getBoard(boardSize, messageSplit[3]);
             Platform.runLater(() -> view.updateBoard(initBoard));
+
+            if(playerColor.equals("White")) { // white player makes a first move
+                Platform.runLater( () -> view.activateMovement(playerColor));
+            }
 
             while(true) {
                 serverMessage = in.readLine();
@@ -62,11 +66,12 @@ public class ClientThread extends Thread {
                 if(messageSplit[0].equals("update")) {
                     String playerTurn = messageSplit[1];
                     if(playerTurn.equals(playerColor)) {
-                        // TODO: lock controls if it is not this player's turn
-                        //Platform.runLater( () -> view.activateMovement(playerColor));
+                        System.out.println("My turn :DDD");
+                        Platform.runLater( () -> view.activateMovement(playerColor));
                     }
-                    else{
-                        //Platform.runLater( () -> view.blockMovement());
+                    else {
+                        System.out.println("Not my turn :((");
+                        Platform.runLater( () -> view.blockMovement());
                     }
                     Board board = getBoard(boardSize, messageSplit[2]);
                     Platform.runLater( () -> view.updateBoard(board));
@@ -125,7 +130,6 @@ public class ClientThread extends Thread {
 
     public void makeMove(int x1, int y1, int x2, int y2) {
         out.println("move;" + x1 + ";" + y1 + ";" + x2 + ";" + y2);
-        // TODO: check server response (legal/illegal)
     }
 
     public void closeSocket() {
