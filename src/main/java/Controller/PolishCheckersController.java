@@ -15,12 +15,12 @@ public class PolishCheckersController extends GameController {
         if (!finishCapture) {
             if (playerTurn == PlayerTurn.Black) {
                 this.captureFieldList(blackPawns);
-            }                     //zapisz czarne pola z których mozliwe jest bicie}
+            }                                                                                   //zapisz czarne pola z których mozliwe jest bicie}
             else {
                 this.captureFieldList(whitePawns);
-            }                                                                           //zapisz biale pola z których mozliwe jest bicie
+            }                                                                                   //zapisz biale pola z których mozliwe jest bicie
             if (this.isCapturePossible()) {                                                     //sprawdz czy mozliwe jest bicie dla (bialego/czarnego)                 //czy doszloby do wykonania bicia?
-                if (this.checkCapture(x1, y1, x2, y2)) {                                            //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
+                if (this.checkCapture(x1, y1, x2, y2)) {                                        //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
                     this.capturePawn(x1, y1, x2, y2); //jak tak to zbij
                     this.capturePossible.clear();
                     if (this.canICaptureOneMoreTime(x2, y2)) {
@@ -39,7 +39,7 @@ public class PolishCheckersController extends GameController {
             }
         }
         else {
-            if (this.checkCapture(x1, y1, x2, y2)) {                                       //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
+            if (this.checkCapture(x1, y1, x2, y2)) {                                                //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
                 this.capturePawn(x1, y1, x2, y2); //jak tak to zbij
                 this.capturePossible.clear();
                 if (this.canICaptureOneMoreTime(x2, y2)) {
@@ -51,7 +51,7 @@ public class PolishCheckersController extends GameController {
             }
 
         }
-        return false;                                                                    //powtórzenie ruchu
+        return false;                                                                               //powtórzenie ruchu
     }
 
     //przypisuje do myPaws wszytkie pionki danego gracza
@@ -82,93 +82,95 @@ public class PolishCheckersController extends GameController {
         for (Field boardField : typeOfPawns) {
             int x = boardField.getX();
             int y = boardField.getY();
-            if (!board.getFields()[x][y].getPawn().isQueen()) {
+            if(board.getFields()[x][y].isOccupied()) {
+                if (!board.getFields()[x][y].getPawn().isQueen()) {
 
-                if ((x + 2 < getBoardSize()) && (y + 2) < getBoardSize()) {
-                    if (board.getFields()[x + 1][y + 1].isOccupied() && !board.getFields()[x + 2][y + 2].isOccupied()) {
-                        if (!board.getFields()[x + 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                            capturePossible.add(boardField);
-                        }
-                    }
-                }
-                if ((x + 2 < getBoardSize()) && (y - 2) > 0) {
-                    if (board.getFields()[x + 1][y - 1].isOccupied() && !board.getFields()[x + 2][y - 2].isOccupied()) {
-                        if (!board.getFields()[x + 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                            capturePossible.add(boardField);
-                        }
-                    }
-                }
-
-                if ((x - 2) > 0 && (y - 2) > 0) {
-                    if (board.getFields()[x - 1][y - 1].isOccupied() && !board.getFields()[x - 2][y - 2].isOccupied()) {
-                        if (!board.getFields()[x - 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                            capturePossible.add(boardField);
-                        }
-                    }
-                }
-                if ((x - 2) > 0 && (y + 2) < getBoardSize()) {
-                    if (board.getFields()[x - 1][y + 1].isOccupied() && !board.getFields()[x - 2][y + 2].isOccupied()) {
-                        if (!board.getFields()[x - 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                            capturePossible.add(boardField);
-                        }
-                    }
-                }
-            } else {
-
-                int i = 1;
-                while (x + i + 1 < getBoardSize() && y + 1 + i < getBoardSize()) {
-                    if (board.getFields()[x + i][y + i].getColor().equals(board.getFields()[x][y].getColor())) {
-                        if (!board.getFields()[x + i + 1][y + i + 1].isOccupied()) {
-                            if (capturePossible.contains(board.getFields()[x][y])) {
-                                capturePossible.add(board.getFields()[x][y]);
+                    if ((x + 2 < getBoardSize()) && (y + 2) < getBoardSize()) {
+                        if (board.getFields()[x + 1][y + 1].isOccupied() && !board.getFields()[x + 2][y + 2].isOccupied()) {
+                            if (!board.getFields()[x + 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
+                                capturePossible.add(boardField);
                             }
                         }
-                    } else {
-                        break;
                     }
-                    i++;
-                }
-                i = 1;
-                while (x + i + 1 < getBoardSize() && y - 1 - i > 0) {
-                    if (board.getFields()[x + i][y - i].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                        if (!board.getFields()[x + i + 1][y - i - 1].isOccupied()) {
-                            if (!capturePossible.contains(board.getFields()[x][y])) {
-                                capturePossible.add(board.getFields()[x][y]);
+                    if ((x + 2 < getBoardSize()) && (y - 2) > 0) {
+                        if (board.getFields()[x + 1][y - 1].isOccupied() && !board.getFields()[x + 2][y - 2].isOccupied()) {
+                            if (!board.getFields()[x + 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
+                                capturePossible.add(boardField);
                             }
                         }
-                    } else {
-                        break;
                     }
-                    i++;
-                }
-                i = 1;
-                while (x - i - 1 > 0 && y - 1 - i > 0) {
-                    if (board.getFields()[x - i][y - i].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                        if (!board.getFields()[x - i - 1][y - i - 1].isOccupied()) {
-                            if (!capturePossible.contains(board.getFields()[x][y])) {
-                                capturePossible.add(board.getFields()[x][y]);
+
+                    if ((x - 2) > 0 && (y - 2) > 0) {
+                        if (board.getFields()[x - 1][y - 1].isOccupied() && !board.getFields()[x - 2][y - 2].isOccupied()) {
+                            if (!board.getFields()[x - 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
+                                capturePossible.add(boardField);
                             }
                         }
-                    } else {
-                        break;
                     }
-                    i++;
-                }
-                i = 1;
-                while (x - i - 1 > 0 && y + 1 + i < getBoardSize()) {
-                    if (board.getFields()[x - i][y + i].getColor().equals(board.getFields()[x][y].getColor())) {
-                        if (!board.getFields()[x - i - 1][y + i + 1].isOccupied()) {
-                            if (!capturePossible.contains(board.getFields()[x][y])) {
-                                capturePossible.add(board.getFields()[x][y]);
+                    if ((x - 2) > 0 && (y + 2) < getBoardSize()) {
+                        if (board.getFields()[x - 1][y + 1].isOccupied() && !board.getFields()[x - 2][y + 2].isOccupied()) {
+                            if (!board.getFields()[x - 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
+                                capturePossible.add(boardField);
                             }
                         }
-                    } else {
-                        break;
                     }
-                    i++;
-                }
+                } else {
+
+                    int i = 1;
+                    while (x + i + 1 < getBoardSize() && y + 1 + i < getBoardSize()) {
+                        if (board.getFields()[x + i][y + i].getColor().equals(board.getFields()[x][y].getColor())) {
+                            if (!board.getFields()[x + i + 1][y + i + 1].isOccupied()) {
+                                if (capturePossible.contains(board.getFields()[x][y])) {
+                                    capturePossible.add(board.getFields()[x][y]);
+                                }
+                            }
+                        } else {
+                            break;
+                        }
+                        i++;
+                    }
+                    i = 1;
+                    while (x + i + 1 < getBoardSize() && y - 1 - i > 0) {
+                        if (board.getFields()[x + i][y - i].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
+                            if (!board.getFields()[x + i + 1][y - i - 1].isOccupied()) {
+                                if (!capturePossible.contains(board.getFields()[x][y])) {
+                                    capturePossible.add(board.getFields()[x][y]);
+                                }
+                            }
+                        } else {
+                            break;
+                        }
+                        i++;
+                    }
+                    i = 1;
+                    while (x - i - 1 > 0 && y - 1 - i > 0) {
+                        if (board.getFields()[x - i][y - i].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
+                            if (!board.getFields()[x - i - 1][y - i - 1].isOccupied()) {
+                                if (!capturePossible.contains(board.getFields()[x][y])) {
+                                    capturePossible.add(board.getFields()[x][y]);
+                                }
+                            }
+                        } else {
+                            break;
+                        }
+                        i++;
+                    }
+                    i = 1;
+                    while (x - i - 1 > 0 && y + 1 + i < getBoardSize()) {
+                        if (board.getFields()[x - i][y + i].getColor().equals(board.getFields()[x][y].getColor())) {
+                            if (!board.getFields()[x - i - 1][y + i + 1].isOccupied()) {
+                                if (!capturePossible.contains(board.getFields()[x][y])) {
+                                    capturePossible.add(board.getFields()[x][y]);
+                                }
+                            }
+                        } else {
+                            break;
+                        }
+                        i++;
+                    }
 
 
+                }
             }
         }
         this.removePawnsFromList();
@@ -186,7 +188,6 @@ public class PolishCheckersController extends GameController {
         if (capturePossible.contains(board.getFields()[x1][y1])) {
             if (!board.getFields()[x1][y1].getPawn().isQueen()) {
                 if (Math.abs(x1 - x2) == 2 && Math.abs(y1 - y2) == 2 && board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].isOccupied() && !board.getFields()[x2][y2].isOccupied()) {
-                    System.out.println("it contains this pawn inside");
                     return !board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].getColor().equals(board.getFields()[x1][y1].getColor());
                 }
             } else {
