@@ -60,4 +60,12 @@ public class ClientView {
     public void updateBoard(Board board) {
         boardView.update(board);
     }
+
+    public void activateMovement(String color){
+        boardView.activateClientMovement(color);
+    }
+
+    public void blockMovement(){
+        boardView.blockClientMovement();
+    }
 }

@@ -62,4 +62,26 @@ public class BoardView extends Pane {
             }
         }
     }
+
+    public void activateClientMovement(String color){
+        for(PawnView pawn : pawnViews){
+            if(color.equals("Black")){
+                if(pawn.getColor().equals(Color.rgb(0,0,0))){
+                    pawn.setEventListener();
+                }
+            }
+            else if(color.equals("White")){
+                if(pawn.getColor().equals(Color.rgb(255,255,255))){
+                    pawn.setEventListener();
+                }
+            }
+        }
+
+    }
+
+    public void blockClientMovement(){
+        for(PawnView pawn : pawnViews){
+            pawn.removeEvenetListener();
+        }
+    }
 }

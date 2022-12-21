@@ -63,6 +63,10 @@ public class ClientThread extends Thread {
                     String playerTurn = messageSplit[1];
                     if(playerTurn.equals(playerColor)) {
                         // TODO: lock controls if it is not this player's turn
+                        //Platform.runLater( () -> view.activateMovement(playerColor));
+                    }
+                    else{
+                        //Platform.runLater( () -> view.blockMovement());
                     }
                     Board board = getBoard(boardSize, messageSplit[2]);
                     Platform.runLater( () -> view.updateBoard(board));

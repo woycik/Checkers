@@ -6,13 +6,16 @@ import javafx.scene.shape.Circle;
 
 public class PawnView extends Circle {
     private final int boardSize;
+    private final Color color;
+    private final PawnEventHandler pawnEventHandler;
 
     PawnView(int x, int y, int radius, Color color, int boardSize, ClientThread clientThread){
         super(x,y,radius,color);
+        this.color=color;
         this.boardSize = boardSize;
-        PawnEventHandler pawnEventHandler = new PawnEventHandler(this, clientThread);
-        setOnMouseDragged(pawnEventHandler);
-        setOnMouseReleased(pawnEventHandler);
+        this.pawnEventHandler = new PawnEventHandler(this, clientThread);
+        setOnMouseDragged(null);
+        setOnMouseReleased(null);
     }
 
     public boolean hit(double x, double y) {
@@ -27,6 +30,16 @@ public class PawnView extends Circle {
         setCenterY(getCenterY()+y);
     }
 
+    public void setEventListener(){
+        setOnMouseDragged(pawnEventHandler);
+        setOnMouseReleased(pawnEventHandler);
+    }
+
+    public void removeEvenetListener(){
+        setOnMouseDragged(null);
+        setOnMouseReleased(null);
+    }
+
     public int getFieldX() {
         double width=500;
         double fieldWidth = width / boardSize;
@@ -37,5 +50,9 @@ public class PawnView extends Circle {
         double height=500;
         double fieldHeight = height / boardSize;
         return (int)Math.floor(this.getCenterY()/fieldHeight);
+    }
+
+    public Color getColor(){
+        return this.color;
     }
 }

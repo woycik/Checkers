@@ -39,11 +39,7 @@ public class Field {
         this.pawn = pawn;
     }
 
-    public void addToPossibleFields(Pawn pawn){
-        pawn.possibleFields.add(pawn);
-    }
 
-    public ArrayList<Pawn> getPossibleFields() {
-        return pawn.possibleFields;
-    }
+
+
 }
