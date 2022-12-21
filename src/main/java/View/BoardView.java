@@ -5,8 +5,11 @@ import Model.Board;
 import Model.Field;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
+import javafx.scene.image.Image;
+
 
 import java.util.ArrayList;
 
@@ -51,8 +54,26 @@ public class BoardView extends Pane {
             for (int j = 0; j < board.getSize(); j++) {
 
                 if (fields[i][j].isOccupied()) {
+                    Image img;
                     PawnView pawnView = new PawnView(50 * i + 25, 50 * j + 25, 20, fields[i][j].getColor(), board.getSize(), client.thread);
                     pawnViews.add(pawnView);
+
+                    if(!fields[i][j].getPawn().isQueen() && fields[i][j].getColor().equals(Color.rgb(255,255,255))){
+                        img = new Image("file:whitePawn.jpg");
+                        pawnView.setFill(new ImagePattern(img));
+                    }
+                    else if(!fields[i][j].getPawn().isQueen() && fields[i][j].getColor().equals(Color.rgb(0,0,0))){
+                        img = new Image("file:blackPawn.jpg");
+                        pawnView.setFill(new ImagePattern(img));
+                    }
+                    else if( fields[i][j].getColor().equals(Color.rgb(255,255,255))){
+                        img = new Image("file:whiteQueenPawn.jpg");
+                        pawnView.setFill(new ImagePattern(img));
+                    }
+                    else if(fields[i][j].getColor().equals(Color.rgb(0,0,0))){
+                        img = new Image("file:blackQueenPawn.jg");
+                        pawnView.setFill(new ImagePattern(img));
+                    }
                     this.getChildren().add(pawnView);
                 }
             }
