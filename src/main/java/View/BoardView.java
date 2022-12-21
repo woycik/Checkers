@@ -6,6 +6,7 @@ import Model.Field;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 
@@ -48,9 +49,9 @@ public class BoardView extends Pane {
         Field[][] fields = board.getFields();
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
+
                 if (fields[i][j].isOccupied()) {
-                    PawnView pawnView = new PawnView(50 * i + 25, 50 * j + 25, 20,
-                            fields[i][j].getColor(), board.getSize(), client.thread);
+                    PawnView pawnView = new PawnView(50 * i + 25, 50 * j + 25, 20, fields[i][j].getColor(), board.getSize(), client.thread);
                     pawnViews.add(pawnView);
                     this.getChildren().add(pawnView);
                 }
@@ -74,6 +75,13 @@ public class BoardView extends Pane {
                     pawn.setControlsEnabled(true);
                 }
             }
+        }
+    }
+
+    public void flipScene(){
+        if(client.thread.playerColor.equals("Black")){
+            Rotate rotate = new Rotate(180,250,250);
+            this.getTransforms().addAll(rotate);
         }
     }
 }

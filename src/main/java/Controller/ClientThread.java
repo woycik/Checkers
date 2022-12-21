@@ -52,6 +52,7 @@ public class ClientThread extends Thread {
             int boardSize = Integer.parseInt(messageSplit[2]);
 
             Platform.runLater(() -> view.showBoard(boardSize));
+            Platform.runLater(() -> view.flipBoard());
             Board initBoard = getBoard(boardSize, messageSplit[3]);
             Platform.runLater(() -> view.updateBoard(initBoard, "White"));
 
