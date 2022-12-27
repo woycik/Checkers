@@ -17,20 +17,22 @@ import java.util.ArrayList;
 public class BoardView extends Pane {
     private final Client client;
     private ArrayList<PawnView> pawnViews;
+    double size;
 
     public BoardView(int boardSize, Client client) {
         super();
         this.client = client;
         this.pawnViews = new ArrayList<>();
+        size= 500.0/boardSize;
 
         Rectangle[][] rectangles = new Rectangle[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 rectangles[i][j] = new Rectangle();
-                rectangles[i][j].setX(i * 50);
-                rectangles[i][j].setY(j * 50);
-                rectangles[i][j].setWidth(50);
-                rectangles[i][j].setHeight(50);
+                rectangles[i][j].setX(i * size);
+                rectangles[i][j].setY(j * size);
+                rectangles[i][j].setWidth(size);
+                rectangles[i][j].setHeight(size);
             }
         }
 
@@ -55,7 +57,7 @@ public class BoardView extends Pane {
 
                 if (fields[i][j].isOccupied()) {
                     Image img;
-                    PawnView pawnView = new PawnView(50 * i + 25, 50 * j + 25, 20, fields[i][j].getColor(), board.getSize(), client.thread);
+                    PawnView pawnView = new PawnView((int)size * i + (int)Math.floor(size/2), (int)size * j + (int)Math.floor(size/2), 20, fields[i][j].getColor(), board.getSize(), client.thread);
                     pawnViews.add(pawnView);
 
                     if(!fields[i][j].getPawn().isQueen() && fields[i][j].getColor().equals(Color.rgb(255,255,255))){
@@ -71,7 +73,7 @@ public class BoardView extends Pane {
                         pawnView.setFill(new ImagePattern(img));
                     }
                     else if(fields[i][j].getColor().equals(Color.rgb(0,0,0))){
-                        img = new Image("file:blackQueenPawn.jg");
+                        img = new Image("file:blackQueenPawn.jpg");
                         pawnView.setFill(new ImagePattern(img));
                     }
                     this.getChildren().add(pawnView);

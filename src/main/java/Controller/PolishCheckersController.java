@@ -1,10 +1,8 @@
 package Controller;
 
 import Model.Field;
-
 import Model.PlayerTurn;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 
 public class PolishCheckersController extends GameController {
@@ -40,7 +38,7 @@ public class PolishCheckersController extends GameController {
         }
         else {
             if (this.checkCapture(x1, y1, x2, y2)) {                                                //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
-                this.capturePawn(x1, y1, x2, y2); //jak tak to zbij
+                this.capturePawn(x1, y1, x2, y2);
                 this.capturePossible.clear();
                 if (this.canICaptureOneMoreTime(x2, y2)) {
                     capturePossible.add(board.getFields()[x2][y2]);
@@ -48,186 +46,202 @@ public class PolishCheckersController extends GameController {
                     return false;
                 }
                 finishCapture = false;
+                return true;
             }
 
         }
-        return false;                                                                               //powtórzenie ruchu
+        return false;
     }
 
-    //przypisuje do myPaws wszytkie pionki danego gracza
-    //najpierw sprawdzamy czy możliwe jest bicie
-    //jesli jest trzeba je wykonać
-    //jesli nie robimy normalny ruch
-    //po czym oddajemy mozliwosc poruszania się przeciwnikowi
 
-    //zwraca fields na których możliwe jest bicie
 
-    //do listy myPaws przypisuje (jak narazie) wszytkie pionki o kolorze czarnym.
-    public void setMyPawns() {
-        for (int i = 0; i < getBoardSize(); i++) {
-            for (int j = 0; j < getBoardSize(); j++) {
-                if (board.getFields()[i][j].getPawn() != null) {
-                    if (board.getFields()[i][j].getPawn().getColor().equals(Color.rgb(0, 0, 0))) {
-                        blackPawns.add(board.getFields()[i][j]);
-                    } else if (board.getFields()[i][j].getPawn().getColor().equals(Color.rgb(255, 255, 255))) {
-                        whitePawns.add(board.getFields()[i][j]);
-                    }
-                }
-            }
-        }
-    }
-
-    //przypisanie do listy capturePossible pol  z których mozliwe jest bicie w ogólnosci i dla queen tez
     public void captureFieldList(ArrayList<Field> typeOfPawns) {
         for (Field boardField : typeOfPawns) {
             int x = boardField.getX();
             int y = boardField.getY();
-            if(board.getFields()[x][y].isOccupied()) {
-                if (!board.getFields()[x][y].getPawn().isQueen()) {
 
-                    if ((x + 2 < getBoardSize()) && (y + 2) < getBoardSize()) {
-                        if (board.getFields()[x + 1][y + 1].isOccupied() && !board.getFields()[x + 2][y + 2].isOccupied()) {
-                            if (!board.getFields()[x + 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                                capturePossible.add(boardField);
-                            }
-                        }
-                    }
-                    if ((x + 2 < getBoardSize()) && (y - 2) > 0) {
-                        if (board.getFields()[x + 1][y - 1].isOccupied() && !board.getFields()[x + 2][y - 2].isOccupied()) {
-                            if (!board.getFields()[x + 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                                capturePossible.add(boardField);
-                            }
-                        }
+            if(boardField.isOccupied()) {
+                Color color =boardField.getColor();
+                if (!boardField.getPawn().isQueen()) {
+
+                    if(isCapturePossibleTopLeft(x,y,color)){
+                        capturePossible.add(boardField);
                     }
 
-                    if ((x - 2) > 0 && (y - 2) > 0) {
-                        if (board.getFields()[x - 1][y - 1].isOccupied() && !board.getFields()[x - 2][y - 2].isOccupied()) {
-                            if (!board.getFields()[x - 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                                capturePossible.add(boardField);
-                            }
-                        }
+                    else if(isCapturePossibleTopRight(x,y,color)){
+                        capturePossible.add(boardField);
                     }
-                    if ((x - 2) > 0 && (y + 2) < getBoardSize()) {
-                        if (board.getFields()[x - 1][y + 1].isOccupied() && !board.getFields()[x - 2][y + 2].isOccupied()) {
-                            if (!board.getFields()[x - 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                                capturePossible.add(boardField);
-                            }
-                        }
-                    }
-                } else {
 
-                    int i = 1;
-                    while (x + i + 1 < getBoardSize() && y + 1 + i < getBoardSize()) {
-                        if (board.getFields()[x + i][y + i].getColor().equals(board.getFields()[x][y].getColor())) {
-                            if (!board.getFields()[x + i + 1][y + i + 1].isOccupied()) {
-                                if (capturePossible.contains(board.getFields()[x][y])) {
-                                    capturePossible.add(board.getFields()[x][y]);
-                                }
+                    else if(isCapturePossibleBottomLeft(x,y,color)){
+                        capturePossible.add(boardField);
+                    }
+                    else if(isCapturePossibleBottomRight(x,y,color)){
+                        capturePossible.add(boardField);
+                    }
+                }
+
+                else {
+                    int currx=x;
+                    int curry=y;
+                    int prevx=x;
+                    int prevy=y;
+                    while(currx>=0 && curry>=0){
+                        if(!(isCapturePossibleTopLeft(currx,curry,color))){
+                            currx--;
+                            curry--;
+                            if(isMovePossible(prevx,prevy,currx,curry)){
+                                prevy--;
+                                prevx--;
                             }
-                        } else {
+                            else{
+                                break;
+                            }
+                        }
+                        else{
+                            capturePossible.add(boardField);
                             break;
                         }
-                        i++;
-                    }
-                    i = 1;
-                    while (x + i + 1 < getBoardSize() && y - 1 - i > 0) {
-                        if (board.getFields()[x + i][y - i].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                            if (!board.getFields()[x + i + 1][y - i - 1].isOccupied()) {
-                                if (!capturePossible.contains(board.getFields()[x][y])) {
-                                    capturePossible.add(board.getFields()[x][y]);
-                                }
-                            }
-                        } else {
-                            break;
-                        }
-                        i++;
-                    }
-                    i = 1;
-                    while (x - i - 1 > 0 && y - 1 - i > 0) {
-                        if (board.getFields()[x - i][y - i].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                            if (!board.getFields()[x - i - 1][y - i - 1].isOccupied()) {
-                                if (!capturePossible.contains(board.getFields()[x][y])) {
-                                    capturePossible.add(board.getFields()[x][y]);
-                                }
-                            }
-                        } else {
-                            break;
-                        }
-                        i++;
-                    }
-                    i = 1;
-                    while (x - i - 1 > 0 && y + 1 + i < getBoardSize()) {
-                        if (board.getFields()[x - i][y + i].getColor().equals(board.getFields()[x][y].getColor())) {
-                            if (!board.getFields()[x - i - 1][y + i + 1].isOccupied()) {
-                                if (!capturePossible.contains(board.getFields()[x][y])) {
-                                    capturePossible.add(board.getFields()[x][y]);
-                                }
-                            }
-                        } else {
-                            break;
-                        }
-                        i++;
                     }
 
+                    currx=x;
+                    curry=y;
+                    prevx=x;
+                    prevy=y;
+                    while(currx<=(this.getBoardSize()-1) && curry>=0){
+                        if(!(isCapturePossibleTopRight(currx,curry,color))){
+                            currx++;
+                            curry--;
+                            if(isMovePossible(prevx,prevy,currx,curry)){
+                                prevx++;
+                                prevy--;
+                            }
+                            else{
+                                break;
+                            }
+                        }
+                        else{
+                            capturePossible.add(boardField);
+                            break;
+                        }
+                    }
 
+                    currx=x;
+                    curry=y;
+                    prevx=x;
+                    prevy=y;
+                    while(currx<=(this.getBoardSize()-1) && curry<=(this.getBoardSize()-1)){
+                        if(!(isCapturePossibleBottomRight(currx,curry,color))){
+                            currx++;
+                            curry++;
+                            if(isMovePossible(prevx,prevy,currx,curry)){
+                                prevy++;
+                                prevx++;
+                            }
+                            else{
+                                break;
+                            }
+                        }
+                        else{
+                            capturePossible.add(boardField);
+                            break;
+                        }
+                    }
+
+                    currx=x;
+                    curry=y;
+                    prevx=x;
+                    prevy=y;
+                    while(currx>=0 && curry<=(this.getBoardSize()-1)){
+                        if(!(isCapturePossibleBottomLeft(currx,curry,color))){
+                            currx--;
+                            curry++;
+                            if(isMovePossible(prevx,prevy,currx,curry)){
+                                prevy++;
+                                prevx--;
+                            }
+                            else{
+                                break;
+                            }
+                        }
+                        else{
+                            capturePossible.add(boardField);
+                            break;
+                        }
+                    }
                 }
             }
         }
         this.removePawnsFromList();
-
-
     }
 
-    public void removePawnsFromList(){
-        blackPawns.clear();
-        whitePawns.clear();
+    public void bestCaptureRule(){
+        for(Field fields : capturePossible){
+            int x = fields.getX();
+            int y = fields.getY();
+            int currX=x;
+            int currY=y;
+            Color color = fields.getColor();
+            while(canICaptureOneMoreTime(currX,currY)){
+
+            }
+        }
     }
 
-    //Sprawdzam czy mozliwe jest bicie dla podanych lokalizacji
+
+
+
     public boolean checkCapture(int x1, int y1, int x2, int y2) {
         if (capturePossible.contains(board.getFields()[x1][y1])) {
             if (!board.getFields()[x1][y1].getPawn().isQueen()) {
                 if (Math.abs(x1 - x2) == 2 && Math.abs(y1 - y2) == 2 && board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].isOccupied() && !board.getFields()[x2][y2].isOccupied()) {
                     return !board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].getColor().equals(board.getFields()[x1][y1].getColor());
                 }
-            } else {
+            }
+            else {
                 if (!board.getFields()[x2][y2].isOccupied()) {
                     int diffX;
                     int diffY;
 
                     diffX = x2 - x1;
                     diffY = y2 - y1;
-                    int count = 0;
+
                     if (diffY == diffX || -diffY == diffX) {
                         if (diffY > 0 && diffX > 0) {
                             for (int i = 1; i < diffX; i++) {
-                                if (board.getFields()[x1 + i][y1 + 1].getColor().equals(board.getFields()[x1][y1].getColor())) {
-                                    count++;
+                                if(board.getFields()[x1 + i][y1 + i].isOccupied()) {
+                                    if (!board.getFields()[x1 + i][y1 + i].getColor().equals(board.getFields()[x1][y1].getColor())) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
-                        if (diffY > 0 && diffX < 0) {
+                        else if (diffY > 0 && diffX < 0) {
                             for (int i = 1; i < Math.abs(diffX); i++) {
-                                if (board.getFields()[x1 - i][y1 + i].getColor().equals(board.getFields()[x1][y1].getColor())) {
-                                    count++;
+                                if(board.getFields()[x1 - i][y1 + i].isOccupied()) {
+                                    if (!board.getFields()[x1 - i][y1 + i].getColor().equals(board.getFields()[x1][y1].getColor())) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
-                        if (diffY < 0 && diffX < 0) {
+                        else if (diffY < 0 && diffX < 0) {
                             for (int i = 1; i < Math.abs(diffX); i++) {
-                                if (board.getFields()[x1 - i][y1 - i].getColor().equals(board.getFields()[x1][y1].getColor())) {
-                                    count++;
+                                if(board.getFields()[x1 - i][y1 - i].isOccupied()) {
+                                    if (!board.getFields()[x1 - i][y1 - i].getColor().equals(board.getFields()[x1][y1].getColor())) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
-                        if (diffY < 0 && diffX > 0) {
+                        else if (diffY < 0 && diffX > 0) {
                             for (int i = 1; i < diffX; i++) {
-                                if (board.getFields()[x1 - i][y1 + 1].getColor().equals(board.getFields()[x1][y1].getColor())) {
-                                    count++;
+                                if(board.getFields()[x1 + i][y1 - i].isOccupied()) {
+                                    if (!board.getFields()[x1 + i][y1 - i].getColor().equals(board.getFields()[x1][y1].getColor())) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
-                        return count == 1;
                     }
                 }
             }
@@ -235,200 +249,244 @@ public class PolishCheckersController extends GameController {
         return false;
     }
 
-    public boolean canICaptureOneMoreTime(int x, int y) {
-        if (!board.getFields()[x][y].getPawn().isQueen()) {
-            if (x + 2 < getBoardSize() && y + 2 < getBoardSize()) {
-                if (board.getFields()[x + 1][y + 1].isOccupied() && !board.getFields()[x + 2][y + 2].isOccupied()) {
-                    if (!board.getFields()[x + 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                        return true;
-                    }
-                }
-            }
-            if (x + 2 < getBoardSize() && y - 2 > 0) {
-                if (board.getFields()[x + 1][y - 1].isOccupied() && !board.getFields()[x + 2][y - 2].isOccupied()) {
-                    if (!board.getFields()[x + 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                        return true;
-                    }
-                }
-            }
-            if ((x - 2) > 0 && (y - 2) > 0) {
-                if (board.getFields()[x - 1][y - 1].isOccupied() && !board.getFields()[x - 2][y - 2].isOccupied()) {
-                    if (!board.getFields()[x - 1][y - 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                        return true;
-                    }
-                }
-            }
-            if ((x - 2) > 0 && (y + 2) < getBoardSize()) {
-                if (board.getFields()[x - 1][y + 1].isOccupied() && !board.getFields()[x - 2][y + 2].isOccupied()) {
-                    if (!board.getFields()[x - 1][y + 1].getPawn().getColor().equals(board.getFields()[x][y].getPawn().getColor())) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            int i = 1;
-            while (x + i + 1 < getBoardSize() && y + 1 + i < getBoardSize()) {
-                if (board.getFields()[x + i][y + i].getColor() != board.getFields()[x][y].getColor()) {
-                    if (!board.getFields()[x + i + 1][y + i + 1].isOccupied()) {
-                        return true;
-                    }
-                } else {
-                    break;
-                }
-                i++;
-            }
-            i = 1;
-            while (x + i + 1 < getBoardSize() && y - 1 - i > 0) {
-                if (board.getFields()[x + i][y - i].getPawn().getColor() != board.getFields()[x][y].getPawn().getColor()) {
-                    if (!board.getFields()[x + i + 1][y - i - 1].isOccupied()) {
-                        return true;
-                    }
-                } else {
-                    break;
-                }
-                i++;
-            }
-            i = 1;
-            while (x - i - 1 > 0 && y - 1 - i > 0) {
-                if (board.getFields()[x - i][y - i].getPawn().getColor() != board.getFields()[x][y].getPawn().getColor()) {
-                    if (!board.getFields()[x - i - 1][y - i - 1].isOccupied()) {
-                        return true;
-                    }
-                } else {
-                    break;
-                }
-                i++;
-            }
-            i = 1;
-            while (x - i - 1 > 0 && y + 1 + i < getBoardSize()) {
-                if (board.getFields()[x - i][y + i].getColor() != board.getFields()[x][y].getColor()) {
-                    if (!board.getFields()[x - i - 1][y + i + 1].isOccupied()) {
-                        return true;
 
-                    }
-                } else {
-                    break;
-                }
-                i++;
-            }
 
+    public boolean isMovePossible(int x1, int y1, int x2, int y2){
+        if(x2<this.getBoardSize() && x2>=0 && y2<this.getBoardSize() && y2>=0) {
+            if (!board.getFields()[x2][y2].isOccupied()) {
+                return Math.abs(x1-x2)==1 && Math.abs(y1-y2)==1;
+            }
         }
         return false;
     }
 
-    //sprawdzenie czy zwykły ruch jest możliwy i dla damki tez
+
     @Override
     public boolean isMoveLegal(int x1, int y1, int x2, int y2) {
         if (board.getFields()[x1][y1].getPawn() != null) {
-            if (!board.getFields()[x2][y2].isOccupied()) {
-                if (!board.getFields()[x1][y1].getPawn().isQueen()) {
-                    return (x1 + 1 == x2 && (y1 + 1 == y2 || y1 - 1 == y2)) || (x1 - 1 == x2 && (y1 + 1 == y2 || y1 - 1 == y2));
+            if(x2<this.getBoardSize() && x2>=0 && y2<this.getBoardSize() && y2>=0) {
+                if (!board.getFields()[x2][y2].isOccupied()) {
+                    if (!board.getFields()[x1][y1].getPawn().isQueen()) {
+                        if(this.playerTurn==PlayerTurn.White) {
+                            return (y1 - 1 == y2 && (x1 + 1 == x2 || x1 - 1 == x2));
+                        }
+                        else if(this.playerTurn==PlayerTurn.Black){
+                            return (y1 + 1 == y2 && ( x1 + 1 == x2 || x1 - 1 ==x2));
+                        }
+                    }
+                    else {                                //do tej sytuacji nie dojdzie jesli będzie jakiekolwiek bicie, tzn wystarczy sprawdzic cze pola miedzy poczatkiem a konczem są puste.
+                        int diffX;
+                        int diffY;
 
-                } else {                                //do tej sytuacji nie dojdzie jesli będzie jakiekolwiek bicie, tzn wystarczy sprawdzic cze pola miedzy poczatkiem a konczem są puste.
-                    int diffX;
-                    int diffY;
-
-                    diffX = x2 - x1;
-                    diffY = y2 - y1;
-                    if (diffY == diffX || -diffY == diffX) {
-                        if (diffY > 0 && diffX > 0) {
-                            for (int i = 1; i < diffX; i++) {
-                                if (board.getFields()[x1 + i][y1 + i].isOccupied()) {
-                                    return false;
+                        diffX = x2 - x1;
+                        diffY = y2 - y1;
+                        if (diffY == diffX || -diffY == diffX) {
+                            if (diffY > 0 && diffX > 0) {
+                                for (int i = 1; i < diffX; i++) {
+                                    if (board.getFields()[x1 + i][y1 + i].isOccupied()) {
+                                        return false;
+                                    }
                                 }
                             }
-                        }
-                        if (diffY > 0 && diffX < 0) {
-                            for (int i = 1; i < Math.abs(diffX); i++) {
-                                if (board.getFields()[x1 - i][y1 + i].isOccupied()) {
-                                    return false;
+                            if (diffY > 0 && diffX < 0) {
+                                for (int i = 1; i < Math.abs(diffX); i++) {
+                                    if (board.getFields()[x1 - i][y1 + i].isOccupied()) {
+                                        return false;
+                                    }
                                 }
                             }
-                        }
-                        if (diffY < 0 && diffX < 0) {
-                            for (int i = 1; i < Math.abs(diffX); i++) {
-                                if (board.getFields()[x1 - i][y1 - i].isOccupied()) {
-                                    return false;
+                            if (diffY < 0 && diffX < 0) {
+                                for (int i = 1; i < Math.abs(diffX); i++) {
+                                    if (board.getFields()[x1 - i][y1 - i].isOccupied()) {
+                                        return false;
+                                    }
                                 }
                             }
-                        }
-                        if (diffY < 0 && diffX > 0) {
-                            for (int i = 1; i < diffX; i++) {
-                                if (board.getFields()[x1 + i][y1 - i].isOccupied()) {
-                                    return false;
+                            if (diffY < 0 && diffX > 0) {
+                                for (int i = 1; i < diffX; i++) {
+                                    if (board.getFields()[x1 + i][y1 - i].isOccupied()) {
+                                        return false;
+                                    }
                                 }
                             }
+                            return true;
                         }
-                        return true;
                     }
                 }
             }
         }
-
         return false;
     }
 
-    //bicie i dla damek tez
-    public void capturePawn(int x1, int y1, int x2, int y2) {           //pozycje mn dla pionka zostaly zaakceptowane przez poprzednia funkcje wiec mozna wykonac bez sprawdzenia
 
-            if (!board.getFields()[x1][y1].getPawn().isQueen()) {
-                board.getFields()[x2][y2].setPawn(board.getFields()[x1][y1].getPawn());
-                board.getFields()[x1][y1].setPawn(null);
-                board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].setPawn(null);
-                if (board.getFields()[x2][y2].getColor().equals(Color.rgb(0, 0, 0))) {
-                    numberOfWhitePawns--;
+    public void capturePawn(int x1, int y1, int x2, int y2) {
+
+        if (!board.getFields()[x1][y1].getPawn().isQueen()) {
+            board.getFields()[x2][y2].setPawn(board.getFields()[x1][y1].getPawn());
+            board.getFields()[x1][y1].setPawn(null);
+            board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].setPawn(null);
+            if (board.getFields()[x2][y2].getColor().equals(Color.rgb(0, 0, 0))) {
+                numberOfWhitePawns--;
+            }
+            else if(board.getFields()[x2][y2].getColor().equals(Color.rgb(255, 255, 255))) {
+                numberOfBlackPawns--;
+            }
+        }
+        else {
+            board.getFields()[x2][y2].setPawn(board.getFields()[x1][y1].getPawn());
+            board.getFields()[x1][y1].setPawn(null);
+            int diffX;
+            int diffY;
+
+            diffX = x2 - x1;
+            diffY = y2 - y1;
+
+
+            if (diffY == diffX || -diffY == diffX) {
+                if (diffY > 0 && diffX > 0) {
+                    for (int i = 1; i < diffX; i++) {
+                        if (board.getFields()[x1 + i][y1 + i].isOccupied()) {
+                            board.getFields()[x1 + i][y1 + i].setPawn(null);
+                            break;
+                        }
+                    }
                 }
-                else if(board.getFields()[x2][y2].getColor().equals(Color.rgb(255, 255, 255))) {
-                    numberOfBlackPawns--;
+                if (diffY > 0 && diffX < 0) {
+                    for (int i = 1; i < Math.abs(diffX); i++) {
+                        if (board.getFields()[x1 - i][y1 + i].isOccupied()) {
+                            board.getFields()[x1 - i][y1 + i].setPawn(null);
+                            break;
+                        }
+                    }
+                }
+                if (diffY < 0 && diffX < 0) {
+                    for (int i = 1; i < Math.abs(diffX); i++) {
+                        if (board.getFields()[x1 - i][y1 - i].isOccupied()) {
+                            board.getFields()[x1 - i][y1 - i].setPawn(null);
+                            break;
+                        }
+                    }
+                }
+                if (diffY < 0 && diffX > 0) {
+                    for (int i = 1; i < diffX; i++) {
+                        if (board.getFields()[x1 + i][y1 - i].isOccupied()) {
+                            board.getFields()[x1 + i][y1 - i].setPawn(null);
+                            break;
+                        }
+                    }
                 }
             }
-            else {
-                board.getFields()[x2][y2].setPawn(board.getFields()[x1][y1].getPawn());
-                int diffX;
-                int diffY;
-
-                diffX = x2 - x1;
-                diffY = y2 - y1;
-
-                //w tym wypadku mamy juz pewnosc, ze nie ma zadnych pionków poza jednym (o kolorze przeciwnym ) na naszej drodze, wiec zmieniamy na null napotkany pionek.
-                if (diffY == diffX || -diffY == diffX) {
-                    if (diffY > 0 && diffX > 0) {
-                        for (int i = 1; i < diffX; i++) {
-                            if (board.getFields()[x1 + i][y1 + i].isOccupied()) {
-                                board.getFields()[x1 + i][y1 + i].setPawn(null);
-                                break;
-                            }
-                        }
-                    }
-                    if (diffY > 0 && diffX < 0) {
-                        for (int i = 1; i < Math.abs(diffX); i++) {
-                            if (board.getFields()[x1 - i][y1 + i].isOccupied()) {
-                                board.getFields()[x1 - i][y1 + i].setPawn(null);
-                                break;
-                            }
-                        }
-                    }
-                    if (diffY < 0 && diffX < 0) {
-                        for (int i = 1; i < Math.abs(diffX); i++) {
-                            if (board.getFields()[x1 - i][y1 - i].isOccupied()) {
-                                board.getFields()[x1 - i][y1 - i].setPawn(null);
-                                break;
-                            }
-                        }
-                    }
-                    if (diffY < 0 && diffX > 0) {
-                        for (int i = 1; i < diffX; i++) {
-                            if (board.getFields()[x1 + i][y1 - i].isOccupied()) {
-                                board.getFields()[x1 + i][y1 - i].setPawn(null);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            capturePossible.clear();
+        }
+        capturePossible.clear();
+        this.createNewQueen(x2,y2);
 
     }
+
+    public boolean canICaptureOneMoreTime(int x, int y) {
+        Color color = board.getFields()[x][y].getColor();
+        if (!board.getFields()[x][y].getPawn().isQueen()) {
+            if(this.isCapturePossibleBottomRight(x,y,color)){
+                return true;
+            }
+            if(this.isCapturePossibleTopRight(x,y,color)){
+                return true;
+            }
+            if(this.isCapturePossibleTopLeft(x,y,color)){
+                return true;
+            }
+            if(this.isCapturePossibleBottomLeft(x,y,color)){
+                return true;
+            }
+        }
+        else {
+            int currx=x;
+            int curry=y;
+            int prevx=x;
+            int prevy=y;
+            while(currx>=0 && curry>=0){
+                if(!(isCapturePossibleTopLeft(currx,curry,color))){
+                    currx--;
+                    curry--;
+                    if(isMovePossible(prevx,prevy,currx,curry)){
+                        prevy--;
+                        prevx--;
+                    }
+                    else{
+                        break;
+                    }
+                }
+                else{
+                    return true;
+                }
+            }
+
+            currx=x;
+            curry=y;
+            prevx=x;
+            prevy=y;
+            while(currx<=(this.getBoardSize()-1) && curry>=0){
+                if(!(isCapturePossibleTopRight(currx,curry,color))){
+                    currx++;
+                    curry--;
+                    if(isMovePossible(prevx,prevy,currx,curry)){
+                        prevx++;
+                        prevy--;
+                    }
+                    else{
+                        break;
+                    }
+                }
+                else{
+                    return true;
+                }
+            }
+
+            currx=x;
+            curry=y;
+            prevx=x;
+            prevy=y;
+            while(currx<=(this.getBoardSize()-1) && curry<=(this.getBoardSize()-1)){
+                if(!(isCapturePossibleBottomRight(currx,curry,color))){
+                    currx++;
+                    curry++;
+                    if(isMovePossible(prevx,prevy,currx,curry)){
+                        prevy++;
+                        prevx++;
+                    }
+                    else{
+                        break;
+                    }
+                }
+                else{
+                    return true;
+                }
+            }
+
+            currx=x;
+            curry=y;
+            prevx=x;
+            prevy=y;
+            while(currx>=0 && curry<=(this.getBoardSize()-1)){
+                if(!(isCapturePossibleBottomLeft(currx,curry,color))){
+                    currx--;
+                    curry++;
+                    if(isMovePossible(prevx,prevy,currx,curry)){
+                        prevy++;
+                        prevx--;
+                    }
+                    else{
+                        break;
+                    }
+                }
+                else{
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
 
     @Override
     public int getBoardSize() {

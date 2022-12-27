@@ -31,6 +31,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         if (pawnView.hit(x, y)) {
             pawnView.changeX(dx);
             pawnView.changeY(dy);
+            pawnView.toFront();
         }
 
         x += dx;
