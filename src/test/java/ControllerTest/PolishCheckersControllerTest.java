@@ -1,6 +1,8 @@
-package Controller;
+package ControllerTest;
 
+import Controller.PolishCheckersController;
 import Model.PlayerTurn;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,8 +18,8 @@ public class PolishCheckersControllerTest extends GameControllerTest {
 
     @Test
     public void testStartingPosition() {
-        assertEquals(10, controller.getBoardSize());
-        assertEquals(4, controller.getPawnRows());
+        Assert.assertEquals(10, controller.getBoardSize());
+        Assert.assertEquals(4, controller.getPawnRows());
         // white pawns
         assertTrue(fields[0][6].isOccupied());
         assertTrue(fields[2][6].isOccupied());
@@ -116,30 +118,30 @@ public class PolishCheckersControllerTest extends GameControllerTest {
 
     @Test
     public void testPlayerTurns() {
-        assertEquals(PlayerTurn.White, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.White, controller.playerTurn);
         controller.move(4, 6, 5, 5);
-        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
         controller.move(3, 3, 4, 4);
-        assertEquals(PlayerTurn.White, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.White, controller.playerTurn);
         controller.move(5, 5, 3, 3);
-        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
         controller.move(2, 2, 4, 4);
-        assertEquals(PlayerTurn.White, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.White, controller.playerTurn);
         controller.move(5, 7, 4, 6);
-        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
         controller.move(9, 3, 8, 4);
-        assertEquals(PlayerTurn.White, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.White, controller.playerTurn);
         controller.move(4, 8, 5, 7);
-        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
         controller.move(4, 2, 3, 3);
-        assertEquals(PlayerTurn.White, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.White, controller.playerTurn);
         controller.move(2, 6, 3, 5);
-        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
         controller.move(4, 4, 2, 6);
-        assertEquals(PlayerTurn.Black, controller.playerTurn);  // black again, because capture is available
+        Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);  // black again, because capture is available
         controller.move(2, 6, 4, 8);
-        assertEquals(PlayerTurn.White, controller.playerTurn);  // double capture finished
+        Assert.assertEquals(PlayerTurn.White, controller.playerTurn);  // double capture finished
         controller.move(5, 9, 3, 7);
-        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
     }
 }

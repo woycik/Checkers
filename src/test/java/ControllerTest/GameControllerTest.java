@@ -1,5 +1,6 @@
-package Controller;
+package ControllerTest;
 
+import Controller.GameController;
 import Model.Field;
 import javafx.scene.paint.Color;
 

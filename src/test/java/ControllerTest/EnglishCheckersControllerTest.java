@@ -1,5 +1,6 @@
-package Controller;
+package ControllerTest;
 
+import Controller.EnglishCheckersController;
 import Model.PlayerTurn;
 import org.junit.Before;
 import org.junit.Test;
