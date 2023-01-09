@@ -117,29 +117,29 @@ public class PolishCheckersControllerTest extends GameControllerTest {
     @Test
     public void testPlayerTurns() {
         assertEquals(PlayerTurn.White, controller.playerTurn);
-        controller.makeMove(4, 6, 5, 5);
+        controller.move(4, 6, 5, 5);
         assertEquals(PlayerTurn.Black, controller.playerTurn);
-        controller.makeMove(3, 3, 4, 4);
+        controller.move(3, 3, 4, 4);
         assertEquals(PlayerTurn.White, controller.playerTurn);
-        controller.makeMove(5, 5, 3, 3);
+        controller.move(5, 5, 3, 3);
         assertEquals(PlayerTurn.Black, controller.playerTurn);
-        controller.makeMove(2, 2, 4, 4);
+        controller.move(2, 2, 4, 4);
         assertEquals(PlayerTurn.White, controller.playerTurn);
-        controller.makeMove(5, 7, 4, 6);
+        controller.move(5, 7, 4, 6);
         assertEquals(PlayerTurn.Black, controller.playerTurn);
-        controller.makeMove(9, 3, 8, 4);
+        controller.move(9, 3, 8, 4);
         assertEquals(PlayerTurn.White, controller.playerTurn);
-        controller.makeMove(4, 8, 5, 7);
+        controller.move(4, 8, 5, 7);
         assertEquals(PlayerTurn.Black, controller.playerTurn);
-        controller.makeMove(4, 2, 3, 3);
+        controller.move(4, 2, 3, 3);
         assertEquals(PlayerTurn.White, controller.playerTurn);
-        controller.makeMove(2, 6, 3, 5);
+        controller.move(2, 6, 3, 5);
         assertEquals(PlayerTurn.Black, controller.playerTurn);
-        controller.makeMove(4, 4, 2, 6);
+        controller.move(4, 4, 2, 6);
         assertEquals(PlayerTurn.Black, controller.playerTurn);  // black again, because capture is available
-        controller.makeMove(2, 6, 4, 8);
+        controller.move(2, 6, 4, 8);
         assertEquals(PlayerTurn.White, controller.playerTurn);  // double capture finished
-        controller.makeMove(5, 9, 3, 7);
+        controller.move(5, 9, 3, 7);
         assertEquals(PlayerTurn.Black, controller.playerTurn);
     }
 }

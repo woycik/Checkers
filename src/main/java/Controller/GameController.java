@@ -17,7 +17,7 @@ public abstract class GameController {
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
 
-    public abstract boolean makeMove(int x1, int y1, int x2, int y2);
+    protected abstract boolean makeMove(int x1, int y1, int x2, int y2);
 
     public abstract boolean isMoveLegal(int x1, int y1, int x2, int y2);
 
@@ -131,6 +131,14 @@ public abstract class GameController {
                 }
             }
         }
+    }
+
+    public boolean move(int x1, int y1, int x2, int y2) {
+        if(makeMove(x1, y1, x2, y2)) {
+            nextTurn();
+            return true;
+        }
+        return false;
     }
 
     public void nextTurn() {
