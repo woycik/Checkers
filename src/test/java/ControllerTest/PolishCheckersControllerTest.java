@@ -144,4 +144,55 @@ public class PolishCheckersControllerTest extends GameControllerTest {
         controller.move(5, 9, 3, 7);
         Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
     }
+
+    @Test
+    public void testQueenPromotion() {
+        controller.move(6, 6, 5, 5);
+        controller.move(3, 3, 4, 4);
+        controller.move(5, 5, 3, 3);
+        controller.move(2, 2, 4, 4);
+        controller.move(4, 6, 5, 5);
+        controller.move(4, 4, 6, 6);
+        controller.move(7, 7, 5, 5);
+        controller.move(5, 3, 4, 4);
+        controller.move(5, 5, 3, 3);
+        controller.move(4, 2, 2, 4);
+        controller.move(2, 6, 3, 5);
+        controller.move(2, 4, 4, 6);
+        controller.move(5, 7, 3, 5);
+        controller.move(1, 3, 2, 4);
+        controller.move(3, 5, 1, 3);
+        controller.move(0, 2, 2, 4);
+        controller.move(0, 6, 1, 5);
+        controller.move(2, 4, 0, 6);
+        controller.move(1, 7, 2, 6);
+        controller.move(7, 3, 6, 4);
+        controller.move(0, 8, 1, 7);
+        controller.move(6, 2, 5, 3);
+        controller.move(2, 6, 3, 5);
+        controller.move(5, 1, 4, 2);
+        controller.move(1, 7, 2, 6);
+        controller.move(7, 1, 6, 2);
+        controller.move(3, 7, 4, 6);
+        controller.move(8, 2, 7, 3);
+        controller.move(2, 8, 3, 7);
+        controller.move(9, 1, 8, 2);
+        controller.move(1, 9, 2, 8);
+        controller.move(7, 3, 8, 4);
+        controller.move(4, 6, 5, 5);
+        controller.move(6, 4, 4, 6);
+        controller.move(4, 6, 2, 4);
+        controller.move(2, 6, 3, 5);
+        controller.move(2, 4, 4, 6);
+        controller.move(3, 7, 5, 5);
+        controller.move(8, 2, 7, 3);
+        controller.move(2, 8, 3, 7);
+        controller.move(0, 6, 1, 7);
+        controller.move(3, 7, 4, 6);
+        controller.move(1, 7, 0, 8);
+        controller.move(4, 8, 3, 7);
+        controller.move(0, 8, 1, 9);
+
+        assertTrue(controller.getBoard().getFields()[1][9].getPawn().isQueen());
+    }
 }

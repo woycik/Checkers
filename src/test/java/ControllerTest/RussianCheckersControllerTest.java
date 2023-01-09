@@ -112,4 +112,34 @@ public class RussianCheckersControllerTest extends GameControllerTest {
         controller.move(1, 7, 3, 5);
         assertEquals(PlayerTurn.Black, controller.playerTurn);
     }
+
+    @Test
+    public void testQueenPromotion() {
+        controller.move(5, 5, 4, 4);
+        controller.move(2, 2, 3, 3);
+        controller.move(4, 4, 2, 2);
+        controller.move(1, 1, 3, 3);
+        controller.move(3, 5, 4, 4);
+        controller.move(3, 3, 5, 5);
+        controller.move(6, 6, 4, 4);
+        controller.move(4, 2, 3, 3);
+        controller.move(4, 4, 2, 2);
+        controller.move(3, 1, 1, 3);
+        controller.move(1, 5, 2, 4);
+        controller.move(1, 3, 3, 5);
+        controller.move(4, 6, 2, 4);
+        controller.move(0, 2, 1, 3);
+        controller.move(2, 4, 0, 2);
+        controller.move(0, 0, 1, 1);
+        controller.move(0, 6, 1, 5);
+        controller.move(1, 1, 2, 2);
+        controller.move(7, 5, 6, 4);
+        controller.move(2, 0, 3, 1);
+        controller.move(2, 6, 3, 5);
+        controller.move(2, 2, 3, 3);
+        controller.move(0, 2, 1, 1);
+        controller.move(3, 1, 4, 2);
+        controller.move(1, 1, 0, 0);
+        assertTrue(controller.getBoard().getFields()[0][0].getPawn().isQueen());
+    }
 }
