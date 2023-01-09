@@ -64,7 +64,7 @@ public class EnglishCheckersController extends GameController {
             int y = boardField.getY();
 
             if(boardField.isOccupied()) {
-                Color color =boardField.getColor();
+                Color color =boardField.getPawnColor();
 
                     if(isCapturePossibleTopLeft(x,y,color)){
                         capturePossible.add(boardField);
@@ -89,7 +89,7 @@ public class EnglishCheckersController extends GameController {
     public boolean checkCapture(int x1, int y1, int x2, int y2) {
         if (capturePossible.contains(board.getFields()[x1][y1])) {
                 if (Math.abs(x1 - x2) == 2 && Math.abs(y1 - y2) == 2 && board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].isOccupied() && !board.getFields()[x2][y2].isOccupied()) {
-                    return !board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].getColor().equals(board.getFields()[x1][y1].getColor());
+                    return !board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].getPawnColor().equals(board.getFields()[x1][y1].getPawnColor());
                 }
             }
         return false;
@@ -126,10 +126,10 @@ public class EnglishCheckersController extends GameController {
             board.getFields()[x2][y2].setPawn(board.getFields()[x1][y1].getPawn());
             board.getFields()[x1][y1].setPawn(null);
             board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].setPawn(null);
-            if (board.getFields()[x2][y2].getColor().equals(Color.rgb(0, 0, 0))) {
+            if (board.getFields()[x2][y2].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                 numberOfWhitePawns--;
             }
-            else if(board.getFields()[x2][y2].getColor().equals(Color.rgb(255, 255, 255))) {
+            else if(board.getFields()[x2][y2].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                 numberOfBlackPawns--;
             }
 
@@ -139,7 +139,7 @@ public class EnglishCheckersController extends GameController {
     }
 
     public boolean canICaptureOneMoreTime(int x, int y) {
-        Color color = board.getFields()[x][y].getColor();
+        Color color = board.getFields()[x][y].getPawnColor();
             if(this.isCapturePossibleBottomRight(x,y,color)){
                 return true;
             }

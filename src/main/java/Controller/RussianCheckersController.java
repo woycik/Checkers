@@ -64,7 +64,7 @@ public class RussianCheckersController extends GameController {
             int y = boardField.getY();
 
             if(boardField.isOccupied()) {
-                Color color =boardField.getColor();
+                Color color =boardField.getPawnColor();
                 if (!boardField.getPawn().isQueen()) {
 
                     if(isCapturePossibleTopLeft(x,y,color)){
@@ -184,7 +184,7 @@ public class RussianCheckersController extends GameController {
         if (capturePossible.contains(board.getFields()[x1][y1])) {
             if (!board.getFields()[x1][y1].getPawn().isQueen()) {
                 if (Math.abs(x1 - x2) == 2 && Math.abs(y1 - y2) == 2 && board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].isOccupied() && !board.getFields()[x2][y2].isOccupied()) {
-                    return !board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].getColor().equals(board.getFields()[x1][y1].getColor());
+                    return !board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].getPawnColor().equals(board.getFields()[x1][y1].getPawnColor());
                 }
             }
             else {
@@ -199,7 +199,7 @@ public class RussianCheckersController extends GameController {
                         if (diffY > 0 && diffX > 0) {
                             for (int i = 1; i < diffX; i++) {
                                 if(board.getFields()[x1 + i][y1 + i].isOccupied()) {
-                                    if (!board.getFields()[x1 + i][y1 + i].getColor().equals(board.getFields()[x1][y1].getColor())) {
+                                    if (!board.getFields()[x1 + i][y1 + i].getPawnColor().equals(board.getFields()[x1][y1].getPawnColor())) {
                                         return true;
                                     }
                                 }
@@ -208,7 +208,7 @@ public class RussianCheckersController extends GameController {
                         else if (diffY > 0 && diffX < 0) {
                             for (int i = 1; i < Math.abs(diffX); i++) {
                                 if(board.getFields()[x1 - i][y1 + i].isOccupied()) {
-                                    if (!board.getFields()[x1 - i][y1 + i].getColor().equals(board.getFields()[x1][y1].getColor())) {
+                                    if (!board.getFields()[x1 - i][y1 + i].getPawnColor().equals(board.getFields()[x1][y1].getPawnColor())) {
                                         return true;
                                     }
                                 }
@@ -217,7 +217,7 @@ public class RussianCheckersController extends GameController {
                         else if (diffY < 0 && diffX < 0) {
                             for (int i = 1; i < Math.abs(diffX); i++) {
                                 if(board.getFields()[x1 - i][y1 - i].isOccupied()) {
-                                    if (!board.getFields()[x1 - i][y1 - i].getColor().equals(board.getFields()[x1][y1].getColor())) {
+                                    if (!board.getFields()[x1 - i][y1 - i].getPawnColor().equals(board.getFields()[x1][y1].getPawnColor())) {
                                         return true;
                                     }
                                 }
@@ -226,7 +226,7 @@ public class RussianCheckersController extends GameController {
                         else if (diffY < 0 && diffX > 0) {
                             for (int i = 1; i < diffX; i++) {
                                 if(board.getFields()[x1 + i][y1 - i].isOccupied()) {
-                                    if (!board.getFields()[x1 + i][y1 - i].getColor().equals(board.getFields()[x1][y1].getColor())) {
+                                    if (!board.getFields()[x1 + i][y1 - i].getPawnColor().equals(board.getFields()[x1][y1].getPawnColor())) {
                                         return true;
                                     }
                                 }
@@ -316,10 +316,10 @@ public class RussianCheckersController extends GameController {
             board.getFields()[x2][y2].setPawn(board.getFields()[x1][y1].getPawn());
             board.getFields()[x1][y1].setPawn(null);
             board.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].setPawn(null);
-            if (board.getFields()[x2][y2].getColor().equals(Color.rgb(0, 0, 0))) {
+            if (board.getFields()[x2][y2].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                 numberOfWhitePawns--;
             }
-            else if(board.getFields()[x2][y2].getColor().equals(Color.rgb(255, 255, 255))) {
+            else if(board.getFields()[x2][y2].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                 numberOfBlackPawns--;
             }
         }
@@ -374,7 +374,7 @@ public class RussianCheckersController extends GameController {
     }
 
     public boolean canICaptureOneMoreTime(int x, int y) {
-        Color color = board.getFields()[x][y].getColor();
+        Color color = board.getFields()[x][y].getPawnColor();
         if (!board.getFields()[x][y].getPawn().isQueen()) {
             if(this.isCapturePossibleBottomRight(x,y,color)){
                 return true;
