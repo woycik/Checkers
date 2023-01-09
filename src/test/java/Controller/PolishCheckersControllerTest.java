@@ -1,6 +1,7 @@
 package Controller;
 
-import Model.Field;
+import Model.PlayerTurn;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,12 +9,16 @@ import static org.junit.Assert.assertTrue;
 
 public class PolishCheckersControllerTest extends GameControllerTest {
 
+    @Before
+    public void initializeController() {
+        initialize(new PolishCheckersController());
+    }
+
     @Test
     public void testStartingPosition() {
-        PolishCheckersController controller = new PolishCheckersController();
         assertEquals(10, controller.getBoardSize());
         assertEquals(4, controller.getPawnRows());
-        Field[][] fields = controller.getBoard().getFields();
+        assertEquals(PlayerTurn.White, controller.playerTurn);
         // white pawns
         assertTrue(fields[0][6].isOccupied());
         assertTrue(fields[2][6].isOccupied());
@@ -95,5 +100,18 @@ public class PolishCheckersControllerTest extends GameControllerTest {
         assertEquals(black, fields[4][0].getPawnColor());
         assertEquals(black, fields[2][0].getPawnColor());
         assertEquals(black, fields[0][0].getPawnColor());
+    }
+
+    @Test
+    public void testLegalFirstMoves() {
+        assertTrue(controller.isMoveLegal(0, 6, 1, 5));
+        assertTrue(controller.isMoveLegal(2, 6, 1, 5));
+        assertTrue(controller.isMoveLegal(2, 6, 3, 5));
+        assertTrue(controller.isMoveLegal(4, 6, 3, 5));
+        assertTrue(controller.isMoveLegal(4, 6, 5, 5));
+        assertTrue(controller.isMoveLegal(6, 6, 5, 5));
+        assertTrue(controller.isMoveLegal(6, 6, 7, 5));
+        assertTrue(controller.isMoveLegal(8, 6, 7, 5));
+        assertTrue(controller.isMoveLegal(8, 6, 9, 5));
     }
 }
