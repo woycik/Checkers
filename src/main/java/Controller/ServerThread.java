@@ -92,7 +92,7 @@ public class ServerThread extends Thread {
                         y2 = Integer.parseInt(messageSplit[4]);
 
                         if (gameController.move(x1, y1, x2, y2)) {
-                            System.out.println("Legal move. Sending update to both players.");
+                            System.out.println("Changing player turn and sending update to both players.");
                             firstOut.println(getUpdateMessage());
                             secondOut.println(getUpdateMessage());
                             System.out.println(gameController.playerTurn.toString() + "'s move");
