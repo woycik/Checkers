@@ -18,7 +18,6 @@ public class RussianCheckersControllerTest extends GameControllerTest {
     public void testStartingPosition() {
         assertEquals(8, controller.getBoardSize());
         assertEquals(3, controller.getPawnRows());
-        assertEquals(PlayerTurn.White, controller.playerTurn);
         // white pawns
         assertTrue(fields[1][5].isOccupied());
         assertTrue(fields[3][5].isOccupied());
@@ -82,5 +81,34 @@ public class RussianCheckersControllerTest extends GameControllerTest {
         assertTrue(controller.isMoveLegal(5, 5, 4, 4));
         assertTrue(controller.isMoveLegal(5, 5, 6, 4));
         assertTrue(controller.isMoveLegal(7, 5, 6, 4));
+    }
+
+    @Test
+    public void testPlayerTurns() {
+        assertEquals(PlayerTurn.White, controller.playerTurn);
+        controller.makeMove(1, 5, 0, 4);
+        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        controller.makeMove(0, 2, 1, 3);
+        assertEquals(PlayerTurn.White, controller.playerTurn);
+        controller.makeMove(3, 5, 2, 4);
+        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        controller.makeMove(1, 3, 3, 5);
+        assertEquals(PlayerTurn.White, controller.playerTurn);
+        controller.makeMove(2, 6, 4, 4);
+        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        controller.makeMove(1, 1, 0, 2);
+        assertEquals(PlayerTurn.White, controller.playerTurn);
+        controller.makeMove(4, 6, 3, 5);
+        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        controller.makeMove(0, 2, 1, 3);
+        assertEquals(PlayerTurn.White, controller.playerTurn);
+        controller.makeMove(4, 4, 5, 3);
+        assertEquals(PlayerTurn.Black, controller.playerTurn);
+        controller.makeMove(6, 2, 4, 4);
+        assertEquals(PlayerTurn.Black, controller.playerTurn); // black again, because capture is available
+        controller.makeMove(4, 4, 2, 6);
+        assertEquals(PlayerTurn.White, controller.playerTurn); // double capture finished
+        controller.makeMove(1, 7, 3, 5);
+        assertEquals(PlayerTurn.Black, controller.playerTurn);
     }
 }
