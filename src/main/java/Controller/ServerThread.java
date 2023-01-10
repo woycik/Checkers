@@ -24,6 +24,10 @@ public class ServerThread extends Thread {
     ServerSocket serverSocket;
     Socket firstPlayerSocket;
     Socket secondPlayerSocket;
+    BufferedReader firstIn;
+    PrintWriter firstOut;
+    BufferedReader secondIn;
+    PrintWriter secondOut;
 
     public ServerThread(int port, ServerView view, GameController gameController) {
         this.port = port;
@@ -52,10 +56,10 @@ public class ServerThread extends Thread {
             System.out.println("Both players connected");
             Platform.runLater(() -> view.bothPlayersConnected());
 
-            BufferedReader firstIn = new BufferedReader(new InputStreamReader(firstPlayerSocket.getInputStream()));
-            PrintWriter firstOut = new PrintWriter(firstPlayerSocket.getOutputStream(), true);
-            BufferedReader secondIn = new BufferedReader(new InputStreamReader(secondPlayerSocket.getInputStream()));
-            PrintWriter secondOut = new PrintWriter(secondPlayerSocket.getOutputStream(), true);
+            firstIn = new BufferedReader(new InputStreamReader(firstPlayerSocket.getInputStream()));
+            firstOut = new PrintWriter(firstPlayerSocket.getOutputStream(), true);
+            secondIn = new BufferedReader(new InputStreamReader(secondPlayerSocket.getInputStream()));
+            secondOut = new PrintWriter(secondPlayerSocket.getOutputStream(), true);
 
             // sending message to start displaying board
             int boardSize = gameController.getBoardSize();
@@ -109,15 +113,17 @@ public class ServerThread extends Thread {
                 clientMessage = "";
             }
 
-            String winnerInfo;
+            String winner;
             if (gameController.isWhiteWinner()) {
-                winnerInfo = "win;White";
+                winner = "White";
             } else {
-                winnerInfo = "win;Black";
+                winner = "Black";
             }
+            String winnerInfo = "win;" + winner;
 
             firstOut.println(winnerInfo);
             secondOut.println(winnerInfo);
+            Platform.runLater(() -> view.announceWinner(winner));
         } catch (SocketException se) {
             System.out.println("Server socket closed");
         } catch (Exception e) {
@@ -159,6 +165,8 @@ public class ServerThread extends Thread {
             playerColor = "White";
         } else if (gameController.playerTurn == PlayerTurn.Black) {
             playerColor = "Black";
+        } else {
+            playerColor = "None";
         }
 
         return "update;" + playerColor + ";" + getSocketPrintableFormat(gameController.board);
@@ -182,6 +190,14 @@ public class ServerThread extends Thread {
 
     public void closeServerSocket() {
         try {
+            if(firstOut != null) {
+                firstOut.println("disconnect");
+            }
+
+            if(secondOut != null) {
+                secondOut.println("disconnect");
+            }
+
             if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
             }

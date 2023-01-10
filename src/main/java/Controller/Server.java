@@ -17,15 +17,22 @@ public class Server extends Application {
 
     public void prepareGame(String type) {
         GameController gameController;
-        if (type.equals("Polish")) {
-            System.out.println("Preparing Polish checkers");
-            gameController = new PolishCheckersController();
-        } else if (type.equals("Russian")) {
-            System.out.println("Preparing Russian checkers");
-            gameController = new RussianCheckersController();
-        } else {
-            System.out.println("Preparing English checkers");
-            gameController = new EnglishCheckersController();
+        switch (type) {
+            case "Polish":
+                System.out.println("Preparing Polish checkers");
+                gameController = new PolishCheckersController();
+                break;
+            case "Russian":
+                System.out.println("Preparing Russian checkers");
+                gameController = new RussianCheckersController();
+                break;
+            case "English":
+                System.out.println("Preparing English checkers");
+                gameController = new EnglishCheckersController();
+                break;
+            default:
+                System.out.println("Invalid game type.");
+                return;
         }
 
         thread = new ServerThread(port, view, gameController);
