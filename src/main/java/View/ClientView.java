@@ -60,7 +60,8 @@ public class ClientView {
     public void announceWinner(String winner) {
         final BorderPane borderPane = new BorderPane();
         Scene scene = stage.getScene();
-        Label clientStatusLabel = new Label(winner + " wins!");
+        String message = client.thread.playerColor.equals(winner) ? "You won!" : "You lost.";
+        Label clientStatusLabel = new Label(message);
         borderPane.setCenter(clientStatusLabel);
         scene.setRoot(borderPane);
     }

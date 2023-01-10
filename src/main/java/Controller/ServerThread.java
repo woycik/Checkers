@@ -113,15 +113,17 @@ public class ServerThread extends Thread {
                 clientMessage = "";
             }
 
-            String winnerInfo;
+            String winner;
             if (gameController.isWhiteWinner()) {
-                winnerInfo = "win;White";
+                winner = "White";
             } else {
-                winnerInfo = "win;Black";
+                winner = "Black";
             }
+            String winnerInfo = "win;" + winner;
 
             firstOut.println(winnerInfo);
             secondOut.println(winnerInfo);
+            Platform.runLater(() -> view.announceWinner(winner));
         } catch (SocketException se) {
             System.out.println("Server socket closed");
         } catch (Exception e) {
@@ -163,6 +165,8 @@ public class ServerThread extends Thread {
             playerColor = "White";
         } else if (gameController.playerTurn == PlayerTurn.Black) {
             playerColor = "Black";
+        } else {
+            playerColor = "None";
         }
 
         return "update;" + playerColor + ";" + getSocketPrintableFormat(gameController.board);
