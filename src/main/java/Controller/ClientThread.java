@@ -65,6 +65,9 @@ public class ClientThread extends Thread {
                     String winner = messageSplit[1];
                     Platform.runLater(() -> view.announceWinner(winner));
                     break;
+                } else if(messageSplit[0].equals("disconnect")) {
+                    Platform.runLater(() -> view.serverDisconnected());
+                    break;
                 }
             }
         } catch (IOException ioe) {
