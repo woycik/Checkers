@@ -1,11 +1,9 @@
 package Controller;
 
 import Model.Board;
-import Model.Field;
 import Model.Pawn;
 import View.ClientView;
 import javafx.application.Platform;
-import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import static javafx.scene.paint.Color.color;
 import static javafx.scene.paint.Color.rgb;
 
 public class ClientThread extends Thread {
@@ -64,8 +61,6 @@ public class ClientThread extends Thread {
                     String playerTurn = messageSplit[1];
                     Board board = getBoard(boardSize, messageSplit[2]);
                     Platform.runLater(() -> view.updateBoard(board, playerTurn));
-                } else if (messageSplit[0].equals("illegal")) {
-                    System.out.println("Illegal move!");
                 } else if (messageSplit[0].equals("win")) {
                     String winner = messageSplit[1];
                     Platform.runLater(() -> view.announceWinner(winner));

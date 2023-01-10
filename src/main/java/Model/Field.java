@@ -2,8 +2,6 @@ package Model;
 
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-
 public class Field {
     private Pawn pawn;
     private final int x;
@@ -27,7 +25,7 @@ public class Field {
         return pawn != null;
     }
 
-    public Color getColor() {
+    public Color getPawnColor() {
         return pawn.getColor();
     }
 

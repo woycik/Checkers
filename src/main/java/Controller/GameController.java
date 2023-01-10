@@ -17,7 +17,7 @@ public abstract class GameController {
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
 
-    public abstract boolean makeMove(int x1, int y1, int x2, int y2);
+    protected abstract boolean makeMove(int x1, int y1, int x2, int y2);
 
     public abstract boolean isMoveLegal(int x1, int y1, int x2, int y2);
 
@@ -56,12 +56,12 @@ public abstract class GameController {
 
     public  void createNewQueen(int x,int y){
         if(y==0) {
-            if (!board.getFields()[x][y].getColor().equals(Color.rgb(0, 0, 0))) {
+            if (!board.getFields()[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                 board.getFields()[x][y].getPawn().makeQueen();
             }
         }
         else if(y==board.getSize()-1){
-            if(!board.getFields()[x][y].getColor().equals(Color.rgb(255,255,255))){
+            if(!board.getFields()[x][y].getPawnColor().equals(Color.rgb(255,255,255))){
                 board.getFields()[x][y].getPawn().makeQueen();
             }
         }
@@ -81,7 +81,7 @@ public abstract class GameController {
     public boolean isCapturePossibleTopRight(int x,int y,Color color){
         if((x+2)<=(this.getBoardSize()-1) && (y-2)>=0){
             if(board.getFields()[x+1][y-1].isOccupied() && !board.getFields()[x+2][y-2].isOccupied() ) {
-                return ((!board.getFields()[x + 1][y - 1].getColor().equals(color)));
+                return ((!board.getFields()[x + 1][y - 1].getPawnColor().equals(color)));
             }
         }
         return false;
@@ -89,7 +89,7 @@ public abstract class GameController {
     public boolean isCapturePossibleTopLeft(int x,int y,Color color){
         if((x-2)>=0 && (y-2)>=0){
             if(board.getFields()[x-1][y-1].isOccupied() && !board.getFields()[x-2][y-2].isOccupied() ) {
-                return ((!board.getFields()[x - 1][y - 1].getColor().equals(color)));
+                return ((!board.getFields()[x - 1][y - 1].getPawnColor().equals(color)));
             }
         }
         return false;
@@ -99,7 +99,7 @@ public abstract class GameController {
     public boolean isCapturePossibleBottomLeft(int x,int y,Color color){
         if((y + 2)<=(this.getBoardSize()-1) && (x-2)>=0){
             if(board.getFields()[x-1][y+1].isOccupied() && !board.getFields()[x-2][y+2].isOccupied() ) {
-                return ((!board.getFields()[x - 1][y + 1].getColor().equals(color)));
+                return ((!board.getFields()[x - 1][y + 1].getPawnColor().equals(color)));
             }
         }
         return false;
@@ -108,7 +108,7 @@ public abstract class GameController {
     public boolean isCapturePossibleBottomRight(int x,int y,Color color){
         if((x+2)<=(this.getBoardSize()-1) && (y+2)<=(this.getBoardSize()-1)){
             if(board.getFields()[x+1][y+1].isOccupied() && !board.getFields()[x+2][y+2].isOccupied() && board.getFields()[x][y].isOccupied()) {
-                return ((!board.getFields()[x + 1][y + 1].getColor().equals(color)));
+                return ((!board.getFields()[x + 1][y + 1].getPawnColor().equals(color)));
             }
         }
         return false;
@@ -131,6 +131,14 @@ public abstract class GameController {
                 }
             }
         }
+    }
+
+    public boolean move(int x1, int y1, int x2, int y2) {
+        if(makeMove(x1, y1, x2, y2)) {
+            nextTurn();
+            return true;
+        }
+        return false;
     }
 
     public void nextTurn() {

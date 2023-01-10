@@ -57,22 +57,22 @@ public class BoardView extends Pane {
 
                 if (fields[i][j].isOccupied()) {
                     Image img;
-                    PawnView pawnView = new PawnView((int)size * i + (int)Math.floor(size/2), (int)size * j + (int)Math.floor(size/2), 20, fields[i][j].getColor(), board.getSize(), client.thread);
+                    PawnView pawnView = new PawnView((int)size * i + (int)Math.floor(size/2), (int)size * j + (int)Math.floor(size/2), 20, fields[i][j].getPawnColor(), board.getSize(), client.thread);
                     pawnViews.add(pawnView);
 
-                    if(!fields[i][j].getPawn().isQueen() && fields[i][j].getColor().equals(Color.rgb(255,255,255))){
+                    if(!fields[i][j].getPawn().isQueen() && fields[i][j].getPawnColor().equals(Color.rgb(255,255,255))){
                         img = new Image("file:whitePawn.jpg");
                         pawnView.setFill(new ImagePattern(img));
                     }
-                    else if(!fields[i][j].getPawn().isQueen() && fields[i][j].getColor().equals(Color.rgb(0,0,0))){
+                    else if(!fields[i][j].getPawn().isQueen() && fields[i][j].getPawnColor().equals(Color.rgb(0,0,0))){
                         img = new Image("file:blackPawn.jpg");
                         pawnView.setFill(new ImagePattern(img));
                     }
-                    else if( fields[i][j].getColor().equals(Color.rgb(255,255,255))){
+                    else if( fields[i][j].getPawnColor().equals(Color.rgb(255,255,255))){
                         img = new Image("file:whiteQueenPawn.jpg");
                         pawnView.setFill(new ImagePattern(img));
                     }
-                    else if(fields[i][j].getColor().equals(Color.rgb(0,0,0))){
+                    else if(fields[i][j].getPawnColor().equals(Color.rgb(0,0,0))){
                         img = new Image("file:blackQueenPawn.jpg");
                         pawnView.setFill(new ImagePattern(img));
                     }
