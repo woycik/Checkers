@@ -2,15 +2,21 @@ package Model;
 
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 public class Field {
     private Pawn pawn;
     private final int x;
     private final int y;
+    private ArrayList<Field> possibleMoves;
+    private ArrayList<Field> possibleCaptures;
 
     public Field(int x, int y) {
         this.x = x;
         this.y = y;
         this.pawn = null;
+        this.possibleMoves = new ArrayList<>();
+        this.possibleCaptures= new ArrayList<>();
     }
 
     public int getX() {
@@ -35,5 +41,27 @@ public class Field {
 
     public void setPawn(Pawn pawn) {
         this.pawn = pawn;
+    }
+
+    public void addToPossibleMoves(Field field) {
+        this.possibleMoves.add(field);
+    }
+    public void addToPossibleCaptures(Field field) {
+        this.possibleCaptures.add(field);
+    }
+
+    public ArrayList<Field> getPossibleMoves() {
+        return possibleMoves;
+    }
+    public ArrayList<Field> getPossibleCaptures() {
+        return possibleCaptures;
+    }
+
+    public void clearPossibleMove(){
+        this.possibleMoves.clear();
+    }
+
+    public void clearPossibleCaptures(){
+        this.possibleCaptures.clear();
     }
 }

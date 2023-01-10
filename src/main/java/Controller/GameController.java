@@ -12,12 +12,12 @@ public abstract class GameController {
     public PlayerTurn playerTurn;
     protected ArrayList<Field> blackPawns;
     protected ArrayList<Field> whitePawns;
-    protected ArrayList<Field> capturePossible; //lista pól w które może wskoczyc pionek w ramach bicia
+    protected ArrayList<Field> capturePossible;
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
 
-    protected abstract boolean makeMove(int x1, int y1, int x2, int y2);
+    protected abstract boolean makeMove(int x1, int y1, int x2, int y2) throws CloneNotSupportedException;
 
     public abstract boolean isMoveLegal(int x1, int y1, int x2, int y2);
 
@@ -133,7 +133,7 @@ public abstract class GameController {
         }
     }
 
-    public boolean move(int x1, int y1, int x2, int y2) {
+    public boolean move(int x1, int y1, int x2, int y2) throws CloneNotSupportedException {
         if(makeMove(x1, y1, x2, y2)) {
             nextTurn();
             return true;
