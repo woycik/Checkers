@@ -19,14 +19,12 @@ public abstract class GameController {
 
     protected abstract boolean makeMove(int x1, int y1, int x2, int y2) throws CloneNotSupportedException;
 
-    public abstract boolean isMoveLegal(int x1, int y1, int x2, int y2);
 
     public abstract int getBoardSize();
 
     public abstract int getPawnRows();
 
     public GameController() {
-        this.board = new Board(getBoardSize(), getPawnRows());
         this.numberOfBlackPawns = getBoardSize() / 2 * getPawnRows();
         this.numberOfWhitePawns = getBoardSize() / 2 * getPawnRows();
         this.blackPawns = new ArrayList<>();

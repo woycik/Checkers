@@ -10,6 +10,7 @@ public class EnglishCheckersController extends GameController {
 
     @Override
     public boolean makeMove(int x1, int y1, int x2, int y2) {
+        this.board = ;
         this.setMyPawns();
         if (!finishCapture) {
             if (playerTurn == PlayerTurn.Black) {

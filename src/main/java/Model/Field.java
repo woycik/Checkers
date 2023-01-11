@@ -3,6 +3,7 @@ package Model;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Field {
     private Pawn pawn;
@@ -55,6 +56,10 @@ public class Field {
     }
     public ArrayList<Field> getPossibleCaptures() {
         return possibleCaptures;
+    }
+
+    public void setPossibleCaptures(List<Field> f){
+        this.possibleCaptures.addAll(f);
     }
 
     public void clearPossibleMove(){
