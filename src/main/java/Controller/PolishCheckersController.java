@@ -7,28 +7,31 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PolishCheckersController extends GameController{
+public class PolishCheckersController extends GameController {
 
-    public PolishCheckersController(){
-        this.board=  new PolishBoard();
+    public PolishCheckersController() {
+        this.board = new PolishBoard();
     }
 
     @Override
-    public boolean makeMove(int x1, int y1, int x2, int y2)  {
+    public boolean makeMove(int x1, int y1, int x2, int y2) {
         this.board.setMyPawns();
         this.board.addToPossibleMoves();
         this.board.addToPossibleCaptures();
         if (!finishCapture) {
             this.board.capturePossible.clear();
-            if (playerTurn == PlayerTurn.Black) {this.board.captureFieldList(board.blackPawns);}
-            else {this.board.captureFieldList(board.whitePawns);}
+            if (playerTurn == PlayerTurn.Black) {
+                this.board.captureFieldList(board.blackPawns);
+            } else {
+                this.board.captureFieldList(board.whitePawns);
+            }
             if (this.board.isCapturePossible()) {
-                if(!this.board.getLongestMove().contains(board.getFields()[x2][y2])){
+                if (!this.board.getLongestMove().contains(board.getFields()[x2][y2])) {
                     return false;
                 }
                 if (this.board.checkCapture(x1, y1, x2, y2)) {
                     this.board.capturePawn(x1, y1, x2, y2);
-                    this.board.createNewQueen(x2,y2);
+                    this.board.createNewQueen(x2, y2);
                     this.board.capturePossible.clear();
                     if (this.board.canICaptureOneMoreTime(x2, y2)) {
                         this.board.capturePossible.add(board.getFields()[x2][y2]); //zmien na settera
@@ -45,6 +48,9 @@ public class PolishCheckersController extends GameController{
             }
         } else {
             if (this.board.checkCapture(x1, y1, x2, y2)) {
+                if (!this.board.getLongestMove().contains(board.getFields()[x2][y2])) {
+                    return false;
+                }
                 this.board.capturePawn(x1, y1, x2, y2);
                 this.board.capturePossible.clear();
                 if (this.board.canICaptureOneMoreTime(x2, y2)) {
@@ -59,7 +65,6 @@ public class PolishCheckersController extends GameController{
         }
         return false;
     }
-
 
 
     @Override

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class RussianCheckersController extends GameController {
 
-    public RussianCheckersController(){
+    public RussianCheckersController() {
         this.board = new RussianBoard();
     }
 
@@ -60,7 +60,6 @@ public class RussianCheckersController extends GameController {
         }
         return false;                                                                               //powtórzenie ruchu
     }
-
 
 
     @Override

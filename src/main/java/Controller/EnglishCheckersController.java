@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class EnglishCheckersController extends GameController {
 
-    public EnglishCheckersController(){
+    public EnglishCheckersController() {
         this.board = new EnglishBoard();
     }
 
@@ -57,7 +57,6 @@ public class EnglishCheckersController extends GameController {
         }
         return false;
     }
-
 
 
     @Override

@@ -1,14 +1,16 @@
 package ControllerTest;
 
 import Controller.PolishCheckersController;
+import Model.Field;
+import Model.Pawn;
 import Model.PlayerTurn;
 import Model.PolishBoard;
+import javafx.scene.paint.Color;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PolishCheckersControllerTest extends GameControllerTest {
 
@@ -106,16 +108,16 @@ public class PolishCheckersControllerTest extends GameControllerTest {
 
     @Test
     public void testLegalFirstMoves() {
-        board.addToPossibleMoves();
-        assertTrue(board.isMoveLegal(0, 6, 1, 5));
-        assertTrue(board.isMoveLegal(2, 6, 1, 5));
-        assertTrue(board.isMoveLegal(2, 6, 3, 5));
-        assertTrue(board.isMoveLegal(4, 6, 3, 5));
-        assertTrue(board.isMoveLegal(4, 6, 5, 5));
-        assertTrue(board.isMoveLegal(6, 6, 5, 5));
-        assertTrue(board.isMoveLegal(6, 6, 7, 5));
-        assertTrue(board.isMoveLegal(8, 6, 7, 5));
-        assertTrue(board.isMoveLegal(8, 6, 9, 5));
+        controller.getBoard().addToPossibleMoves();
+        assertTrue(controller.getBoard().isMoveLegal(0, 6, 1, 5));
+        assertTrue(controller.getBoard().isMoveLegal(2, 6, 1, 5));
+        assertTrue(controller.getBoard().isMoveLegal(2, 6, 3, 5));
+        assertTrue(controller.getBoard().isMoveLegal(4, 6, 3, 5));
+        assertTrue(controller.getBoard().isMoveLegal(4, 6, 5, 5));
+        assertTrue(controller.getBoard().isMoveLegal(6, 6, 5, 5));
+        assertTrue(controller.getBoard().isMoveLegal(6, 6, 7, 5));
+        assertTrue(controller.getBoard().isMoveLegal(8, 6, 7, 5));
+        assertTrue(controller.getBoard().isMoveLegal(8, 6, 9, 5));
     }
 
     @Test
@@ -148,7 +150,7 @@ public class PolishCheckersControllerTest extends GameControllerTest {
     }
 
     @Test
-    public void testQueenPromotion() throws CloneNotSupportedException {
+    public void testQueenPromotion() {
         controller.move(6, 6, 5, 5);
         controller.move(3, 3, 4, 4);
         controller.move(5, 5, 3, 3);
@@ -196,5 +198,23 @@ public class PolishCheckersControllerTest extends GameControllerTest {
         controller.move(0, 8, 1, 9);
 
         assertTrue(controller.getBoard().getFields()[1][9].getPawn().isQueen());
+    }
+
+    @Test
+    public void bestCaptureRuleTest(){
+        controller.move(4,6,5,5);
+        controller.move(3,3,2,4);
+        controller.move(3,7,4,6);
+        controller.move(5,3,6,4);
+        controller.move(5,5,4,4);
+        controller.move(6,4,7,5);
+        controller.move(8,6,6,4);
+        controller.move(7,3,5,5);
+        //Dochodzi tutaj do sytuacji w której możliwe jest bicie wielu pionków, algorytm słusznie wybiera najlepszą opcję.
+        assertFalse(controller.move(5,5,3,3));
+        assertFalse(controller.move(5,5,3,7));
+        assertTrue(controller.move(3,7,1,5));
+
+
     }
 }

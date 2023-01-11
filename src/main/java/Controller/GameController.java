@@ -14,7 +14,7 @@ public abstract class GameController {
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
 
-    protected abstract boolean makeMove(int x1, int y1, int x2, int y2) ;
+    public abstract boolean makeMove(int x1, int y1, int x2, int y2);
 
 
     public abstract int getBoardSize();
@@ -22,21 +22,22 @@ public abstract class GameController {
     public abstract int getPawnRows();
 
     public GameController() {
-        this.numberOfBlackPawns = getBoardSize() / 2 * getPawnRows();
-        this.numberOfWhitePawns = getBoardSize() / 2 * getPawnRows();
         this.finishCapture = false;
         this.playerTurn = PlayerTurn.White;
+        this.numberOfBlackPawns = getBoardSize() / 2 * getPawnRows();
+        this.numberOfWhitePawns = getBoardSize() / 2 * getPawnRows();
     }
-
 
 
     //sprawdzenie czy białe wygrały
     public boolean isWhiteWinner() {
+        this.setNumberOfPawns();
         return numberOfBlackPawns == 0;
     }
 
     //sprawdzenie czy czarne wygrały
     public boolean isBlackWinner() {
+        this.setNumberOfPawns();
         return numberOfWhitePawns == 0;
     }
 
@@ -45,12 +46,17 @@ public abstract class GameController {
     }
 
 
-    public boolean move(int x1, int y1, int x2, int y2)  {
-        if(makeMove(x1, y1, x2, y2)) {
+    public boolean move(int x1, int y1, int x2, int y2) {
+        if (makeMove(x1, y1, x2, y2)) {
             nextTurn();
             return true;
         }
         return false;
+    }
+
+    void setNumberOfPawns() {
+        numberOfBlackPawns = board.getNumberOfBlackPawns();
+        numberOfWhitePawns = board.getNumberOfWhitePawns();
     }
 
     public void nextTurn() {
