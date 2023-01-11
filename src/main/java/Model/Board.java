@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 import static javafx.scene.paint.Color.rgb;
 
 public  class Board implements Cloneable{
-    protected ArrayList<Field> blackPawns;
-    protected ArrayList<Field> whitePawns;
+    public ArrayList<Field> blackPawns;
+    public ArrayList<Field> whitePawns;
     public ArrayList<Field> capturePossible;
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
@@ -340,7 +340,6 @@ public  class Board implements Cloneable{
                 this.getFields()[x2][y2].setPawn(this.getFields()[x1][y1].getPawn());
                 this.getFields()[x1][y1].setPawn(null);
                 this.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].setPawn(null);
-                this.getFields()[x1][y1].setPawn(null);
             }
             else {
                 int diffX;
@@ -472,12 +471,12 @@ public  class Board implements Cloneable{
 
 
     public int getBoardSize() {
-        return 10;
+        return 8;
     }
 
 
     public int getPawnRows() {
-        return 4;
+        return 3;
     }
 
     public List<Field> getLongestMove() {

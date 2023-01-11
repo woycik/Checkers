@@ -9,16 +9,19 @@ import java.util.stream.Collectors;
 
 public class PolishCheckersController extends GameController{
 
+    public PolishCheckersController(){
+        this.board=  new PolishBoard();
+    }
+
     @Override
     public boolean makeMove(int x1, int y1, int x2, int y2)  {
-        this.board = new PolishBoard();
         this.board.setMyPawns();
         this.board.addToPossibleMoves();
         this.board.addToPossibleCaptures();
         if (!finishCapture) {
             this.board.capturePossible.clear();
-            if (playerTurn == PlayerTurn.Black) {this.board.captureFieldList(blackPawns);}
-            else {this.board.captureFieldList(whitePawns);}
+            if (playerTurn == PlayerTurn.Black) {this.board.captureFieldList(board.blackPawns);}
+            else {this.board.captureFieldList(board.whitePawns);}
             if (this.board.isCapturePossible()) {
                 if(!this.board.getLongestMove().contains(board.getFields()[x2][y2])){
                     return false;
@@ -43,9 +46,9 @@ public class PolishCheckersController extends GameController{
         } else {
             if (this.board.checkCapture(x1, y1, x2, y2)) {
                 this.board.capturePawn(x1, y1, x2, y2);
-                this.capturePossible.clear();
+                this.board.capturePossible.clear();
                 if (this.board.canICaptureOneMoreTime(x2, y2)) {
-                    capturePossible.add(board.getFields()[x2][y2]);
+                    board.capturePossible.add(board.getFields()[x2][y2]);
                     finishCapture = true;
                     return false;
                 }
