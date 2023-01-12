@@ -7,6 +7,21 @@ public class EnglishBoard extends Board {
         super(8, 3);
     }
 
+    @Override
+    public int getBoardSize() {
+        return 8;
+    }
+
+    @Override
+    public int getPawnRows() {
+        return 3;
+    }
+
+    @Override
+    public String getGameVariant() {
+        return "English";
+    }
+
     public void addToPossibleMoves() {
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {

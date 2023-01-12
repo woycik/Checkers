@@ -12,16 +12,18 @@ public class PolishBoard extends Board {
     }
 
     @Override
-    public PolishBoard clone() {
-        PolishBoard boardClone = new PolishBoard();
-        for (int i = 0; i < this.getBoardSize(); i++) {
-            for (int j = 0; j < this.getBoardSize(); j++) {
-                Field f = new Field(fields[i][j].getX(), fields[i][j].getY());
-                f.setPawn(fields[i][j].getPawn());
-                boardClone.fields[i][j] = f;
-            }
-        }
-        return boardClone;
+    public int getBoardSize() {
+        return 10;
+    }
+
+    @Override
+    public int getPawnRows() {
+        return 4;
+    }
+
+    @Override
+    public String getGameVariant() {
+        return "Polish";
     }
 
     public List<Field> getLongestMove() {
@@ -42,7 +44,7 @@ public class PolishBoard extends Board {
         ArrayList<Move> moves = new ArrayList<>();
         ArrayList<Integer> length = new ArrayList<>();
         for (Field f : fields[field.getX()][field.getY()].getPossibleCaptures()) {
-            PolishBoard bc = this.clone();
+            PolishBoard bc = (PolishBoard) this.clone();
             bc.capturePawn(field.getX(), field.getY(), f.getX(), f.getY());
             bc.addToPossibleCaptures();
             if (!bc.longestPawnTake(f).isEmpty()) {
@@ -57,15 +59,5 @@ public class PolishBoard extends Board {
         }
         moves.removeIf(move -> move.length < Collections.max(length));
         return moves;
-    }
-
-    @Override
-    public int getBoardSize() {
-        return 10;
-    }
-
-    @Override
-    public int getPawnRows() {
-        return 4;
     }
 }

@@ -57,4 +57,11 @@ public abstract class GameController {
             playerTurn = PlayerTurn.White;
         }
     }
+
+    public String getGameVariant() {
+        if(board != null) {
+            return board.getGameVariant();
+        }
+        return "None";
+    }
 }

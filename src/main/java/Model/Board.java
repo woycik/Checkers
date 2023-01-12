@@ -409,7 +409,7 @@ public class Board implements Cloneable {
     }
 
     public int getPawnRows() {
-        return 3;
+        return 0;
     }
 
     public List<Field> getLongestMove() {
@@ -422,5 +422,23 @@ public class Board implements Cloneable {
 
     public int getNumberOfBlackPawns() {
         return numberOfBlackPawns;
+    }
+
+    @Override
+    public Board clone() {
+        BoardFactory boardFactory = new BoardFactory();
+        Board boardClone = boardFactory.createBoard(getGameVariant());
+        for (int x = 0; x < getSize(); x++) {
+            for (int y = 0; y < getSize(); y++) {
+                Field f = new Field(fields[x][y].getX(), fields[x][y].getY());
+                f.setPawn(fields[x][y].getPawn());
+                boardClone.fields[x][y] = f;
+            }
+        }
+        return boardClone;
+    }
+
+    public String getGameVariant() {
+        return "None";
     }
 }
