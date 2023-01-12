@@ -14,7 +14,6 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
     private final int startingFieldY;
     public boolean controlsEnabled;
 
-
     public PawnEventHandler(PawnView pawnView, ClientThread clientThread) {
         super();
         this.pawnView = pawnView;

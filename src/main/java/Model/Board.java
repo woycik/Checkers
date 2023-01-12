@@ -6,7 +6,7 @@ import java.util.List;
 
 import static javafx.scene.paint.Color.rgb;
 
-public  class Board implements Cloneable {
+public class Board implements Cloneable {
     public ArrayList<Field> blackPawns;
     public ArrayList<Field> whitePawns;
     public ArrayList<Field> capturePossible;
@@ -46,7 +46,6 @@ public  class Board implements Cloneable {
         }
     }
 
-
     public Field[][] getFields() {
         return fields;
     }
@@ -58,7 +57,6 @@ public  class Board implements Cloneable {
     public boolean isCapturePossible() {
         return capturePossible.size() > 0;
     }
-
 
     public void addToPossibleMoves() {
         for (int x = 0; x < getSize(); x++) {
@@ -147,7 +145,6 @@ public  class Board implements Cloneable {
         }
     }
 
-
     public void addToPossibleCaptures() {
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {
@@ -200,7 +197,6 @@ public  class Board implements Cloneable {
                                 break;
                             }
                         }
-
 
                         currx = x;
                         curry = y;
@@ -266,7 +262,6 @@ public  class Board implements Cloneable {
                                 break;
                             }
                         }
-
                     }
                 }
             }
@@ -377,14 +372,12 @@ public  class Board implements Cloneable {
         }
     }
 
-
     public boolean checkCapture(int x1, int y1, int x2, int y2) {
         if (capturePossible.contains(this.getFields()[x1][y1])) {
             return this.getFields()[x1][y1].getPossibleCaptures().contains(this.getFields()[x2][y2]);
         }
         return false;
     }
-
 
     public boolean isMoveLegal(int x1, int y1, int x2, int y2) {
         if (this.getFields()[x1][y1].getPawn() != null) {
@@ -407,17 +400,14 @@ public  class Board implements Cloneable {
         return false;
     }
 
-
     public boolean canICaptureOneMoreTime(int x, int y) {
         this.addToPossibleCaptures();
         return (this.getFields()[x][y].getPossibleCaptures().size() > 0);
     }
 
-
     public int getBoardSize() {
         return 8;
     }
-
 
     public int getPawnRows() {
         return 3;

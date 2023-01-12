@@ -61,7 +61,6 @@ public class EnglishBoard extends Board {
         }
     }
 
-
     public void addToPossibleCaptures() {
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {
@@ -131,7 +130,6 @@ public class EnglishBoard extends Board {
         }
 
     }
-
 
     public void capturePawn(int x1, int y1, int x2, int y2) {
         if (this.getFields()[x1][y1].isOccupied()) {

@@ -17,7 +17,7 @@ public class Field {
         this.y = y;
         this.pawn = null;
         this.possibleMoves = new ArrayList<>();
-        this.possibleCaptures= new ArrayList<>();
+        this.possibleCaptures = new ArrayList<>();
     }
 
     public int getX() {
@@ -47,6 +47,7 @@ public class Field {
     public void addToPossibleMoves(Field field) {
         this.possibleMoves.add(field);
     }
+
     public void addToPossibleCaptures(Field field) {
         this.possibleCaptures.add(field);
     }
@@ -54,19 +55,20 @@ public class Field {
     public ArrayList<Field> getPossibleMoves() {
         return possibleMoves;
     }
+
     public ArrayList<Field> getPossibleCaptures() {
         return possibleCaptures;
     }
 
-    public void setPossibleCaptures(List<Field> f){
+    public void setPossibleCaptures(List<Field> f) {
         this.possibleCaptures.addAll(f);
     }
 
-    public void clearPossibleMove(){
+    public void clearPossibleMove() {
         this.possibleMoves.clear();
     }
 
-    public void clearPossibleCaptures(){
+    public void clearPossibleCaptures() {
         this.possibleCaptures.clear();
     }
 }

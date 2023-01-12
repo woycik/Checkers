@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 
-
 public class BoardView extends Pane {
     private final Client client;
     private ArrayList<PawnView> pawnViews;

@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 public class PolishBoard extends Board {
 
-
     public PolishBoard() {
         super(10, 4);
     }
@@ -20,7 +19,6 @@ public class PolishBoard extends Board {
                 Field f = new Field(fields[i][j].getX(), fields[i][j].getY());
                 f.setPawn(fields[i][j].getPawn());
                 boardClone.fields[i][j] = f;
-
             }
         }
         return boardClone;
@@ -32,15 +30,11 @@ public class PolishBoard extends Board {
 
         for (Field f : capturePossible) {
             moves.addAll(this.longestPawnTake(f));
-
         }
         for (Move move : moves) {
             length.add(move.length);
-
         }
         moves.removeIf(move -> move.length < Collections.max(length));
-
-
         return moves.stream().map(Move::getEndField).collect(Collectors.toList());
     }
 
@@ -62,11 +56,8 @@ public class PolishBoard extends Board {
             length.add(move.length);
         }
         moves.removeIf(move -> move.length < Collections.max(length));
-
-
         return moves;
     }
-
 
     @Override
     public int getBoardSize() {

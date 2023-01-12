@@ -190,11 +190,11 @@ public class ServerThread extends Thread {
 
     public void closeServerSocket() {
         try {
-            if(firstOut != null) {
+            if (firstOut != null) {
                 firstOut.println("disconnect");
             }
 
-            if(secondOut != null) {
+            if (secondOut != null) {
                 secondOut.println("disconnect");
             }
 
