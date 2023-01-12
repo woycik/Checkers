@@ -38,6 +38,11 @@ public class ServerThread extends Thread {
         this.stopRequest = false;
     }
 
+    /**
+     * Opens ServerSocket, waits for both players to connect, prepares and starts a checkers game.
+     * Listens to players' input streams for move requests, verifies if they are legal, performs moves on board
+     * and sends update messages to both of them.
+     */
     @Override
     public void run() {
         System.out.println("Server is listening on port " + port);
@@ -65,13 +70,9 @@ public class ServerThread extends Thread {
             String gameVariant = gameController.getGameVariant();
             int boardSize = gameController.getBoardSize();
             String boardString = getSocketPrintableFormat(gameController.getBoard());
-            // start;gameVariant;color;boardSize;boardString
-            firstOut.println("start;" + gameVariant + ";White;" + boardSize + ";" + boardString);
-            secondOut.println("start;" + gameVariant + ";Black;" + boardSize + ";" + boardString);
-            System.out.println("Sent game start message to both players");
+            sendGameStartMessages(gameVariant, boardSize, boardString);
 
             String clientMessage = "";
-            int x1, x2, y1, y2;
             while (!stopRequest && !gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
                 if (gameController.playerTurn == PlayerTurn.White) {
                     clientMessage = firstIn.readLine();
@@ -90,41 +91,12 @@ public class ServerThread extends Thread {
                 if (clientMessage != null && !clientMessage.isEmpty()) {
                     String[] messageSplit = clientMessage.split(";");
                     if (messageSplit[0].equals("move")) { // player wants to make a move
-                        // move;x1;y1;x2;y2
-                        x1 = Integer.parseInt(messageSplit[1]);
-                        y1 = Integer.parseInt(messageSplit[2]);
-                        x2 = Integer.parseInt(messageSplit[3]);
-                        y2 = Integer.parseInt(messageSplit[4]);
-
-                        if (gameController.move(x1, y1, x2, y2)) {
-                            System.out.println("Changing player turn and sending update to both players.");
-                            firstOut.println(getUpdateMessage());
-                            secondOut.println(getUpdateMessage());
-                            System.out.println(gameController.playerTurn.toString() + "'s move");
-                        } else { // inform client about illegal move
-                            if (gameController.playerTurn == PlayerTurn.White) {
-                                firstOut.println(getUpdateMessage());
-                            } else if (gameController.playerTurn == PlayerTurn.Black) {
-                                secondOut.println(getUpdateMessage());
-                            }
-                            System.out.println("Illegal move. Player notified.");
-                        }
+                        handleMoveRequest(clientMessage);
                     }
                 }
                 clientMessage = "";
             }
-
-            String winner;
-            if (gameController.isWhiteWinner()) {
-                winner = "White";
-            } else {
-                winner = "Black";
-            }
-            String winnerInfo = "win;" + winner;
-
-            firstOut.println(winnerInfo);
-            secondOut.println(winnerInfo);
-            Platform.runLater(() -> view.announceWinner(winner));
+            sendWinnerMessage();
         } catch (SocketException se) {
             System.out.println("Server socket closed");
         } catch (Exception e) {
@@ -132,9 +104,76 @@ public class ServerThread extends Thread {
         }
     }
 
+    /**
+     * Sends game starting message to both players.
+     * @param gameVariant Checkers variant
+     * @param boardSize Number of fields horizontally and vertically on Board
+     * @param boardString Initial state of Board
+     */
+    private void sendGameStartMessages(String gameVariant, int boardSize, String boardString) {
+        // start;gameVariant;color;boardSize;boardString
+        firstOut.println("start;" + gameVariant + ";White;" + boardSize + ";" + boardString);
+        secondOut.println("start;" + gameVariant + ";Black;" + boardSize + ";" + boardString);
+        System.out.println("Sent game start message to both players");
+    }
+
+    /**
+     * Handles player's move request. Parses message into starting and landing fields' coordinates,
+     * verifies whether move is legal, performs move on board and sends update messages to both players.
+     * @param message move request in format move;x1;y1;x2;y2
+     */
+    private void handleMoveRequest(String message) {
+        String[] messageSplit = message.split(";");
+        // move;x1;y1;x2;y2
+        int x1 = Integer.parseInt(messageSplit[1]);
+        int y1 = Integer.parseInt(messageSplit[2]);
+        int x2 = Integer.parseInt(messageSplit[3]);
+        int y2 = Integer.parseInt(messageSplit[4]);
+
+        if (gameController.move(x1, y1, x2, y2)) {
+            System.out.println("Changing player turn and sending update to both players.");
+            firstOut.println(getUpdateMessage());
+            secondOut.println(getUpdateMessage());
+            System.out.println(gameController.playerTurn.toString() + "'s move");
+        } else { // inform client about illegal move
+            if (gameController.playerTurn == PlayerTurn.White) {
+                firstOut.println(getUpdateMessage());
+            } else if (gameController.playerTurn == PlayerTurn.Black) {
+                secondOut.println(getUpdateMessage());
+            }
+            System.out.println("Illegal move. Player notified.");
+        }
+    }
+
+    /**
+     * Determines the winner and sends appropriate message to both players.
+     */
+    private void sendWinnerMessage() {
+        String winner;
+        if (gameController.isWhiteWinner()) {
+            winner = "White";
+        } else {
+            winner = "Black";
+        }
+        String winnerInfo = "win;" + winner;
+
+        firstOut.println(winnerInfo);
+        secondOut.println(winnerInfo);
+        Platform.runLater(() -> view.announceWinner(winner));
+    }
+
+    /**
+     * Converts Board object into String message to send to Client.
+     * @param board Checkers board object to convert
+     * @return String representation of current board state. Each character represents one field:
+     *                w - white pawn
+     *                b - black pawn
+     *                W - white queen
+     *                B - black queen
+     *                0 - empty field
+     */
     private String getSocketPrintableFormat(Board board) {
         StringBuilder stringBuilder = new StringBuilder();
-
         Field[][] fields = board.getFields();
         Pawn pawn;
         char ch;
@@ -160,6 +199,10 @@ public class ServerThread extends Thread {
         return stringBuilder.toString();
     }
 
+    /**
+     * Prepares a update message to inform players about current game board state.
+     * @return String in format of update;playerColor;board
+     */
     private String getUpdateMessage() {
         String playerColor;
         if (gameController.playerTurn == PlayerTurn.White) {
@@ -173,6 +216,11 @@ public class ServerThread extends Thread {
         return "update;" + playerColor + ";" + getSocketPrintableFormat(gameController.board);
     }
 
+    /**
+     * Determines whether client socket is still connected with server. Pings client and awaits response.
+     * @param socket Client socket
+     * @return true if socket is connected and false otherwise
+     */
     private boolean isConnected(Socket socket) {
         try {
             if (socket == null || socket.isClosed() || !socket.isConnected()
@@ -189,6 +237,9 @@ public class ServerThread extends Thread {
         }
     }
 
+    /**
+     * Safely closes ServerSocket and informs clients beforehand.
+     */
     public void closeServerSocket() {
         try {
             if (firstOut != null) {
@@ -207,6 +258,9 @@ public class ServerThread extends Thread {
         }
     }
 
+    /**
+     * Sets stopRequest flag to true. Safely demands for thread stop.
+     */
     public void requestStop() {
         stopRequest = true;
     }
