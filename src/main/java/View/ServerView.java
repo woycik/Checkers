@@ -12,8 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ServerView {
-    Server server;
-    Stage stage;
+    final Server server;
+    final Stage stage;
 
     public ServerView(Server server, Stage stage) {
         this.server = server;

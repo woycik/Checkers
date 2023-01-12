@@ -1,34 +1,27 @@
 package Controller;
 
 import Model.EnglishBoard;
-import Model.Field;
 import Model.PlayerTurn;
-import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
 
 public class EnglishCheckersController extends GameController {
 
     public EnglishCheckersController() {
-        this.board = new EnglishBoard();
+        board = new EnglishBoard();
     }
 
     @Override
-    public boolean makeMove(int x1, int y1, int x2, int y2) {
-        this.board.setMyPawns();
-        this.board.addToPossibleMoves();
-        this.board.addToPossibleCaptures(playerTurn.toString());
+    protected boolean makeMove(int x1, int y1, int x2, int y2) {
         if (!finishCapture) {
             if (playerTurn == PlayerTurn.Black) {
-                this.board.captureFieldList(board.blackPawns);
+                board.captureFieldList(board.blackPawns);
             } else {
-                this.board.captureFieldList(board.whitePawns);
+                board.captureFieldList(board.whitePawns);
             }
-            if (this.board.isCapturePossible()) {
-                if (this.board.checkCapture(x1, y1, x2, y2)) {
-                    this.board.capturePawn(x1, y1, x2, y2);
-                    this.board.capturePossible.clear();
-                    if (this.board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
+            if (board.isCapturePossible()) {
+                if (board.checkCapture(x1, y1, x2, y2)) {
+                    board.capturePawn(x1, y1, x2, y2);
+                    board.capturePossible.clear();
+                    if (board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
                         board.capturePossible.add(board.getFields()[x2][y2]);
                         finishCapture = true;
                         return false;
@@ -37,15 +30,15 @@ public class EnglishCheckersController extends GameController {
                 }
                 return false;
             } else {
-                if (this.board.isMoveLegal(x1, y1, x2, y2)) {
-                    return this.board.movePawn(x1, y1, x2, y2);
+                if (board.isMoveLegal(x1, y1, x2, y2)) {
+                    return board.movePawn(x1, y1, x2, y2);
                 }
             }
         } else {
-            if (this.board.checkCapture(x1, y1, x2, y2)) {
-                this.board.capturePawn(x1, y1, x2, y2);
-                this.board.capturePossible.clear();
-                if (this.board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
+            if (board.checkCapture(x1, y1, x2, y2)) {
+                board.capturePawn(x1, y1, x2, y2);
+                board.capturePossible.clear();
+                if (board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
                     board.capturePossible.add(board.getFields()[x2][y2]);
                     finishCapture = true;
                     return false;

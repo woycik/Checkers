@@ -1,18 +1,17 @@
 package Model;
 
 public class Move {
-    public Field startField;
-    public Field endField;
-    public int length;
-    Move(Field startField,Field endField,int length){
+    public final Field startField;
+    public final Field endField;
+    public final int length;
+
+    Move(Field startField, Field endField, int length) {
         this.startField = startField;
         this.endField = endField;
-        this.length=length;
+        this.length = length;
     }
 
-    public Field getEndField(){
+    public Field getEndField() {
         return endField;
     }
-
-
 }

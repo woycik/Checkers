@@ -18,16 +18,16 @@ import static javafx.scene.paint.Color.rgb;
 
 public class ServerThread extends Thread {
     private boolean stopRequest;
-    int port;
-    ServerView view;
-    GameController gameController;
-    ServerSocket serverSocket;
-    Socket firstPlayerSocket;
-    Socket secondPlayerSocket;
-    BufferedReader firstIn;
-    PrintWriter firstOut;
-    BufferedReader secondIn;
-    PrintWriter secondOut;
+    private final int port;
+    private final ServerView view;
+    private final GameController gameController;
+    private ServerSocket serverSocket;
+    private Socket firstPlayerSocket;
+    private Socket secondPlayerSocket;
+    private BufferedReader firstIn;
+    private PrintWriter firstOut;
+    private BufferedReader secondIn;
+    private PrintWriter secondOut;
 
     public ServerThread(int port, ServerView view, GameController gameController) {
         this.port = port;
@@ -161,7 +161,7 @@ public class ServerThread extends Thread {
     }
 
     private String getUpdateMessage() {
-        String playerColor = "";
+        String playerColor;
         if (gameController.playerTurn == PlayerTurn.White) {
             playerColor = "White";
         } else if (gameController.playerTurn == PlayerTurn.Black) {
@@ -191,11 +191,11 @@ public class ServerThread extends Thread {
 
     public void closeServerSocket() {
         try {
-            if(firstOut != null) {
+            if (firstOut != null) {
                 firstOut.println("disconnect");
             }
 
-            if(secondOut != null) {
+            if (secondOut != null) {
                 secondOut.println("disconnect");
             }
 

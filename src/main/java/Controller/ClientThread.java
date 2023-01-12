@@ -13,9 +13,9 @@ import java.net.Socket;
 import static javafx.scene.paint.Color.rgb;
 
 public class ClientThread extends Thread {
-    int port;
+    final int port;
     public String playerColor;
-    ClientView view;
+    final ClientView view;
     Socket socket;
     PrintWriter out;
     BufferedReader in;
@@ -65,7 +65,7 @@ public class ClientThread extends Thread {
                     String winner = messageSplit[1];
                     Platform.runLater(() -> view.announceWinner(winner));
                     break;
-                } else if(messageSplit[0].equals("disconnect")) {
+                } else if (messageSplit[0].equals("disconnect")) {
                     Platform.runLater(() -> view.serverDisconnected());
                     break;
                 }
@@ -83,19 +83,10 @@ public class ClientThread extends Thread {
     }
 
     private Board getBoard(String gameVariant, String message) {
-        Board board;
-        switch (gameVariant) {
-            case "Polish":
-                board = new PolishBoard();
-                break;
-            case "Russian":
-                board = new RussianBoard();
-                break;
-            case "English":
-                board = new EnglishBoard();
-                break;
-            default:
-                return null;
+        BoardFactory boardFactory = new BoardFactory();
+        Board board = boardFactory.createBoard(gameVariant);
+        if(board == null) {
+            return null;
         }
 
         String[] messageSplit = message.split(",");

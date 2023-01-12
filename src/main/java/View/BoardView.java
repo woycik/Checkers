@@ -10,15 +10,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.image.Image;
 
-
 import java.util.ArrayList;
-
 
 public class BoardView extends Pane {
     private final Client client;
     private final ArrayList<PawnView> pawnViews;
-    private final ArrayList<Rectangle> highlightedFields;
-    double size;
+    final double size;
     Board board ;
 
     public BoardView(int boardSize, Client client) {
@@ -26,7 +23,6 @@ public class BoardView extends Pane {
         board = new Board(boardSize);
         this.client = client;
         this.pawnViews = new ArrayList<>();
-        this.highlightedFields = new ArrayList<>();
         size= 500.0/boardSize;
 
         Rectangle[][] rectangles = new Rectangle[boardSize][boardSize];
@@ -55,23 +51,8 @@ public class BoardView extends Pane {
     public void update(Board board, String color) {
         this.board = board;
         getChildren().removeAll(pawnViews);
-        getChildren().removeAll(highlightedFields);
         pawnViews.clear();
-        highlightedFields.clear();
         Field[][] fields = board.getFields();
-        //ArrayList<Field> boardHighLights = board.getHighlights();
-        //for(Field f : boardHighLights) {
-        //    System.out.println("JEstem w petli");
-        //    Rectangle rectHighlight = new Rectangle();
-        //    rectHighlight.setX(f.getX() * size);
-        //    rectHighlight.setY(f.getY() * size);
-        //    rectHighlight.setWidth(size);
-        //    rectHighlight.setHeight(size);
-        //    rectHighlight.setFill(Color.GREENYELLOW);
-        //    highlightedFields.add(rectHighlight);
-        //}
-        //getChildren().addAll(highlightedFields);
-
 
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
@@ -79,7 +60,6 @@ public class BoardView extends Pane {
                     Image img;
                     PawnView pawnView = new PawnView((int)size * i + (int)Math.floor(size/2), (int)size * j + (int)Math.floor(size/2), 20, fields[i][j].getPawnColor(), board.getSize(), client.thread);
                     pawnViews.add(pawnView);
-
 
                     if(!fields[i][j].getPawn().isQueen() && fields[i][j].getPawnColor().equals(Color.rgb(255,255,255))){
                         img = new Image("file:whitePawn.jpg");

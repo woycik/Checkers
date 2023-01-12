@@ -3,7 +3,6 @@ package ControllerTest;
 import Controller.RussianCheckersController;
 import Model.PlayerTurn;
 
-import Model.RussianBoard;
 import org.junit.Before;
 import org.junit.Test;
 

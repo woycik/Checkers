@@ -2,8 +2,6 @@ package Model;
 
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-
 public class Pawn {
     private final Color color;
     private boolean isQueen;
