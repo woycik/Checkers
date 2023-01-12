@@ -17,8 +17,8 @@ public class GameControllerTest {
 
     protected void initialize(GameController controller) {
         this.controller = controller;
-        this.fields = board.getFields();
         this.board = controller.getBoard();
+        this.fields = board.getFields();
         board.addToPossibleMoves();
     }
 }
