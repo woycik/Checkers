@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 public class EnglishBoard extends Board {
 
     /**
-     * Constructor
+     * English board constructor
      */
     public EnglishBoard() {
         super(8, 3);
@@ -17,7 +17,7 @@ public class EnglishBoard extends Board {
 
     /**
      * Returning game variant method
-     * @return String
+     * @return game variant
      */
     @Override
     public String getGameVariant() {

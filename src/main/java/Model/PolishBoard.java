@@ -14,7 +14,7 @@ public class PolishBoard extends Board {
 
     /**
      * Game variant returning method
-     * @return String
+     * @return game variant
      */
     @Override
     public String getGameVariant() {

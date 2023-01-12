@@ -470,7 +470,7 @@ public class Board implements Cloneable {
      * @param y1 y-coordinate of pawn starting position
      * @param x2 x-coordinate of pawn ending position
      * @param y2 y-coordinate of pawn ending position
-     * @return boolean
+     * @return true if  this capture is legal
      */
 
     public boolean checkCapture(int x1, int y1, int x2, int y2) {
@@ -486,7 +486,7 @@ public class Board implements Cloneable {
      * @param y1 y-coordinate of pawn starting position
      * @param x2 x-coordinate of pawn ending position
      * @param y2 y-coordinate of pawn ending position
-     * @return boolean
+     * @return true if  this capture is legal
      */
 
     public boolean checkCapture(int x1, int y1, int x2, int y2, String color) {
@@ -514,7 +514,7 @@ public class Board implements Cloneable {
     /**
      * Method that removes from the capture list all fields that do not make the best capture
      * @param color
-     * @return List<Field>
+     * @return list of fields that makes the longest capture
      */
 
     public List<Field> getLongestCaptures(String color) {
@@ -536,7 +536,7 @@ public class Board implements Cloneable {
      * Returns list of fields that makes the longest capture
      * @param field
      * @param color
-     * @return List<Move>
+     * @return list of fields that makes the longest capture
      */
     public List<Move> getLongestPawnCaptures(Field field, String color) {
         List<Move> moves = new ArrayList<>();
@@ -565,7 +565,7 @@ public class Board implements Cloneable {
      * @param y1 y-coordinate of pawn starting position
      * @param x2 x-coordinate of pawn ending position
      * @param y2 y-coordinate of pawn starting position
-     * @return boolean
+     * @return true if this move is legal
      */
     public boolean isMoveLegal(int x1, int y1, int x2, int y2) {
         if (this.getFields()[x1][y1].getPawn() != null) {
@@ -584,7 +584,7 @@ public class Board implements Cloneable {
      * @param y1 y-coordinate of pawn starting position
      * @param x2 x-coordinate of pawn ending position
      * @param y2 y-coordinate of pawn starting position
-     * @return boolean
+     * @return true if move was done correctly
      */
 
     public boolean movePawn(int x1, int y1, int x2, int y2) {
@@ -602,7 +602,7 @@ public class Board implements Cloneable {
      * @param x x-coordinate of pawn position
      * @param y y-coordinate of pawn position
      * @param color pawn color
-     * @return boolean
+     * @return true if capture is possible one more time
      */
     public boolean canICaptureOneMoreTime(int x, int y,String color) {
         this.addToPossibleCaptures(color);
@@ -611,7 +611,7 @@ public class Board implements Cloneable {
 
     /**
      * Number of white pawns returning method
-     * @return nint
+     * @return number of white pawns
      */
 
     public int getNumberOfWhitePawns() {
@@ -620,7 +620,7 @@ public class Board implements Cloneable {
 
     /**
      * Number of black pawns returning method
-     * @return int
+     * @return number of black pawns
      */
 
     public int getNumberOfBlackPawns() {
@@ -649,7 +649,7 @@ public class Board implements Cloneable {
     /**
      * Player color returning method
      * @param playerColor
-     * @return Color
+     * @return player's pawns color
      */
 
     public Color getPlayerRGBColor(String playerColor) {
@@ -662,7 +662,7 @@ public class Board implements Cloneable {
 
     /**
      * Game variant returning method
-     * @return string
+     * @return game variant
      */
     public String getGameVariant() {
         return "None";

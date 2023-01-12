@@ -86,12 +86,14 @@ public class Field {
     }
     /**
      * Method that returns  the list of possible moves
+     * @return list of fields
      */
     public List<Field> getPossibleMoves() {
         return possibleMoves;
     }
     /**
      * Method that returns  the list of possible captures
+     * @return list of fields
      */
     public ArrayList<Field> getPossibleCaptures() {
         return possibleCaptures;

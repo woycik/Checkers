@@ -5,7 +5,7 @@ package Model;
  */
 public class RussianBoard extends Board{
     /**
-     * Constructor
+     * Russian board constructor
      */
     public RussianBoard() {
         super(8,3);
@@ -13,7 +13,7 @@ public class RussianBoard extends Board{
 
     /**
      * Game variant returning method
-     * @return String
+     * @return game variant
      */
     @Override
     public String getGameVariant() {
