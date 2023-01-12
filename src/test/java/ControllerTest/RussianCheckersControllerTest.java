@@ -3,6 +3,7 @@ package ControllerTest;
 import Controller.RussianCheckersController;
 import Model.PlayerTurn;
 
+import Model.RussianBoard;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -75,13 +76,13 @@ public class RussianCheckersControllerTest extends GameControllerTest {
 
     @Test
     public void testLegalFirstMoves() {
-        assertTrue(controller.isMoveLegal(1, 5, 0, 4));
-        assertTrue(controller.isMoveLegal(1, 5, 2, 4));
-        assertTrue(controller.isMoveLegal(3, 5, 2, 4));
-        assertTrue(controller.isMoveLegal(3, 5, 4, 4));
-        assertTrue(controller.isMoveLegal(5, 5, 4, 4));
-        assertTrue(controller.isMoveLegal(5, 5, 6, 4));
-        assertTrue(controller.isMoveLegal(7, 5, 6, 4));
+        assertTrue(board.isMoveLegal(1, 5, 0, 4));
+        assertTrue(board.isMoveLegal(1, 5, 2, 4));
+        assertTrue(board.isMoveLegal(3, 5, 2, 4));
+        assertTrue(board.isMoveLegal(3, 5, 4, 4));
+        assertTrue(board.isMoveLegal(5, 5, 4, 4));
+        assertTrue(board.isMoveLegal(5, 5, 6, 4));
+        assertTrue(board.isMoveLegal(7, 5, 6, 4));
     }
 
     @Test
