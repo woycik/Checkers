@@ -9,8 +9,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class ClientView {
-    private Client client;
-    private Stage stage;
+    private final Client client;
+    private final Stage stage;
     private BoardView boardView;
 
     public ClientView(Client client, Stage stage) {

@@ -1,8 +1,7 @@
 package View;
 
 import Controller.ClientThread;
-import Model.Board;
-import Model.Field;
+import Model.*;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -20,17 +19,17 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
     private final int startingFieldX;
     private final int startingFieldY;
     public boolean controlsEnabled;
-    ArrayList<Rectangle> captures;
+    final List<Rectangle> captures;
     Board board;
 
     public PawnEventHandler(PawnView pawnView, ClientThread clientThread) {
         super();
         this.pawnView = pawnView;
-        this.startingFieldX = pawnView.getFieldX();
-        this.startingFieldY = pawnView.getFieldY();
+        startingFieldX = pawnView.getFieldX();
+        startingFieldY = pawnView.getFieldY();
         this.clientThread = clientThread;
-        this.controlsEnabled = false;
-        this.captures = new ArrayList<>();
+        controlsEnabled = false;
+        captures = new ArrayList<>();
     }
 
     private boolean isCapturePossible(Board board) {
@@ -58,11 +57,13 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         board = parent.getBoard();
         board.addToPossibleCaptures(clientThread.playerColor);
         board.addToPossibleMoves();
-        board.fillterLongestCapture();
+        if(board instanceof PolishBoard) {
+            board.filterLongestCaptures(clientThread.playerColor);
+        }
 
         int x = (int) Math.floor(event.getX() / 500 * board.getSize());
         int y = (int) Math.floor(event.getY() / 500 * board.getSize());
-        if (this.isCapturePossible(board)) {
+        if (isCapturePossible(board)) {
             highlightFields(board.getFields()[x][y].getPossibleCaptures());
         } else {
             highlightFields(board.getFields()[x][y].getPossibleMoves());

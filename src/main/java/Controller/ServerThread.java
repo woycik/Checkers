@@ -18,9 +18,9 @@ import static javafx.scene.paint.Color.rgb;
 
 public class ServerThread extends Thread {
     private boolean stopRequest;
-    private int port;
-    private ServerView view;
-    private GameController gameController;
+    private final int port;
+    private final ServerView view;
+    private final GameController gameController;
     private ServerSocket serverSocket;
     private Socket firstPlayerSocket;
     private Socket secondPlayerSocket;
@@ -161,7 +161,7 @@ public class ServerThread extends Thread {
     }
 
     private String getUpdateMessage() {
-        String playerColor = "";
+        String playerColor;
         if (gameController.playerTurn == PlayerTurn.White) {
             playerColor = "White";
         } else if (gameController.playerTurn == PlayerTurn.Black) {

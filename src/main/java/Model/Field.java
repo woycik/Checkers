@@ -9,8 +9,8 @@ public class Field {
     private Pawn pawn;
     private final int x;
     private final int y;
-    private ArrayList<Field> possibleMoves;
-    private ArrayList<Field> possibleCaptures;
+    private final ArrayList<Field> possibleMoves;
+    private final ArrayList<Field> possibleCaptures;
 
     public Field(int x, int y) {
         this.x = x;

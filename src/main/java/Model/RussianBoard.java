@@ -6,16 +6,6 @@ public class RussianBoard extends Board{
     }
 
     @Override
-    public int getBoardSize() {
-        return 8;
-    }
-
-    @Override
-    public int getPawnRows() {
-        return 3;
-    }
-
-    @Override
     public String getGameVariant() {
         return "Russian";
     }

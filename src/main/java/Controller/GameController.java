@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Board;
 import Model.PlayerTurn;
+import javafx.scene.paint.Color;
 
 public abstract class GameController {
     protected Board board;
@@ -9,28 +10,27 @@ public abstract class GameController {
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
-    protected Color color;
 
     protected abstract boolean makeMove(int x1, int y1, int x2, int y2);
     public abstract int getBoardSize();
     public abstract int getPawnRows();
 
     public GameController() {
-        this.finishCapture = false;
-        this.playerTurn = PlayerTurn.White;
-        this.numberOfBlackPawns = getBoardSize() / 2 * getPawnRows();
-        this.numberOfWhitePawns = getBoardSize() / 2 * getPawnRows();
+        finishCapture = false;
+        playerTurn = PlayerTurn.White;
+        numberOfBlackPawns = getBoardSize() / 2 * getPawnRows();
+        numberOfWhitePawns = getBoardSize() / 2 * getPawnRows();
     }
 
     //sprawdzenie czy białe wygrały
     public boolean isWhiteWinner() {
-        this.setNumberOfPawns();
+        setNumberOfPawns();
         return numberOfBlackPawns == 0;
     }
 
     //sprawdzenie czy czarne wygrały
     public boolean isBlackWinner() {
-        this.setNumberOfPawns();
+        setNumberOfPawns();
         return numberOfWhitePawns == 0;
     }
 
@@ -39,6 +39,9 @@ public abstract class GameController {
     }
 
     public boolean move(int x1, int y1, int x2, int y2) {
+        board.setMyPawns();
+        board.addToPossibleMoves();
+        board.addToPossibleCaptures(playerTurn.toString());
         if (makeMove(x1, y1, x2, y2)) {
             nextTurn();
             return true;
@@ -64,15 +67,5 @@ public abstract class GameController {
             return board.getGameVariant();
         }
         return "None";
-    }
-
-    public  Color getColor(){
-        return color;
-    }
-    public Color oppositeColor(){
-        if(color.equals(Color.rgb(0,0,0))){
-            return Color.rgb(255,255,255);
-        }
-        return Color.rgb(0,0,0);
     }
 }

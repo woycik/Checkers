@@ -1,19 +1,21 @@
 package Model;
 
 import javafx.scene.paint.Color;
-import java.util.ArrayList;
-import java.util.List;
 
-import static javafx.scene.paint.Color.color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static javafx.scene.paint.Color.rgb;
 
 public class Board implements Cloneable {
-    public ArrayList<Field> blackPawns;
-    public ArrayList<Field> whitePawns;
-    public ArrayList<Field> capturePossible;
+    public List<Field> blackPawns;
+    public List<Field> whitePawns;
+    public final List<Field> capturePossible;
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
-    protected Field[][] fields;
+    protected final Field[][] fields;
     private final int size;
     private final int pawnRows;
 
@@ -156,18 +158,13 @@ public class Board implements Cloneable {
 
 
     public void addToPossibleCaptures(String color) {
-        Color c;
-        if(color.equals("White")){
-            c=Color.rgb(255,255,255);
-        }
-        else{
-            c=Color.rgb(0,0,0);
-        }
+        Color playerColor = getPlayerRGBColor(color);
+
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {
                 fields[x][y].clearPossibleCaptures();
                 if (fields[x][y].isOccupied()) {
-                    if(!c.equals(fields[x][y].getPawnColor())){
+                    if(!playerColor.equals(fields[x][y].getPawnColor())){
                         continue;
                     }
                     if (!fields[x][y].getPawn().isQueen()) {
@@ -360,7 +357,7 @@ public class Board implements Cloneable {
         }
     }
 
-    public void captureFieldList(ArrayList<Field> typeOfPawns) {
+    public void captureFieldList(List<Field> typeOfPawns) {
         for (Field boardField : typeOfPawns) {
             if (boardField.isOccupied()) {
                 if (boardField.getPossibleCaptures().size() > 0) {
@@ -398,6 +395,59 @@ public class Board implements Cloneable {
         return false;
     }
 
+    public boolean checkCapture(int x1, int y1, int x2, int y2, String color) {
+        if (capturePossible.contains(getFields()[x1][y1])) {
+            if (getLongestCaptures(color).contains(getFields()[x2][y2])) {
+                return getFields()[x1][y1].getPossibleCaptures().contains(getFields()[x2][y2]);
+            }
+        }
+        return false;
+    }
+
+    public void filterLongestCaptures(String color) {
+        List<Field> longestCaptures = getLongestCaptures(color);
+
+        for (Field field : capturePossible) {
+            field.getPossibleCaptures().removeIf(f -> !longestCaptures.contains(f));
+        }
+    }
+
+    public List<Field> getLongestCaptures(String color) {
+        List<Move> moves = new ArrayList<>();
+        List<Integer> length = new ArrayList<>();
+
+        for (Field f : capturePossible) {
+            moves.addAll(getLongestPawnCaptures(f, color));
+        }
+
+        for (Move move : moves) {
+            length.add(move.length);
+        }
+        moves.removeIf(move -> move.length < Collections.max(length));
+        return moves.stream().map(Move::getEndField).collect(Collectors.toList());
+    }
+
+    public List<Move> getLongestPawnCaptures(Field field, String color) {
+        List<Move> moves = new ArrayList<>();
+        List<Integer> length = new ArrayList<>();
+        for (Field f : fields[field.getX()][field.getY()].getPossibleCaptures()) {
+            PolishBoard bc = (PolishBoard) clone();
+            bc.capturePawn(field.getX(), field.getY(), f.getX(), f.getY());
+            bc.addToPossibleCaptures(color);
+            if (!bc.getLongestPawnCaptures(f, color).isEmpty()) {
+                moves.add(new Move(field, f, 1 + bc.getLongestPawnCaptures(f, color).get(0).length));
+            } else {
+                moves.add(new Move(f, f, 0));
+            }
+
+        }
+        for (Move move : moves) {
+            length.add(move.length);
+        }
+        moves.removeIf(move -> move.length < Collections.max(length));
+        return moves;
+    }
+
     public boolean isMoveLegal(int x1, int y1, int x2, int y2) {
         if (this.getFields()[x1][y1].getPawn() != null) {
             if (x2 < this.getSize() && x2 >= 0 && y2 < this.getSize() && y2 >= 0) {
@@ -424,32 +474,6 @@ public class Board implements Cloneable {
         return (this.getFields()[x][y].getPossibleCaptures().size() > 0);
     }
 
-    public ArrayList<Field> getHighlights(String color){
-        ArrayList<Field> captures = new ArrayList<>();
-        ArrayList<Field> moves = new ArrayList<>();
-        this.addToPossibleCaptures(color);
-        this.addToPossibleMoves();
-        for(int x=0;x<getSize();x++){
-            for(int y=0;y<getSize();y++) {
-                captures.addAll(this.getFields()[x][y].getPossibleCaptures());
-                moves.addAll(this.getFields()[x][y].getPossibleMoves());
-            }
-        }
-        if(!captures.isEmpty()){
-            System.out.println(captures.get(0));
-            return captures;
-
-        }
-        if(!moves.isEmpty()){
-            System.out.println(moves.get(0));
-        }
-        return moves;
-    }
-
-    public List<Field> getLongestMove() {
-        return null;
-    }
-
     public int getNumberOfWhitePawns() {
         return numberOfWhitePawns;
     }
@@ -472,11 +496,15 @@ public class Board implements Cloneable {
         return boardClone;
     }
 
-    public String getGameVariant() {
-        return "None";
+    public Color getPlayerRGBColor(String playerColor) {
+        if (playerColor.equals("White")) {
+            return Color.rgb(255, 255, 255);
+        } else {
+            return Color.rgb(0, 0, 0);
+        }
     }
 
-    public void fillterLongestCapture() {
-
+    public String getGameVariant() {
+        return "None";
     }
 }

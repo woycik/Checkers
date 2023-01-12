@@ -8,16 +8,6 @@ public class EnglishBoard extends Board {
     }
 
     @Override
-    public int getBoardSize() {
-        return 8;
-    }
-
-    @Override
-    public int getPawnRows() {
-        return 3;
-    }
-
-    @Override
     public String getGameVariant() {
         return "English";
     }
@@ -76,11 +66,17 @@ public class EnglishBoard extends Board {
         }
     }
 
-    public void addToPossibleCaptures() {
+    @Override
+    public void addToPossibleCaptures(String color) {
+        Color playerColor = getPlayerRGBColor(color);
+
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {
                 fields[x][y].clearPossibleCaptures();
                 if (fields[x][y].isOccupied()) {
+                    if (!playerColor.equals(fields[x][y].getPawnColor())) {
+                        continue;
+                    }
                     if (!fields[x][y].getPawn().isQueen()) {
                         //góra prawo kłucie
                         if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
@@ -143,20 +139,19 @@ public class EnglishBoard extends Board {
                 }
             }
         }
-
     }
 
     public void capturePawn(int x1, int y1, int x2, int y2) {
-        if (this.getFields()[x1][y1].isOccupied()) {
-            if (this.getFields()[x1][y1].getPawnColor().equals(Color.rgb(0, 0, 0))) {
+        if (getFields()[x1][y1].isOccupied()) {
+            if (getFields()[x1][y1].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                 numberOfWhitePawns--;
             } else {
                 numberOfBlackPawns--;
             }
-            this.getFields()[x2][y2].setPawn(this.getFields()[x1][y1].getPawn());
-            this.getFields()[x1][y1].setPawn(null);
-            this.getFields()[(x1 + x2) / 2][(y1 + y2) / 2].setPawn(null);
-            this.createNewQueen(x2, y2);
+            getFields()[x2][y2].setPawn(getFields()[x1][y1].getPawn());
+            getFields()[x1][y1].setPawn(null);
+            getFields()[(x1 + x2) / 2][(y1 + y2) / 2].setPawn(null);
+            createNewQueen(x2, y2);
         }
     }
 }
