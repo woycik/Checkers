@@ -76,7 +76,6 @@ public class EnglishCheckersControllerTest extends GameControllerTest {
 
     @Test
     public void testLegalFirstMoves() {
-        board.addToPossibleMoves();
         assertTrue(board.isMoveLegal(1, 5, 0, 4));
         assertTrue(board.isMoveLegal(1, 5, 2, 4));
         assertTrue(board.isMoveLegal(3, 5, 2, 4));
