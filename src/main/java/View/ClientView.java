@@ -43,6 +43,14 @@ public class ClientView {
         clientStatusLabel.setText("Could not connect with the server. Please try again later.");
     }
 
+    public void serverDisconnected() {
+        final BorderPane borderPane = new BorderPane();
+        Scene scene = stage.getScene();
+        Label clientStatusLabel = new Label("Server disconnected.");
+        borderPane.setCenter(clientStatusLabel);
+        scene.setRoot(borderPane);
+    }
+
     public void showBoard(int boardSize) {
         Scene scene = stage.getScene();
         boardView = new BoardView(boardSize, client);
@@ -52,7 +60,8 @@ public class ClientView {
     public void announceWinner(String winner) {
         final BorderPane borderPane = new BorderPane();
         Scene scene = stage.getScene();
-        Label clientStatusLabel = new Label(winner + " wins!");
+        String message = client.thread.playerColor.equals(winner) ? "You won!" : "You lost.";
+        Label clientStatusLabel = new Label(message);
         borderPane.setCenter(clientStatusLabel);
         scene.setRoot(borderPane);
     }
