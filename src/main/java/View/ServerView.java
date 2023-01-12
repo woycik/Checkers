@@ -87,12 +87,20 @@ public class ServerView {
     public void announceWinner(String winner) {
         Scene scene = stage.getScene();
         Label serverStatusLabel = (Label) scene.lookup("#serverStatusLabel");
+        if(serverStatusLabel == null) {
+            serverStatusLabel = new Label();
+            serverStatusLabel.setId("serverStatusLabel");
+        }
         serverStatusLabel.setText(winner + " wins!");
     }
 
     public void bothPlayersConnected() {
         Scene scene = stage.getScene();
         Label serverStatusLabel = (Label) scene.lookup("#serverStatusLabel");
+        if(serverStatusLabel == null) {
+            serverStatusLabel = new Label();
+            serverStatusLabel.setId("serverStatusLabel");
+        }
         serverStatusLabel.setText("Both players connected. Starting game.");
     }
 }
