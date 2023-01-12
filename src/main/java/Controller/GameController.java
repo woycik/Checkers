@@ -77,4 +77,6 @@ public abstract class GameController {
         }
         return Color.rgb(0,0,0);
     }
+
+    public abstract String getGameVariant();
 }

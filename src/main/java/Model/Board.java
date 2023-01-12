@@ -18,11 +18,13 @@ public  class Board implements Cloneable {
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
     protected Field[][] fields;
-    private int size;
+    private final int size;
+    private final int pawnRows;
 
 
     public Board(int size) {
         this.size = size;
+        this.pawnRows = 0;
         this.fields = new Field[size][size];
         this.capturePossible = new ArrayList<>();
         for (int x = 0; x < size; x++) {
@@ -34,8 +36,9 @@ public  class Board implements Cloneable {
 
     public Board(int size, int pawnRows) {
         this.size = size;
-        this.numberOfBlackPawns = getBoardSize() / 2 * getPawnRows();
-        this.numberOfWhitePawns = getBoardSize() / 2 * getPawnRows();
+        this.pawnRows = pawnRows;
+        this.numberOfBlackPawns = getSize() / 2 * getPawnRows();
+        this.numberOfWhitePawns = getSize() / 2 * getPawnRows();
         this.blackPawns = new ArrayList<>();
         this.whitePawns = new ArrayList<>();
         this.capturePossible = new ArrayList<>();
@@ -58,7 +61,11 @@ public  class Board implements Cloneable {
     }
 
     public int getSize() {
-        return fields.length;
+        return size;
+    }
+
+    public int getPawnRows() {
+        return pawnRows;
     }
 
     public boolean isCapturePossible() {
@@ -369,8 +376,8 @@ public  class Board implements Cloneable {
 
     public void setMyPawns() {
 
-        for (int i = 0; i < this.getBoardSize(); i++) {
-            for (int j = 0; j < this.getBoardSize(); j++) {
+        for (int i = 0; i < this.getSize(); i++) {
+            for (int j = 0; j < this.getSize(); j++) {
                 if (this.getFields()[i][j].getPawn() != null) {
                     if (this.getFields()[i][j].getPawn().getColor().equals(Color.rgb(0, 0, 0))) {
                         blackPawns.add(this.getFields()[i][j]);
@@ -394,7 +401,7 @@ public  class Board implements Cloneable {
 
     public boolean isMoveLegal(int x1, int y1, int x2, int y2) {
         if (this.getFields()[x1][y1].getPawn() != null) {
-            if (x2 < this.getBoardSize() && x2 >= 0 && y2 < this.getBoardSize() && y2 >= 0) {
+            if (x2 < this.getSize() && x2 >= 0 && y2 < this.getSize() && y2 >= 0) {
                 if (!this.getFields()[x2][y2].isOccupied()) {
                     return this.getFields()[x1][y1].getPossibleMoves().contains(this.getFields()[x2][y2]);
                 }
@@ -424,8 +431,8 @@ public  class Board implements Cloneable {
         ArrayList<Field> moves = new ArrayList<>();
         this.addToPossibleCaptures();
         this.addToPossibleMoves();
-        for(int x=0;x<getBoardSize();x++){
-            for(int y=0;y<getBoardSize();y++) {
+        for(int x=0;x<getSize();x++){
+            for(int y=0;y<getSize();y++) {
                 captures.addAll(this.getFields()[x][y].getPossibleCaptures());
                 moves.addAll(this.getFields()[x][y].getPossibleMoves());
             }
@@ -439,16 +446,6 @@ public  class Board implements Cloneable {
             System.out.println(moves.get(0));
         }
         return moves;
-    }
-
-
-    public int getBoardSize() {
-        return 8;
-    }
-
-
-    public int getPawnRows() {
-        return 3;
     }
 
     public List<Field> getLongestMove() {

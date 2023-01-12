@@ -66,15 +66,15 @@ public class ClientServerCommunicationTest {
             gameControllerField.setAccessible(true);
             GameController gameController = (GameController)gameControllerField.get(serverThread);
             Board serverBoard = gameController.getBoard();
-            int boardSize = gameController.getBoardSize();
+            String gameVariant = gameController.getGameVariant();
 
             Method getSocketPrintableFormatMethod = ServerThread.class.getDeclaredMethod("getSocketPrintableFormat", Board.class);
             getSocketPrintableFormatMethod.setAccessible(true);
             String serverBoardMessage = (String)getSocketPrintableFormatMethod.invoke(serverThread, serverBoard);
 
-            Method getBoardMethod = ClientThread.class.getDeclaredMethod("getBoard", int.class, String.class);
+            Method getBoardMethod = ClientThread.class.getDeclaredMethod("getBoard", String.class, String.class);
             getBoardMethod.setAccessible(true);
-            Board clientBoard = (Board)getBoardMethod.invoke(firstClientThread, boardSize, serverBoardMessage);
+            Board clientBoard = (Board)getBoardMethod.invoke(firstClientThread, gameVariant, serverBoardMessage);
 
             assertTrue(areBoardsEqual(serverBoard, clientBoard));
         }
