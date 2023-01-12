@@ -18,16 +18,16 @@ import static javafx.scene.paint.Color.rgb;
 
 public class ServerThread extends Thread {
     private boolean stopRequest;
-    int port;
-    ServerView view;
-    GameController gameController;
-    ServerSocket serverSocket;
-    Socket firstPlayerSocket;
-    Socket secondPlayerSocket;
-    BufferedReader firstIn;
-    PrintWriter firstOut;
-    BufferedReader secondIn;
-    PrintWriter secondOut;
+    private int port;
+    private ServerView view;
+    private GameController gameController;
+    private ServerSocket serverSocket;
+    private Socket firstPlayerSocket;
+    private Socket secondPlayerSocket;
+    private BufferedReader firstIn;
+    private PrintWriter firstOut;
+    private BufferedReader secondIn;
+    private PrintWriter secondOut;
 
     public ServerThread(int port, ServerView view, GameController gameController) {
         this.port = port;

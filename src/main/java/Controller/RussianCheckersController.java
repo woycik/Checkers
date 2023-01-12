@@ -10,7 +10,7 @@ public class RussianCheckersController extends GameController {
     }
 
     @Override
-    public boolean makeMove(int x1, int y1, int x2, int y2) {
+    protected boolean makeMove(int x1, int y1, int x2, int y2) {
         this.board.setMyPawns();
         this.board.addToPossibleMoves();
         this.board.addToPossibleCaptures();

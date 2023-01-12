@@ -5,10 +5,9 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Client extends Application {
-    final int port = 4444;
-    ClientView view;
+    private final int port = 4444;
+    private ClientView view;
     public ClientThread thread;
-
 
     @Override
     public void start(Stage stage) {

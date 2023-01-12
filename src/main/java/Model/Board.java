@@ -13,7 +13,7 @@ public class Board implements Cloneable {
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
     protected Field[][] fields;
-    private int size;
+    private final int size;
 
 
     public Board(int size) {
@@ -51,7 +51,7 @@ public class Board implements Cloneable {
     }
 
     public int getSize() {
-        return fields.length;
+        return size;
     }
 
     public boolean isCapturePossible() {
@@ -357,7 +357,6 @@ public class Board implements Cloneable {
     }
 
     public void setMyPawns() {
-
         for (int i = 0; i < this.getBoardSize(); i++) {
             for (int j = 0; j < this.getBoardSize(); j++) {
                 if (this.getFields()[i][j].getPawn() != null) {
