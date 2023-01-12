@@ -16,7 +16,7 @@ public class PolishCheckersControllerTest extends GameControllerTest {
 
     @Before
     public void initializeController() {
-        initialize(new PolishBoard(),new PolishCheckersController());
+        initialize(new PolishCheckersController());
     }
 
     @Test
