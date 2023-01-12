@@ -15,8 +15,8 @@ public class PolishBoard extends Board {
     @Override
     public PolishBoard clone() {
         PolishBoard boardClone = new PolishBoard();
-        for (int i = 0; i < this.getBoardSize(); i++) {
-            for (int j = 0; j < this.getBoardSize(); j++) {
+        for (int i = 0; i < this.getSize(); i++) {
+            for (int j = 0; j < this.getSize(); j++) {
                 Field f = new Field(fields[i][j].getX(), fields[i][j].getY());
                 f.setPawn(fields[i][j].getPawn());
                 boardClone.fields[i][j] = f;
@@ -222,16 +222,5 @@ public class PolishBoard extends Board {
                 }
             }
         }
-    }
-
-
-    @Override
-    public int getBoardSize() {
-        return 10;
-    }
-
-    @Override
-    public int getPawnRows() {
-        return 4;
     }
 }

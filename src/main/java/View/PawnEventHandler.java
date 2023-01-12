@@ -3,9 +3,7 @@ package View;
 import Controller.ClientThread;
 import Model.Board;
 import Model.Field;
-import Model.PolishBoard;
 import javafx.event.EventHandler;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -33,13 +31,13 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         this.startingFieldY = pawnView.getFieldY();
         this.clientThread = clientThread;
         this.controlsEnabled = false;
-        this.captures= new ArrayList<>();
+        this.captures = new ArrayList<>();
     }
 
-    private boolean isCapturePossible(Board board){
-        for(int x=0;x< board.getSize();x++){
-            for(int y =0;y< board.getSize();y++){
-                if(!board.getFields()[x][y].getPossibleCaptures().isEmpty()){
+    private boolean isCapturePossible(Board board) {
+        for (int x = 0; x < board.getSize(); x++) {
+            for (int y = 0; y < board.getSize(); y++) {
+                if (!board.getFields()[x][y].getPossibleCaptures().isEmpty()) {
                     return true;
                 }
             }
@@ -47,7 +45,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         return false;
     }
 
-    private void createRectangle(Field f,double size){
+    private void createRectangle(Field f, double size) {
         Rectangle rectHighlight = new Rectangle();
         rectHighlight.setX(f.getX() * size);
         rectHighlight.setY(f.getY() * size);
@@ -57,22 +55,17 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         captures.add(rectHighlight);
     }
 
-    private void displayFields(MouseEvent event,BoardView parent){
+    private void displayFields(MouseEvent event, BoardView parent) {
         board = parent.getBoard();
         board.addToPossibleCaptures();
         board.addToPossibleMoves();
-        if(board instanceof PolishBoard){
-            PolishBoard polishBoard = (PolishBoard) this.board;
-            polishBoard.fillterLongestCapture();
-        }
+        board.fillterLongestCapture();
 
-
-        int x = (int)Math.floor(event.getX()/500* board.getSize()) ;
-        int y = (int)Math.floor(event.getY()/500* board.getSize());
-        if(this.isCapturePossible(board)){
+        int x = (int) Math.floor(event.getX() / 500 * board.getSize());
+        int y = (int) Math.floor(event.getY() / 500 * board.getSize());
+        if (this.isCapturePossible(board)) {
             highlightFields(board.getFields()[x][y].getPossibleCaptures());
-        }
-        else {
+        } else {
             highlightFields(board.getFields()[x][y].getPossibleMoves());
         }
     }
@@ -111,9 +104,8 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
                 clientThread.makeMove(startingFieldX, startingFieldY, fieldX, fieldY);
                 boardView.getChildren().removeAll(captures);
                 captures.clear();
-            }
-            else if(event.getEventType() == MouseEvent.MOUSE_PRESSED){
-                displayFields(event,boardView);
+            } else if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+                displayFields(event, boardView);
                 boardView.getChildren().addAll(captures);
             }
         }

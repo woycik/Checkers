@@ -71,4 +71,9 @@ public class RussianCheckersController extends GameController {
     public int getPawnRows() {
         return 3;
     }
+
+    @Override
+    public String getGameVariant() {
+        return "Russian";
+    }
 }
