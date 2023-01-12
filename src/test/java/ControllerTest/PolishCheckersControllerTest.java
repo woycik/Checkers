@@ -108,7 +108,6 @@ public class PolishCheckersControllerTest extends GameControllerTest {
 
     @Test
     public void testLegalFirstMoves() {
-        controller.getBoard().addToPossibleMoves();
         assertTrue(controller.getBoard().isMoveLegal(0, 6, 1, 5));
         assertTrue(controller.getBoard().isMoveLegal(2, 6, 1, 5));
         assertTrue(controller.getBoard().isMoveLegal(2, 6, 3, 5));
