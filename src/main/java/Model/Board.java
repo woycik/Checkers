@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+import static javafx.scene.paint.Color.color;
 import static javafx.scene.paint.Color.rgb;
 
 public  class Board implements Cloneable {
@@ -23,6 +24,7 @@ public  class Board implements Cloneable {
     public Board(int size) {
         this.size = size;
         this.fields = new Field[size][size];
+        this.capturePossible = new ArrayList<>();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 this.fields[x][y] = new Field(x, y);
@@ -415,6 +417,28 @@ public  class Board implements Cloneable {
     public boolean canICaptureOneMoreTime(int x, int y) {
         this.addToPossibleCaptures();
         return (this.getFields()[x][y].getPossibleCaptures().size() > 0);
+    }
+
+    public ArrayList<Field> getHighlights(){
+        ArrayList<Field> captures = new ArrayList<>();
+        ArrayList<Field> moves = new ArrayList<>();
+        this.addToPossibleCaptures();
+        this.addToPossibleMoves();
+        for(int x=0;x<getBoardSize();x++){
+            for(int y=0;y<getBoardSize();y++) {
+                captures.addAll(this.getFields()[x][y].getPossibleCaptures());
+                moves.addAll(this.getFields()[x][y].getPossibleMoves());
+            }
+        }
+        if(!captures.isEmpty()){
+            System.out.println(captures.get(0));
+            return captures;
+
+        }
+        if(!moves.isEmpty()){
+            System.out.println(moves.get(0));
+        }
+        return moves;
     }
 
 

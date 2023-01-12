@@ -13,6 +13,7 @@ public abstract class GameController {
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
+    protected Color color;
 
     public abstract boolean makeMove(int x1, int y1, int x2, int y2);
 
@@ -65,5 +66,15 @@ public abstract class GameController {
         } else {
             playerTurn = PlayerTurn.White;
         }
+    }
+
+    public  Color getColor(){
+        return color;
+    }
+    public Color oppositeColor(){
+        if(color.equals(Color.rgb(0,0,0))){
+            return Color.rgb(255,255,255);
+        }
+        return Color.rgb(0,0,0);
     }
 }

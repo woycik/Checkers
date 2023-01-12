@@ -26,7 +26,7 @@ public class RussianCheckersController extends GameController {
             }                                                                                   //zapisz czarne pola z których mozliwe jest bicie}
             else {
                 this.board.captureFieldList(board.whitePawns);
-            }                                                                                   //zapisz biale pola z których mozliwe jest bicie
+            }
             if (this.board.isCapturePossible()) {                                                     //sprawdz czy mozliwe jest bicie dla (bialego/czarnego)                 //czy doszloby do wykonania bicia?
                 if (this.board.checkCapture(x1, y1, x2, y2)) {                                        //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
                     this.board.capturePawn(x1, y1, x2, y2);
