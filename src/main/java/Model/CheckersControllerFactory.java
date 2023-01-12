@@ -15,7 +15,7 @@ public class CheckersControllerFactory {
      * @param type checkers variant
      * @return GameController related with type or null if type is invalid
      */
-    public GameController createGameControler(String type) {
+    public GameController createGameController(String type) {
         GameController controller;
 
         switch(type) {

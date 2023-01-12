@@ -30,7 +30,7 @@ public class Server extends Application {
     public void prepareGame(String type) {
         System.out.println("Preparing " + type + " checkers...");
         CheckersControllerFactory checkersControllerFactory = new CheckersControllerFactory();
-        GameController gameController = checkersControllerFactory.createGameControler(type);
+        GameController gameController = checkersControllerFactory.createGameController(type);
         if(gameController == null) {
             return;
         }
