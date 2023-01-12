@@ -19,5 +19,6 @@ public class GameControllerTest {
         this.controller = controller;
         this.fields = board.getFields();
         this.board = controller.getBoard();
+        board.addToPossibleMoves();
     }
 }
