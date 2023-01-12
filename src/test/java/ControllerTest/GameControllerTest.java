@@ -15,9 +15,9 @@ public class GameControllerTest {
     protected final Color white = rgb(255, 255, 255);
     protected final Color black = rgb(0, 0, 0);
 
-    protected void initialize(Board board,GameController controller) {
-        this.board = board;
+    protected void initialize(GameController controller) {
         this.controller = controller;
         this.fields = board.getFields();
+        this.board = controller.getBoard();
     }
 }
