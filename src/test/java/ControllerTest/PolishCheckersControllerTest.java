@@ -121,7 +121,7 @@ public class PolishCheckersControllerTest extends GameControllerTest {
     }
 
     @Test
-    public void testPlayerTurns() throws CloneNotSupportedException {
+    public void testPlayerTurns()  {
         Assert.assertEquals(PlayerTurn.White, controller.playerTurn);
         controller.move(4, 6, 5, 5);
         Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
