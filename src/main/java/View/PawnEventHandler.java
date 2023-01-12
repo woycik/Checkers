@@ -3,6 +3,7 @@ package View;
 import Controller.ClientThread;
 import Model.Board;
 import Model.Field;
+import Model.PolishBoard;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
@@ -10,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PawnEventHandler implements EventHandler<MouseEvent> {
@@ -34,15 +36,15 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         this.captures= new ArrayList<>();
     }
 
-    private boolean checkIfCaptureIsNotPossible(Board board){
+    private boolean isCapturePossible(Board board){
         for(int x=0;x< board.getSize();x++){
             for(int y =0;y< board.getSize();y++){
                 if(!board.getFields()[x][y].getPossibleCaptures().isEmpty()){
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     private void createRectangle(Field f,double size){
@@ -59,20 +61,27 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         board = parent.getBoard();
         board.addToPossibleCaptures();
         board.addToPossibleMoves();
-        double size= 500.0/board.getSize();
-        int x = (int)Math.floor(event.getX()/500* board.getSize()) ;
-        int y = (int)Math.floor(event.getY()/500* board.getSize());
-        if(this.checkIfCaptureIsNotPossible(board)){
-            for(Field f : board.getFields()[x][y].getPossibleMoves()){
-                createRectangle(f,size);
-            }
-        }
-        else {
-            for (Field f : board.getFields()[x][y].getPossibleCaptures()) {
-                createRectangle(f, size);
-            }
+        if(board instanceof PolishBoard){
+            PolishBoard polishBoard = (PolishBoard) this.board;
+            polishBoard.fillterLongestCapture();
         }
 
+
+        int x = (int)Math.floor(event.getX()/500* board.getSize()) ;
+        int y = (int)Math.floor(event.getY()/500* board.getSize());
+        if(this.isCapturePossible(board)){
+            highlightFields(board.getFields()[x][y].getPossibleCaptures());
+        }
+        else {
+            highlightFields(board.getFields()[x][y].getPossibleMoves());
+        }
+    }
+
+    private void highlightFields(List<Field> fields) {
+        double size = 500.0 / board.getSize();
+        for (Field f : fields) {
+            createRectangle(f, size);
+        }
     }
 
     private void changePosition(MouseEvent event) {

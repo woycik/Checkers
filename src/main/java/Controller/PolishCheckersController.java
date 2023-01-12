@@ -26,9 +26,7 @@ public class PolishCheckersController extends GameController {
                 this.board.captureFieldList(board.whitePawns);
             }
             if (this.board.isCapturePossible()) {
-                if (!this.board.getLongestMove().contains(board.getFields()[x2][y2])) {
-                    return false;
-                }
+                this.board.fillterLongestCapture();
                 if (this.board.checkCapture(x1, y1, x2, y2)) {
                     this.board.capturePawn(x1, y1, x2, y2);
                     this.board.createNewQueen(x2, y2);
@@ -48,9 +46,6 @@ public class PolishCheckersController extends GameController {
             }
         } else {
             if (this.board.checkCapture(x1, y1, x2, y2)) {
-                if (!this.board.getLongestMove().contains(board.getFields()[x2][y2])) {
-                    return false;
-                }
                 this.board.capturePawn(x1, y1, x2, y2);
                 this.board.capturePossible.clear();
                 if (this.board.canICaptureOneMoreTime(x2, y2)) {

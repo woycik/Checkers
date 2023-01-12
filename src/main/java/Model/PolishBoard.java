@@ -66,6 +66,23 @@ public class PolishBoard extends Board {
 
         return moves;
     }
+    @Override
+    public void fillterLongestCapture(){
+        List<Field> longestMove =this.getLongestMove();
+
+        for(Field field : capturePossible){
+            field.getPossibleCaptures().removeIf(f -> !longestMove.contains(f));
+        }
+    }
+    @Override
+    public boolean checkCapture(int x1, int y1, int x2, int y2) {
+        if (capturePossible.contains(this.getFields()[x1][y1])) {
+            if(this.getLongestMove().contains(this.getFields()[x2][y2])) {
+                return this.getFields()[x1][y1].getPossibleCaptures().contains(this.getFields()[x2][y2]);
+            }
+        }
+        return false;
+    }
 
     public void addToPossibleCaptures() {
         List<Field> longestCapture = this.getLongestMove();
@@ -77,33 +94,31 @@ public class PolishBoard extends Board {
                         //góra prawo kłucie
                         if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
                             if (!fields[x + 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                if(longestCapture.contains(fields[x + 2][y - 2])) {
                                     fields[x][y].addToPossibleCaptures(fields[x + 2][y - 2]);
-                                }
                             }
                         }
                         //góra lewo kucie
                         if ((x - 2) >= 0 && (y - 2) >= 0 && fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
                             if (!fields[x - 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                if(longestCapture.contains(fields[x - 2][y - 2])) {
+
                                     fields[x][y].addToPossibleCaptures(fields[x - 2][y - 2]);
-                                }
+
                             }
                         }
                         //dół prawo kłócie
                         if ((x + 2) < getSize() && (y + 2) < getSize() && fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
                             if (!fields[x + 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                if(longestCapture.contains(fields[x + 2][y + 2])) {
+
                                     fields[x][y].addToPossibleCaptures(fields[x + 2][y + 2]);
-                                }
+
                             }
                         }
                         //dół lewo kłocie
                         if ((x - 2) >= 0 && (y + 2) < getSize() && fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
                             if (!fields[x - 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                if(longestCapture.contains(fields[x - 2][y + 2])) {
+
                                     fields[x][y].addToPossibleCaptures(fields[x - 2][y + 2]);
-                                }
+
                             }
                         }
                     } else {
@@ -118,9 +133,9 @@ public class PolishBoard extends Board {
                                 continue;
                             }
                             if (!fields[currx][curry].isOccupied() && stateOfCaptures == 1) {
-                                if(longestCapture.contains(fields[currx][curry])) {
+
                                     fields[x][y].addToPossibleCaptures(fields[currx][curry]);
-                                }
+
                             } else if (fields[currx][curry].isOccupied() && !fields[currx][curry].getPawnColor().equals(fields[x][y].getPawnColor())) {
                                 if ((currx - 1) >= 0 && (curry - 1) >= 0 && !fields[currx - 1][curry - 1].isOccupied()) {
                                     stateOfCaptures++;
@@ -142,9 +157,9 @@ public class PolishBoard extends Board {
                                 continue;
                             }
                             if (!fields[currx][curry].isOccupied() && stateOfCaptures == 1) {
-                                if(longestCapture.contains(fields[currx][curry])) {
+
                                     fields[x][y].addToPossibleCaptures(fields[currx][curry]);
-                                }
+
                             } else if (fields[currx][curry].isOccupied() && !fields[currx][curry].getPawnColor().equals(fields[x][y].getPawnColor())) {
                                 if ((currx + 1) < getSize() && (curry - 1) >= 0 && !fields[currx + 1][curry - 1].isOccupied()) {
                                     stateOfCaptures++;
@@ -166,9 +181,9 @@ public class PolishBoard extends Board {
                                 continue;
                             }
                             if (!fields[currx][curry].isOccupied() && stateOfCaptures == 1) {
-                                if(longestCapture.contains(fields[currx][curry])) {
+
                                     fields[x][y].addToPossibleCaptures(fields[currx][curry]);
-                                }
+
                             } else if (fields[currx][curry].isOccupied() && !fields[currx][curry].getPawnColor().equals(fields[x][y].getPawnColor())) {
                                 if ((currx + 1) < getSize() && (curry + 1) < getSize() && !fields[currx + 1][curry + 1].isOccupied()) {
                                     stateOfCaptures++;
@@ -190,9 +205,9 @@ public class PolishBoard extends Board {
                                 continue;
                             }
                             if (!fields[currx][curry].isOccupied() && stateOfCaptures == 1) {
-                                if(longestCapture.contains(fields[currx][curry])) {
+
                                     fields[x][y].addToPossibleCaptures(fields[currx][curry]);
-                                }
+
                             } else if (fields[currx][curry].isOccupied() && !fields[currx][curry].getPawnColor().equals(fields[x][y].getPawnColor())) {
                                 if ((currx - 1) >= 0 && (curry + 1) < getSize() && !fields[currx - 1][curry + 1].isOccupied()) {
                                     stateOfCaptures++;

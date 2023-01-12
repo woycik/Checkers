@@ -386,7 +386,7 @@ public  class Board implements Cloneable {
 
     public boolean checkCapture(int x1, int y1, int x2, int y2) {
         if (capturePossible.contains(this.getFields()[x1][y1])) {
-            return this.getFields()[x1][y1].getPossibleCaptures().contains(this.getFields()[x2][y2]);
+                return this.getFields()[x1][y1].getPossibleCaptures().contains(this.getFields()[x2][y2]);
         }
         return false;
     }
@@ -461,5 +461,9 @@ public  class Board implements Cloneable {
 
     public int getNumberOfBlackPawns() {
         return numberOfBlackPawns;
+    }
+
+    public void fillterLongestCapture() {
+        System.out.println("Używam domyślnego");
     }
 }
