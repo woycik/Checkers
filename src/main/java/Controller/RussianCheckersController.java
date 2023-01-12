@@ -13,19 +13,19 @@ public class RussianCheckersController extends GameController {
     protected boolean makeMove(int x1, int y1, int x2, int y2) {
         this.board.setMyPawns();
         this.board.addToPossibleMoves();
-        this.board.addToPossibleCaptures();
+        this.board.addToPossibleCaptures(playerTurn.toString());
         if (!finishCapture) {
             if (playerTurn == PlayerTurn.Black) {
                 this.board.captureFieldList(board.blackPawns);
             }                                                                                   //zapisz czarne pola z których mozliwe jest bicie}
             else {
                 this.board.captureFieldList(board.whitePawns);
-            }                                                                                   //zapisz biale pola z których mozliwe jest bicie
+            }
             if (this.board.isCapturePossible()) {                                                     //sprawdz czy mozliwe jest bicie dla (bialego/czarnego)                 //czy doszloby do wykonania bicia?
                 if (this.board.checkCapture(x1, y1, x2, y2)) {                                        //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
                     this.board.capturePawn(x1, y1, x2, y2);
                     this.board.capturePossible.clear();
-                    if (this.board.canICaptureOneMoreTime(x2, y2)) {
+                    if (this.board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
                         board.capturePossible.add(board.getFields()[x2][y2]);
                         finishCapture = true;
                         return false;
@@ -42,7 +42,7 @@ public class RussianCheckersController extends GameController {
             if (this.board.checkCapture(x1, y1, x2, y2)) {                                                //zapisz pola na które może wybrany pionek wskoczyc po wykonaniu bicia i sprawdz czy ten pionek nalezy do listy
                 this.board.capturePawn(x1, y1, x2, y2); //jak tak to zbij
                 this.board.capturePossible.clear();
-                if (this.board.canICaptureOneMoreTime(x2, y2)) {
+                if (this.board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
                     board.capturePossible.add(board.getFields()[x2][y2]);
                     finishCapture = true;
                     return false;
@@ -64,5 +64,10 @@ public class RussianCheckersController extends GameController {
     @Override
     public int getPawnRows() {
         return 3;
+    }
+
+    @Override
+    public String getGameVariant() {
+        return "Russian";
     }
 }

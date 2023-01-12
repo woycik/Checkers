@@ -1,7 +1,6 @@
 package Controller;
 
-import Model.Board;
-import Model.Pawn;
+import Model.*;
 import View.ClientView;
 import javafx.application.Platform;
 
@@ -45,12 +44,13 @@ public class ClientThread extends Thread {
             } while (!serverMessage.split(";")[0].equals("start"));
 
             messageSplit = serverMessage.split(";");
-            playerColor = messageSplit[1];
-            int boardSize = Integer.parseInt(messageSplit[2]);
+            String gameVariant = messageSplit[1];
+            playerColor = messageSplit[2];
+            int boardSize = Integer.parseInt(messageSplit[3]);
 
             Platform.runLater(() -> view.showBoard(boardSize));
             Platform.runLater(() -> view.flipBoard());
-            Board initBoard = getBoard(boardSize, messageSplit[3]);
+            Board initBoard = getBoard(gameVariant, messageSplit[4]);
             Platform.runLater(() -> view.updateBoard(initBoard, "White"));
 
             while (true) {
@@ -59,7 +59,7 @@ public class ClientThread extends Thread {
 
                 if (messageSplit[0].equals("update")) {
                     String playerTurn = messageSplit[1];
-                    Board board = getBoard(boardSize, messageSplit[2]);
+                    Board board = getBoard(gameVariant, messageSplit[2]);
                     Platform.runLater(() -> view.updateBoard(board, playerTurn));
                 } else if (messageSplit[0].equals("win")) {
                     String winner = messageSplit[1];
@@ -82,8 +82,22 @@ public class ClientThread extends Thread {
         }
     }
 
-    private Board getBoard(int boardSize, String message) {
-        Board board = new Board(boardSize);
+    private Board getBoard(String gameVariant, String message) {
+        Board board;
+        switch (gameVariant) {
+            case "Polish":
+                board = new PolishBoard();
+                break;
+            case "Russian":
+                board = new RussianBoard();
+                break;
+            case "English":
+                board = new EnglishBoard();
+                break;
+            default:
+                return null;
+        }
+
         String[] messageSplit = message.split(",");
         char pawn;
         int n = 0;

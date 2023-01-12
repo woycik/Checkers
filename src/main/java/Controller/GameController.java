@@ -9,6 +9,7 @@ public abstract class GameController {
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
     protected boolean finishCapture;
+    protected Color color;
 
     protected abstract boolean makeMove(int x1, int y1, int x2, int y2);
     public abstract int getBoardSize();
@@ -63,5 +64,15 @@ public abstract class GameController {
             return board.getGameVariant();
         }
         return "None";
+    }
+
+    public  Color getColor(){
+        return color;
+    }
+    public Color oppositeColor(){
+        if(color.equals(Color.rgb(0,0,0))){
+            return Color.rgb(255,255,255);
+        }
+        return Color.rgb(0,0,0);
     }
 }

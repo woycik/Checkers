@@ -62,11 +62,12 @@ public class ServerThread extends Thread {
             secondOut = new PrintWriter(secondPlayerSocket.getOutputStream(), true);
 
             // sending message to start displaying board
+            String gameVariant = gameController.getGameVariant();
             int boardSize = gameController.getBoardSize();
             String boardString = getSocketPrintableFormat(gameController.getBoard());
-            // start;color;boardSize;boardString
-            firstOut.println("start;White;" + boardSize + ";" + boardString);
-            secondOut.println("start;Black;" + boardSize + ";" + boardString);
+            // start;gameVariant;color;boardSize;boardString
+            firstOut.println("start;" + gameVariant + ";White;" + boardSize + ";" + boardString);
+            secondOut.println("start;" + gameVariant + ";Black;" + boardSize + ";" + boardString);
             System.out.println("Sent game start message to both players");
 
             String clientMessage = "";

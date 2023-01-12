@@ -52,7 +52,7 @@ public class Field {
         this.possibleCaptures.add(field);
     }
 
-    public ArrayList<Field> getPossibleMoves() {
+    public List<Field> getPossibleMoves() {
         return possibleMoves;
     }
 
