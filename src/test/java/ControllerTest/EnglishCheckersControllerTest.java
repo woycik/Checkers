@@ -14,6 +14,9 @@ public class EnglishCheckersControllerTest extends GameControllerTest {
         initialize(new EnglishCheckersController());
     }
 
+    /**
+     * Verifies correct starting game board state.
+     */
     @Test
     public void testStartingPosition() {
         assertEquals(8, board.getSize());
@@ -72,6 +75,9 @@ public class EnglishCheckersControllerTest extends GameControllerTest {
         assertEquals(black, fields[0][0].getPawnColor());
     }
 
+    /**
+     * Test correct legal moves in starting game board position.
+     */
     @Test
     public void testLegalFirstMoves() {
         assertTrue(board.isMoveLegal(1, 5, 0, 4));
@@ -83,6 +89,9 @@ public class EnglishCheckersControllerTest extends GameControllerTest {
         assertTrue(board.isMoveLegal(7, 5, 6, 4));
     }
 
+    /**
+     * Tests correct player turns' order.
+     */
     @Test
     public void testPlayerTurns() {
         assertEquals(PlayerTurn.White, controller.playerTurn);
@@ -112,6 +121,9 @@ public class EnglishCheckersControllerTest extends GameControllerTest {
         assertEquals(PlayerTurn.Black, controller.playerTurn);
     }
 
+    /**
+     * Performs a sequence of moves to promote a pawn to a queen.
+     */
     @Test
     public void testQueenPromotion() {
         controller.move(5, 5, 4, 4);
