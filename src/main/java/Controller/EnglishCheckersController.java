@@ -17,7 +17,7 @@ public class EnglishCheckersController extends GameController {
     public boolean makeMove(int x1, int y1, int x2, int y2) {
         this.board.setMyPawns();
         this.board.addToPossibleMoves();
-        this.board.addToPossibleCaptures();
+        this.board.addToPossibleCaptures(playerTurn.toString());
         if (!finishCapture) {
             if (playerTurn == PlayerTurn.Black) {
                 this.board.captureFieldList(board.blackPawns);
@@ -28,7 +28,7 @@ public class EnglishCheckersController extends GameController {
                 if (this.board.checkCapture(x1, y1, x2, y2)) {
                     this.board.capturePawn(x1, y1, x2, y2);
                     this.board.capturePossible.clear();
-                    if (this.board.canICaptureOneMoreTime(x2, y2)) {
+                    if (this.board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
                         board.capturePossible.add(board.getFields()[x2][y2]);
                         finishCapture = true;
                         return false;
@@ -45,7 +45,7 @@ public class EnglishCheckersController extends GameController {
             if (this.board.checkCapture(x1, y1, x2, y2)) {
                 this.board.capturePawn(x1, y1, x2, y2);
                 this.board.capturePossible.clear();
-                if (this.board.canICaptureOneMoreTime(x2, y2)) {
+                if (this.board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
                     board.capturePossible.add(board.getFields()[x2][y2]);
                     finishCapture = true;
                     return false;

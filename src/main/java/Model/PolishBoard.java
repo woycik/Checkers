@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,12 +28,12 @@ public class PolishBoard extends Board {
         return boardClone;
     }
 
-    public List<Field> getLongestMove() {
+    public List<Field> getLongestMove(String color) {
         ArrayList<Move> moves = new ArrayList<>();
         ArrayList<Integer> length = new ArrayList<>();
 
         for (Field f : capturePossible) {
-            moves.addAll(this.longestPawnTake(f));
+            moves.addAll(this.longestPawnTake(f,color));
 
         }
         for (Move move : moves) {
@@ -44,15 +46,15 @@ public class PolishBoard extends Board {
         return moves.stream().map(Move::getEndField).collect(Collectors.toList());
     }
 
-    public ArrayList<Move> longestPawnTake(Field field) {
+    public ArrayList<Move> longestPawnTake(Field field,String color) {
         ArrayList<Move> moves = new ArrayList<>();
         ArrayList<Integer> length = new ArrayList<>();
         for (Field f : fields[field.getX()][field.getY()].getPossibleCaptures()) {
             PolishBoard bc = this.clone();
             bc.capturePawn(field.getX(), field.getY(), f.getX(), f.getY());
-            bc.addToPossibleCaptures();
-            if (!bc.longestPawnTake(f).isEmpty()) {
-                moves.add(new Move(field, f, 1 + bc.longestPawnTake(f).get(0).length));
+            bc.addToPossibleCaptures(color);
+            if (!bc.longestPawnTake(f,color).isEmpty()) {
+                moves.add(new Move(field, f, 1 + bc.longestPawnTake(f,color).get(0).length));
             } else {
                 moves.add(new Move(f, f, 0));
             }
@@ -84,12 +86,22 @@ public class PolishBoard extends Board {
         return false;
     }
 
-    public void addToPossibleCaptures() {
+    public void addToPossibleCaptures(String color) {
+        Color c;
+        if(color.equals("White")){
+            c=Color.rgb(255,255,255);
+        }
+        else{
+            c=Color.rgb(0,0,0);
+        }
         List<Field> longestCapture = this.getLongestMove();
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {
                 fields[x][y].clearPossibleCaptures();
                 if (fields[x][y].isOccupied()) {
+                    if(!c.equals(fields[x][y].getPawnColor())){
+                        continue;
+                    }
                     if (!fields[x][y].getPawn().isQueen()) {
                         //góra prawo kłucie
                         if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {

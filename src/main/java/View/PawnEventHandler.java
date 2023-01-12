@@ -57,7 +57,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     private void displayFields(MouseEvent event, BoardView parent) {
         board = parent.getBoard();
-        board.addToPossibleCaptures();
+        board.addToPossibleCaptures(clientThread.playerColor);
         board.addToPossibleMoves();
         board.fillterLongestCapture();
 

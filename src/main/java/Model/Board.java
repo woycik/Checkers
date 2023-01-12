@@ -161,11 +161,21 @@ public  class Board implements Cloneable {
     }
 
 
-    public void addToPossibleCaptures() {
+    public void addToPossibleCaptures(String color) {
+        Color c;
+        if(color.equals("White")){
+            c=Color.rgb(255,255,255);
+        }
+        else{
+            c=Color.rgb(0,0,0);
+        }
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {
                 fields[x][y].clearPossibleCaptures();
                 if (fields[x][y].isOccupied()) {
+                    if(!c.equals(fields[x][y].getPawnColor())){
+                        continue;
+                    }
                     if (!fields[x][y].getPawn().isQueen()) {
                         //góra prawo kłucie
                         if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
@@ -421,15 +431,15 @@ public  class Board implements Cloneable {
     }
 
 
-    public boolean canICaptureOneMoreTime(int x, int y) {
-        this.addToPossibleCaptures();
+    public boolean canICaptureOneMoreTime(int x, int y,String color) {
+        this.addToPossibleCaptures(color);
         return (this.getFields()[x][y].getPossibleCaptures().size() > 0);
     }
 
-    public ArrayList<Field> getHighlights(){
+    public ArrayList<Field> getHighlights(String color){
         ArrayList<Field> captures = new ArrayList<>();
         ArrayList<Field> moves = new ArrayList<>();
-        this.addToPossibleCaptures();
+        this.addToPossibleCaptures(color);
         this.addToPossibleMoves();
         for(int x=0;x<getSize();x++){
             for(int y=0;y<getSize();y++) {
