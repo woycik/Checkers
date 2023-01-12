@@ -2,15 +2,31 @@ package Model;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Checkers game english board operation handling class
+ */
+
 public class EnglishBoard extends Board {
+
+    /**
+     * Constructor
+     */
     public EnglishBoard() {
         super(8, 3);
     }
 
+    /**
+     * Returning game variant method
+     * @return String
+     */
     @Override
     public String getGameVariant() {
         return "English";
     }
+
+    /**
+     * Method that assigns to each field the fields it can move on
+     */
 
     public void addToPossibleMoves() {
         for (int x = 0; x < getSize(); x++) {
@@ -18,25 +34,21 @@ public class EnglishBoard extends Board {
                 fields[x][y].clearPossibleMove();
                 if (fields[x][y].isOccupied()) {
                     if (!fields[x][y].getPawn().isQueen()) {
-                        //góra prawo normalny ruch
                         if ((x + 1) < getSize() && (y - 1) >= 0 && !fields[x + 1][y - 1].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                                 fields[x][y].addToPossibleMoves(fields[x + 1][y - 1]);
                             }
                         }
-                        //góra lewo normalny ruch
                         if ((x - 1) >= 0 && (y - 1) >= 0 && !fields[x - 1][y - 1].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                                 fields[x][y].addToPossibleMoves(fields[x - 1][y - 1]);
                             }
                         }
-                        //dół lewo normalny ruch
                         if ((x - 1) >= 0 && (y + 1) < getSize() && !fields[x - 1][y + 1].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                                 fields[x][y].addToPossibleMoves(fields[x - 1][y + 1]);
                             }
                         }
-                        //dół prawo normalny ruch
                         if ((x + 1) < getSize() && (y + 1) < getSize() && !fields[x + 1][y + 1].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                                 fields[x][y].addToPossibleMoves(fields[x + 1][y + 1]);
@@ -44,19 +56,15 @@ public class EnglishBoard extends Board {
                         }
 
                     } else {
-                        //queen  góra lewo
                         if ((x + 1) < getSize() && (y - 1) >= 0 && !fields[x + 1][y - 1].isOccupied()) {
                             fields[x][y].addToPossibleMoves(fields[x + 1][y - 1]);
                         }
-                        //góra lewo normalny ruch
                         if ((x - 1) >= 0 && (y - 1) >= 0 && !fields[x - 1][y - 1].isOccupied()) {
                             fields[x][y].addToPossibleMoves(fields[x - 1][y - 1]);
                         }
-                        //dół lewo normalny ruch
                         if ((x - 1) >= 0 && (y + 1) < getSize() && !fields[x - 1][y + 1].isOccupied()) {
                             fields[x][y].addToPossibleMoves(fields[x - 1][y + 1]);
                         }
-                        //dół prawo normalny ruch
                         if ((x + 1) < getSize() && (y + 1) < getSize() && !fields[x + 1][y + 1].isOccupied()) {
                             fields[x][y].addToPossibleMoves(fields[x + 1][y + 1]);
                         }
@@ -65,7 +73,9 @@ public class EnglishBoard extends Board {
             }
         }
     }
-
+    /**
+     * Method that assigns to each field tha fields it can move on after capturing
+     */
     @Override
     public void addToPossibleCaptures(String color) {
         Color playerColor = getPlayerRGBColor(color);
@@ -78,7 +88,6 @@ public class EnglishBoard extends Board {
                         continue;
                     }
                     if (!fields[x][y].getPawn().isQueen()) {
-                        //góra prawo kłucie
                         if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                                 if (!fields[x + 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
@@ -86,7 +95,6 @@ public class EnglishBoard extends Board {
                                 }
                             }
                         }
-                        //góra lewo kucie
                         if ((x - 2) >= 0 && (y - 2) >= 0 && fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                                 if (!fields[x - 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
@@ -94,7 +102,6 @@ public class EnglishBoard extends Board {
                                 }
                             }
                         }
-                        //dół prawo kłócie
                         if ((x + 2) < getSize() && (y + 2) < getSize() && fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                                 if (!fields[x + 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
@@ -102,7 +109,6 @@ public class EnglishBoard extends Board {
                                 }
                             }
                         }
-                        //dół lewo kłocie
                         if ((x - 2) >= 0 && (y + 2) < getSize() && fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                                 if (!fields[x - 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
@@ -111,25 +117,21 @@ public class EnglishBoard extends Board {
                             }
                         }
                     } else {
-                        //góra prawo kłucie
                         if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
                             if (!fields[x + 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
                                 fields[x][y].addToPossibleCaptures(fields[x + 2][y - 2]);
                             }
                         }
-                        //góra lewo kucie
                         if ((x - 2) >= 0 && (y - 2) >= 0 && fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
                             if (!fields[x - 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
                                 fields[x][y].addToPossibleCaptures(fields[x - 2][y - 2]);
                             }
                         }
-                        //dół prawo kłócie
                         if ((x + 2) < getSize() && (y + 2) < getSize() && fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
                             if (!fields[x + 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
                                 fields[x][y].addToPossibleCaptures(fields[x + 2][y + 2]);
                             }
                         }
-                        //dół lewo kłocie
                         if ((x - 2) >= 0 && (y + 2) < getSize() && fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
                             if (!fields[x - 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
                                 fields[x][y].addToPossibleCaptures(fields[x - 2][y + 2]);
@@ -140,6 +142,14 @@ public class EnglishBoard extends Board {
             }
         }
     }
+
+    /**
+     * Pawn capture method
+     * @param x1 x-coordinate of starting position
+     * @param y1 y-coordinate of starting position
+     * @param x2 x-coordinate of ending position
+     * @param y2 x-coordinate of ending position
+     */
 
     public void capturePawn(int x1, int y1, int x2, int y2) {
         if (getFields()[x1][y1].isOccupied()) {

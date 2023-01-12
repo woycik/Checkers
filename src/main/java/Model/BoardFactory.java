@@ -1,6 +1,11 @@
 package Model;
 
 public class BoardFactory {
+    /**
+     * Method that creates different variants of board
+     * @param gameVariant variant of the game
+     * @return Board
+     */
     public Board createBoard(String gameVariant) {
         Board board;
 
