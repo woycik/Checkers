@@ -16,6 +16,7 @@ public class PawnView extends Circle {
         this.pawnEventHandler = new PawnEventHandler(this, clientThread);
         setOnMouseDragged(pawnEventHandler);
         setOnMouseReleased(pawnEventHandler);
+        setOnMousePressed(pawnEventHandler);
     }
 
     public boolean hit(double x, double y) {

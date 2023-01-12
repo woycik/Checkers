@@ -18,7 +18,7 @@ public class EnglishCheckersControllerTest extends GameControllerTest {
 
     @Test
     public void testStartingPosition() {
-        assertEquals(8, board.getBoardSize());
+        assertEquals(8, board.getSize());
         assertEquals(3, board.getPawnRows());
         // white pawns
         assertTrue(fields[1][5].isOccupied());

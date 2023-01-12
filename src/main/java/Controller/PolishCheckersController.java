@@ -17,7 +17,7 @@ public class PolishCheckersController extends GameController {
     public boolean makeMove(int x1, int y1, int x2, int y2) {
         this.board.setMyPawns();
         this.board.addToPossibleMoves();
-        this.board.addToPossibleCaptures();
+        this.board.addToPossibleCaptures(playerTurn.toString());
         if (!finishCapture) {
             this.board.capturePossible.clear();
             if (playerTurn == PlayerTurn.Black) {
@@ -26,14 +26,12 @@ public class PolishCheckersController extends GameController {
                 this.board.captureFieldList(board.whitePawns);
             }
             if (this.board.isCapturePossible()) {
-                if (!this.board.getLongestMove().contains(board.getFields()[x2][y2])) {
-                    return false;
-                }
+                this.board.fillterLongestCapture();
                 if (this.board.checkCapture(x1, y1, x2, y2)) {
                     this.board.capturePawn(x1, y1, x2, y2);
                     this.board.createNewQueen(x2, y2);
                     this.board.capturePossible.clear();
-                    if (this.board.canICaptureOneMoreTime(x2, y2)) {
+                    if (this.board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
                         this.board.capturePossible.add(board.getFields()[x2][y2]); //zmien na settera
                         finishCapture = true;
                         return false;
@@ -48,12 +46,9 @@ public class PolishCheckersController extends GameController {
             }
         } else {
             if (this.board.checkCapture(x1, y1, x2, y2)) {
-                if (!this.board.getLongestMove().contains(board.getFields()[x2][y2])) {
-                    return false;
-                }
                 this.board.capturePawn(x1, y1, x2, y2);
                 this.board.capturePossible.clear();
-                if (this.board.canICaptureOneMoreTime(x2, y2)) {
+                if (this.board.canICaptureOneMoreTime(x2, y2,playerTurn.toString())) {
                     board.capturePossible.add(board.getFields()[x2][y2]);
                     finishCapture = true;
                     return false;
@@ -75,5 +70,10 @@ public class PolishCheckersController extends GameController {
     @Override
     public int getPawnRows() {
         return 4;
+    }
+
+    @Override
+    public String getGameVariant() {
+        return "Polish";
     }
 }
