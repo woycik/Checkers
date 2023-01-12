@@ -1,13 +1,7 @@
 package Controller;
 
-import Model.EnglishBoard;
-import Model.Field;
-
 import Model.PlayerTurn;
 import Model.RussianBoard;
-import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
 
 public class RussianCheckersController extends GameController {
 

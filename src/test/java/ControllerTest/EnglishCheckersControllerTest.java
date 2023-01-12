@@ -1,8 +1,6 @@
 package ControllerTest;
 
 import Controller.EnglishCheckersController;
-import Controller.GameController;
-import Model.EnglishBoard;
 import Model.PlayerTurn;
 import org.junit.Before;
 import org.junit.Test;

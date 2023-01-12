@@ -1,11 +1,7 @@
 package ControllerTest;
 
 import Controller.PolishCheckersController;
-import Model.Field;
-import Model.Pawn;
 import Model.PlayerTurn;
-import Model.PolishBoard;
-import javafx.scene.paint.Color;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

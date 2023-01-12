@@ -1,11 +1,7 @@
 package Controller;
 
 import Model.Board;
-import Model.Field;
 import Model.PlayerTurn;
-import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
 
 public abstract class GameController {
     protected Board board;

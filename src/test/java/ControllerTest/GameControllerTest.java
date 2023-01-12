@@ -3,7 +3,6 @@ package ControllerTest;
 import Controller.GameController;
 import Model.Board;
 import Model.Field;
-import Model.PlayerTurn;
 import javafx.scene.paint.Color;
 
 import static javafx.scene.paint.Color.rgb;

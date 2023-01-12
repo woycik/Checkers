@@ -2,11 +2,7 @@ package Model;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 import static javafx.scene.paint.Color.rgb;
 
