@@ -1,13 +1,16 @@
 package Model;
 
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static javafx.scene.paint.Color.rgb;
+
+/**
+ * Checkers game board operation handling class
+ */
 
 public class Board implements Cloneable {
     public List<Field> blackPawns;
@@ -19,7 +22,10 @@ public class Board implements Cloneable {
     private final int size;
     private final int pawnRows;
 
-
+    /**
+     * Board constructor
+     * @param size board size
+     */
     public Board(int size) {
         this.size = size;
         this.pawnRows = 0;
@@ -31,6 +37,12 @@ public class Board implements Cloneable {
             }
         }
     }
+
+    /**
+     * Board constructor
+     * @param size board size
+     * @param pawnRows number od pawn rows
+     */
 
     public Board(int size, int pawnRows) {
         this.size = size;
@@ -53,47 +65,66 @@ public class Board implements Cloneable {
         }
     }
 
+    /**
+     * Fields returning method
+     * @return Field[][]
+     */
+
     public Field[][] getFields() {
         return fields;
     }
+
+    /**
+     * Board size returning method
+     * @return int
+     */
 
     public int getSize() {
         return size;
     }
 
+    /**
+     * Method that returns number of pawn rows
+     * @return int
+     */
+
     public int getPawnRows() {
         return pawnRows;
     }
+
+    /**
+     * Check if capture is possible
+     * @return boolean
+     */
 
     public boolean isCapturePossible() {
         return capturePossible.size() > 0;
     }
 
+    /**
+     * Method that assigns to each field the fields it can move on
+     */
     public void addToPossibleMoves() {
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {
                 fields[x][y].clearPossibleMove();
                 if (fields[x][y].isOccupied()) {
                     if (!fields[x][y].getPawn().isQueen()) {
-                        //góra prawo normalny ruch
                         if ((x + 1) < getSize() && (y - 1) >= 0 && !fields[x + 1][y - 1].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                                 fields[x][y].addToPossibleMoves(fields[x + 1][y - 1]);
                             }
                         }
-                        //góra lewo normalny ruch
                         if ((x - 1) >= 0 && (y - 1) >= 0 && !fields[x - 1][y - 1].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                                 fields[x][y].addToPossibleMoves(fields[x - 1][y - 1]);
                             }
                         }
-                        //dół lewo normalny ruch
                         if ((x - 1) >= 0 && (y + 1) < getSize() && !fields[x - 1][y + 1].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                                 fields[x][y].addToPossibleMoves(fields[x - 1][y + 1]);
                             }
                         }
-                        //dół prawo normalny ruch
                         if ((x + 1) < getSize() && (y + 1) < getSize() && !fields[x + 1][y + 1].isOccupied()) {
                             if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                                 fields[x][y].addToPossibleMoves(fields[x + 1][y + 1]);
@@ -101,7 +132,6 @@ public class Board implements Cloneable {
                         }
 
                     } else {
-                        //queen  góra lewo
                         int currx = x;
                         int curry = y;
                         while (currx > 0 && curry > 0) {
@@ -114,7 +144,6 @@ public class Board implements Cloneable {
                             }
                         }
 
-                        //queen góra prawo
                         currx = x;
                         curry = y;
                         while (currx < (getSize() - 1) && curry > 0) {
@@ -126,7 +155,6 @@ public class Board implements Cloneable {
                                 break;
                             }
                         }
-                        //queen bicie w  prawo dół
                         currx = x;
                         curry = y;
                         while (currx < (getSize() - 1) && curry < (getSize() - 1)) {
@@ -138,7 +166,7 @@ public class Board implements Cloneable {
                                 break;
                             }
                         }
-                        //queen bicie lewo dół
+
                         currx = x;
                         curry = y;
                         while (currx > 0 && curry < (getSize() - 1)) {
@@ -156,7 +184,9 @@ public class Board implements Cloneable {
         }
     }
 
-
+    /**
+     * Method that assigns to each field tha fields it can move on after capturing
+     */
     public void addToPossibleCaptures(String color) {
         Color playerColor = getPlayerRGBColor(color);
 
@@ -168,13 +198,11 @@ public class Board implements Cloneable {
                             continue;
                         }
                         if (!fields[x][y].getPawn().isQueen()) {
-                            //góra prawo kłucie
                             if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
                                 if (!fields[x + 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
                                     fields[x][y].addToPossibleCaptures(fields[x + 2][y - 2]);
                                 }
                             }
-                            //góra lewo kucie
                             if ((x - 2) >= 0 && (y - 2) >= 0 && fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
                                 if (!fields[x - 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
 
@@ -182,7 +210,6 @@ public class Board implements Cloneable {
 
                                 }
                             }
-                            //dół prawo kłócie
                             if ((x + 2) < getSize() && (y + 2) < getSize() && fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
                                 if (!fields[x + 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
 
@@ -190,7 +217,6 @@ public class Board implements Cloneable {
 
                                 }
                             }
-                            //dół lewo kłocie
                             if ((x - 2) >= 0 && (y + 2) < getSize() && fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
                                 if (!fields[x - 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
 
@@ -253,7 +279,6 @@ public class Board implements Cloneable {
                                 }
                             }
 
-                            //queen bicie dół prawo
                             currx = x;
                             curry = y;
                             stateOfCaptures = 0;
@@ -280,7 +305,6 @@ public class Board implements Cloneable {
                                 }
                             }
 
-                            //queen bicie dół lewo
                             currx = x;
                             curry = y;
                             stateOfCaptures = 0;
@@ -313,7 +337,13 @@ public class Board implements Cloneable {
             }
         }
 
-
+    /**
+     * Pawn capture method
+     * @param x1 x-coordinate of starting position
+     * @param y1 y-coordinate of starting position
+     * @param x2 x-coordinate of ending position
+     * @param y2 x-coordinate of ending position
+     */
     public void capturePawn(int x1, int y1, int x2, int y2) {
         if (this.getFields()[x1][y1].isOccupied()) {
             if (this.getFields()[x1][y1].getPawnColor().equals(Color.rgb(0, 0, 0))) {
@@ -373,6 +403,12 @@ public class Board implements Cloneable {
         }
     }
 
+    /**
+     * Method that creates a new queen on board
+     * @param x x-coordinate of pawn position
+     * @param y y-coordinate of pawn position
+     */
+
     public void createNewQueen(int x, int y) {
         if (y == 0) {
             if (!this.getFields()[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
@@ -385,6 +421,10 @@ public class Board implements Cloneable {
         }
     }
 
+    /**
+     * Assigning to the list all fields from which capturing is possible
+     * @param typeOfPawns whitePawns/blackPawns
+     */
     public void captureFieldList(List<Field> typeOfPawns) {
         for (Field boardField : typeOfPawns) {
             if (boardField.isOccupied()) {
@@ -396,10 +436,18 @@ public class Board implements Cloneable {
         this.removePawnsFromList();
     }
 
+    /**
+     * Method that clear blackPawns list and whitePans list
+     */
+
     public void removePawnsFromList() {
         blackPawns.clear();
         whitePawns.clear();
     }
+
+    /**
+     * Method that separates pawns of different colors and assigns them to the appropriate list
+     */
 
     public void setMyPawns() {
         for (int i = 0; i < this.getSize(); i++) {
@@ -416,12 +464,30 @@ public class Board implements Cloneable {
         }
     }
 
+    /**
+     * Check whether capture from starting field to ending field is possible
+     * @param x1 x-coordinate of pawn starting position
+     * @param y1 y-coordinate of pawn starting position
+     * @param x2 x-coordinate of pawn ending position
+     * @param y2 y-coordinate of pawn ending position
+     * @return true if  this capture is legal
+     */
+
     public boolean checkCapture(int x1, int y1, int x2, int y2) {
         if (capturePossible.contains(this.getFields()[x1][y1])) {
                 return this.getFields()[x1][y1].getPossibleCaptures().contains(this.getFields()[x2][y2]);
         }
         return false;
     }
+
+    /**
+     * Check whether capture from starting field to ending field is possible and it's the best one
+     * @param x1 x-coordinate of pawn starting position
+     * @param y1 y-coordinate of pawn starting position
+     * @param x2 x-coordinate of pawn ending position
+     * @param y2 y-coordinate of pawn ending position
+     * @return true if  this capture is legal
+     */
 
     public boolean checkCapture(int x1, int y1, int x2, int y2, String color) {
         if (capturePossible.contains(getFields()[x1][y1])) {
@@ -432,6 +498,11 @@ public class Board implements Cloneable {
         return false;
     }
 
+    /**
+     *
+     * Method that removes from the list of captures all fields that do not make the best capture
+     * @param color
+     */
     public void filterLongestCaptures(String color) {
         List<Field> longestCaptures = getLongestCaptures(color);
 
@@ -439,6 +510,12 @@ public class Board implements Cloneable {
             field.getPossibleCaptures().removeIf(f -> !longestCaptures.contains(f));
         }
     }
+
+    /**
+     * Method that removes from the capture list all fields that do not make the best capture
+     * @param color
+     * @return list of fields that makes the longest capture
+     */
 
     public List<Field> getLongestCaptures(String color) {
         List<Move> moves = new ArrayList<>();
@@ -455,6 +532,12 @@ public class Board implements Cloneable {
         return moves.stream().map(Move::getEndField).collect(Collectors.toList());
     }
 
+    /**
+     * Returns list of fields that makes the longest capture
+     * @param field
+     * @param color
+     * @return list of fields that makes the longest capture
+     */
     public List<Move> getLongestPawnCaptures(Field field, String color) {
         List<Move> moves = new ArrayList<>();
         List<Integer> length = new ArrayList<>();
@@ -476,6 +559,14 @@ public class Board implements Cloneable {
         return moves;
     }
 
+    /**
+     * Check whether move is possible
+     * @param x1 x-coordinate of pawn starting position
+     * @param y1 y-coordinate of pawn starting position
+     * @param x2 x-coordinate of pawn ending position
+     * @param y2 y-coordinate of pawn starting position
+     * @return true if this move is legal
+     */
     public boolean isMoveLegal(int x1, int y1, int x2, int y2) {
         if (this.getFields()[x1][y1].getPawn() != null) {
             if (x2 < this.getSize() && x2 >= 0 && y2 < this.getSize() && y2 >= 0) {
@@ -487,6 +578,15 @@ public class Board implements Cloneable {
         return false;
     }
 
+    /**
+     * Pawn move method
+     * @param x1 x-coordinate of pawn starting position
+     * @param y1 y-coordinate of pawn starting position
+     * @param x2 x-coordinate of pawn ending position
+     * @param y2 y-coordinate of pawn starting position
+     * @return true if move was done correctly
+     */
+
     public boolean movePawn(int x1, int y1, int x2, int y2) {
         if (this.getFields()[x1][y1].isOccupied()) {
             this.getFields()[x2][y2].setPawn(this.getFields()[x1][y1].getPawn());
@@ -497,18 +597,40 @@ public class Board implements Cloneable {
         return false;
     }
 
+    /**
+     * Check whether this pawn can capture one more time
+     * @param x x-coordinate of pawn position
+     * @param y y-coordinate of pawn position
+     * @param color pawn color
+     * @return true if capture is possible one more time
+     */
     public boolean canICaptureOneMoreTime(int x, int y,String color) {
         this.addToPossibleCaptures(color);
         return (this.getFields()[x][y].getPossibleCaptures().size() > 0);
     }
 
+    /**
+     * Number of white pawns returning method
+     * @return number of white pawns
+     */
+
     public int getNumberOfWhitePawns() {
         return numberOfWhitePawns;
     }
 
+    /**
+     * Number of black pawns returning method
+     * @return number of black pawns
+     */
+
     public int getNumberOfBlackPawns() {
         return numberOfBlackPawns;
     }
+
+    /**
+     * Clones the instance of PolishBoard
+     * @return Board
+     */
 
     @Override
     public Board clone() {
@@ -524,6 +646,12 @@ public class Board implements Cloneable {
         return boardClone;
     }
 
+    /**
+     * Player color returning method
+     * @param playerColor
+     * @return player's pawns color
+     */
+
     public Color getPlayerRGBColor(String playerColor) {
         if (playerColor.equals("White")) {
             return Color.rgb(255, 255, 255);
@@ -532,6 +660,10 @@ public class Board implements Cloneable {
         }
     }
 
+    /**
+     * Game variant returning method
+     * @return game variant
+     */
     public String getGameVariant() {
         return "None";
     }

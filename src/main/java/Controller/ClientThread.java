@@ -12,6 +12,11 @@ import java.net.Socket;
 
 import static javafx.scene.paint.Color.rgb;
 
+/**
+ * Thread communicating Client with Server.
+ * View requests this thread to send moves to Server,
+ * and it updates the view according to Server's response.
+ */
 public class ClientThread extends Thread {
     final int port;
     public String playerColor;
@@ -20,11 +25,21 @@ public class ClientThread extends Thread {
     PrintWriter out;
     BufferedReader in;
 
+    /**
+     *
+     * @param port port on which the server listens
+     * @param view ClientView which must be connected with this thread's logic
+     */
     public ClientThread(int port, ClientView view) {
         this.port = port;
         this.view = view;
     }
 
+    /**
+     * Opens socket and tries to connect with server.
+     * Listens to server messages and performs adequate actions.
+     * Requests view updates if needed.
+     */
     @Override
     public void run() {
         try {
@@ -82,6 +97,17 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Reconstructs game board basing on server message
+     * @param gameVariant type of checkers game
+     * @param message String of fields separated with commas. Each character represents one field:
+     *                w - white pawn
+     *                b - black pawn
+     *                W - white queen
+     *                B - black queen
+     *                0 - empty field
+     * @return Board reconstructed from server's message
+     */
     private Board getBoard(String gameVariant, String message) {
         BoardFactory boardFactory = new BoardFactory();
         Board board = boardFactory.createBoard(gameVariant);
@@ -112,10 +138,20 @@ public class ClientThread extends Thread {
         return board;
     }
 
+    /**
+     * Sends request to perform a move to the server.
+     * @param x1 starting field x coordinate
+     * @param y1 starting field y coordinate
+     * @param x2 landing field x coordinate
+     * @param y2 landing field y coordinate
+     */
     public void makeMove(int x1, int y1, int x2, int y2) {
         out.println("move;" + x1 + ";" + y1 + ";" + x2 + ";" + y2);
     }
 
+    /**
+     * Safely closes the socket.
+     */
     public void closeSocket() {
         try {
             if (socket != null && !socket.isClosed()) {

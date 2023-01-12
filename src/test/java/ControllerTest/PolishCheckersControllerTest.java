@@ -15,6 +15,9 @@ public class PolishCheckersControllerTest extends GameControllerTest {
         initialize(new PolishCheckersController());
     }
 
+    /**
+     * Verifies correct starting game board state.
+     */
     @Test
     public void testStartingPosition() {
         Assert.assertEquals(10, controller.getBoardSize());
@@ -102,6 +105,9 @@ public class PolishCheckersControllerTest extends GameControllerTest {
         assertEquals(black, fields[0][0].getPawnColor());
     }
 
+    /**
+     * Test correct legal moves in starting game board position.
+     */
     @Test
     public void testLegalFirstMoves() {
         assertTrue(controller.getBoard().isMoveLegal(0, 6, 1, 5));
@@ -115,8 +121,11 @@ public class PolishCheckersControllerTest extends GameControllerTest {
         assertTrue(controller.getBoard().isMoveLegal(8, 6, 9, 5));
     }
 
+    /**
+     * Tests correct player turns' order.
+     */
     @Test
-    public void testPlayerTurns()  {
+    public void testPlayerTurns() {
         Assert.assertEquals(PlayerTurn.White, controller.playerTurn);
         controller.move(4, 6, 5, 5);
         Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
@@ -144,6 +153,9 @@ public class PolishCheckersControllerTest extends GameControllerTest {
         Assert.assertEquals(PlayerTurn.Black, controller.playerTurn);
     }
 
+    /**
+     * Performs a sequence of moves to promote a pawn to a queen.
+     */
     @Test
     public void testQueenPromotion() {
         controller.move(6, 6, 5, 5);
@@ -195,21 +207,22 @@ public class PolishCheckersControllerTest extends GameControllerTest {
         assertTrue(controller.getBoard().getFields()[1][9].getPawn().isQueen());
     }
 
+    /**
+     * Performs sequence of moves to force game controller to allow only the best capture.
+     */
     @Test
-    public void bestCaptureRuleTest(){
-        controller.move(4,6,5,5);
-        controller.move(3,3,2,4);
-        controller.move(3,7,4,6);
-        controller.move(5,3,6,4);
-        controller.move(5,5,4,4);
-        controller.move(6,4,7,5);
-        controller.move(8,6,6,4);
-        controller.move(7,3,5,5);
+    public void bestCaptureRuleTest() {
+        controller.move(4, 6, 5, 5);
+        controller.move(3, 3, 2, 4);
+        controller.move(3, 7, 4, 6);
+        controller.move(5, 3, 6, 4);
+        controller.move(5, 5, 4, 4);
+        controller.move(6, 4, 7, 5);
+        controller.move(8, 6, 6, 4);
+        controller.move(7, 3, 5, 5);
         //Dochodzi tutaj do sytuacji w której możliwe jest bicie wielu pionków, algorytm słusznie wybiera najlepszą opcję.
-        assertFalse(controller.move(5,5,3,3));
-        assertFalse(controller.move(5,5,3,7));
-        assertTrue(controller.move(3,7,1,5));
-
-
+        assertFalse(controller.move(5, 5, 3, 3));
+        assertFalse(controller.move(5, 5, 3, 7));
+        assertTrue(controller.move(3, 7, 1, 5));
     }
 }

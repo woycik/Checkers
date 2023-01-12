@@ -4,11 +4,20 @@ import Model.EnglishBoard;
 import Model.PlayerTurn;
 
 public class EnglishCheckersController extends GameController {
-
+    /**
+     * English checkers controller Constructor
+     */
     public EnglishCheckersController() {
         board = new EnglishBoard();
     }
-
+    /**
+     * Pawn move method
+     * @param x1 x-coordinate of pawn starting position
+     * @param y1 y-coordinate of pawn starting position
+     * @param x2 x-coordinate of pawn ending position
+     * @param y2 y-coordinate of pawn ending position
+     * @return true if move was made done correctly
+     */
     @Override
     protected boolean makeMove(int x1, int y1, int x2, int y2) {
         if (!finishCapture) {
@@ -51,17 +60,28 @@ public class EnglishCheckersController extends GameController {
         return false;
     }
 
+    /**
+     * Board size returning method
+     * @return board size
+     */
 
     @Override
     public int getBoardSize() {
         return 8;
     }
+    /**
+     * Number od pawn rows returning method
+     * @return number of pawn rown
+     */
 
     @Override
     public int getPawnRows() {
         return 3;
     }
-
+    /**
+     * Game variant returning method
+     * @return game variant
+     */
     @Override
     public String getGameVariant() {
         return "English";
