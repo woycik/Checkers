@@ -13,7 +13,7 @@ public class EnglishCheckersControllerTest extends GameControllerTest {
 
     @Before
     public void initializeController() {
-        initialize(new EnglishBoard(),new EnglishCheckersController());
+        initialize(new EnglishCheckersController());
     }
 
     @Test
