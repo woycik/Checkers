@@ -1,10 +1,14 @@
 package Model;
 
+/**
+ * Allows creating Board of given type.
+ * Implements Factory creational pattern.
+ */
 public class BoardFactory {
     /**
-     * Method that creates different variants of board
-     * @param gameVariant variant of the game
-     * @return Board
+     * Creates Board for given game variant.
+     * @param gameVariant checkers variant
+     * @return Board of given type or null if gameVariant is invalid
      */
     public Board createBoard(String gameVariant) {
         Board board;

@@ -4,6 +4,9 @@ import View.ClientView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * Client side checkers application.
+ */
 public class Client extends Application {
     private final int port = 4444;
     private ClientView view;
