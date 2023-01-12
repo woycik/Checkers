@@ -4,6 +4,10 @@ import Model.Board;
 import Model.PlayerTurn;
 import javafx.scene.paint.Color;
 
+/**
+ *Class responsible for controlling the game of checkers
+ */
+
 public abstract class GameController {
     protected Board board;
     public PlayerTurn playerTurn;
@@ -15,6 +19,9 @@ public abstract class GameController {
     public abstract int getBoardSize();
     public abstract int getPawnRows();
 
+    /**
+     * Constructor of game controller
+     */
     public GameController() {
         finishCapture = false;
         playerTurn = PlayerTurn.White;
@@ -22,22 +29,40 @@ public abstract class GameController {
         numberOfWhitePawns = getBoardSize() / 2 * getPawnRows();
     }
 
-    //sprawdzenie czy białe wygrały
+    /**
+     * Checks whether white player is a winner
+     * @return true if white is a winner
+     */
     public boolean isWhiteWinner() {
         setNumberOfPawns();
         return numberOfBlackPawns == 0;
     }
 
-    //sprawdzenie czy czarne wygrały
+    /**
+     * Checks whether black player is a winner
+     * @return true if black is a winner
+     */
     public boolean isBlackWinner() {
         setNumberOfPawns();
         return numberOfWhitePawns == 0;
     }
 
+    /**
+     * Board returning method
+     * @return board
+     */
     public Board getBoard() {
         return board;
     }
 
+    /**
+     * Move pawn method
+     * @param x1 x-coordinate of  pawn starting position
+     * @param y1 y-coordinate of  pawn starting position
+     * @param x2 x-coordinate of pawn ending position
+     * @param y2 y-coordinate of pawn ending position
+     * @return true if move was made done correctly
+     */
     public boolean move(int x1, int y1, int x2, int y2) {
         board.setMyPawns();
         board.addToPossibleMoves();
@@ -49,11 +74,17 @@ public abstract class GameController {
         return false;
     }
 
+    /**
+     * Sets the number of pawns for each color
+     */
     protected void setNumberOfPawns() {
         numberOfBlackPawns = board.getNumberOfBlackPawns();
         numberOfWhitePawns = board.getNumberOfWhitePawns();
     }
 
+    /**
+     * Change player turn
+     */
     public void nextTurn() {
         if (playerTurn == PlayerTurn.White) {
             playerTurn = PlayerTurn.Black;
@@ -62,6 +93,10 @@ public abstract class GameController {
         }
     }
 
+    /**
+     * Game varinat returning method
+     * @return game variant
+     */
     public String getGameVariant() {
         if(board != null) {
             return board.getGameVariant();

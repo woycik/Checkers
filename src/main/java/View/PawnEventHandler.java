@@ -10,7 +10,9 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Handles Pawn controls mouse dragged, released and pressed events.
+ */
 public class PawnEventHandler implements EventHandler<MouseEvent> {
     private final PawnView pawnView;
     private final ClientThread clientThread;
@@ -22,8 +24,12 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
     final List<Rectangle> captures;
     Board board;
 
+    /**
+     * Default constructor. Controls are disabled by default.
+     * @param pawnView connected pawn view
+     * @param clientThread client thread instance
+     */
     public PawnEventHandler(PawnView pawnView, ClientThread clientThread) {
-        super();
         this.pawnView = pawnView;
         startingFieldX = pawnView.getFieldX();
         startingFieldY = pawnView.getFieldY();
@@ -32,6 +38,11 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         captures = new ArrayList<>();
     }
 
+    /**
+     * Determines whether there are any captures available on given game board.
+     * @param board board object representing current game state
+     * @return true if there is at least one legal pawn capture and false otherwise
+     */
     private boolean isCapturePossible(Board board) {
         for (int x = 0; x < board.getSize(); x++) {
             for (int y = 0; y < board.getSize(); y++) {
@@ -43,6 +54,11 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         return false;
     }
 
+    /**
+     * Creates green rectangle and places it on field pawn can move on.
+     * @param f field on which the rectangle will be placed
+     * @param size rectangle horizontal and vertical size in pixels
+     */
     private void createRectangle(Field f, double size) {
         Rectangle rectHighlight = new Rectangle();
         rectHighlight.setX(f.getX() * size);
@@ -53,7 +69,12 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         captures.add(rectHighlight);
     }
 
-    private void displayFields(MouseEvent event, BoardView parent) {
+    /**
+     * Highlights fields on which selected pawn can move.
+     * @param event mouse event triggering handler
+     * @param parent board view
+     */
+    private void highlightFields(MouseEvent event, BoardView parent) {
         board = parent.getBoard();
         board.addToPossibleCaptures(clientThread.playerColor);
         board.addToPossibleMoves();
@@ -70,6 +91,10 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Highlights all fields in List passed as parameter.
+     * @param fields list of all fields to highlight
+     */
     private void highlightFields(List<Field> fields) {
         double size = 500.0 / board.getSize();
         for (Field f : fields) {
@@ -77,6 +102,10 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Moves pawn while dragging mouse.
+     * @param event mouse dragged event
+     */
     private void changePosition(MouseEvent event) {
         double dx = event.getX() - x;
         double dy = event.getY() - y;
@@ -91,6 +120,10 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
         y += dy;
     }
 
+    /**
+     * Handles mouse events.
+     * @param event mouse dragged, released or pressed event
+     */
     @Override
     public void handle(MouseEvent event) {
         PawnView pawnView = (PawnView) event.getSource();
@@ -105,7 +138,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
                 boardView.getChildren().removeAll(captures);
                 captures.clear();
             } else if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                displayFields(event, boardView);
+                highlightFields(event, boardView);
                 boardView.getChildren().addAll(captures);
             }
         }

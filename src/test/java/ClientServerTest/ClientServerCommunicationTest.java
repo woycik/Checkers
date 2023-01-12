@@ -17,6 +17,12 @@ public class ClientServerCommunicationTest {
     private ClientThread firstClientThread;
     private ClientThread secondClientThread;
 
+    /**
+     * Compares two game boards
+     * @param first first board
+     * @param second second board
+     * @return true if all fields are equal and false otherwise
+     */
     private boolean areBoardsEqual(Board first, Board second) {
         if(first == null && second == null) {
             return true;
@@ -59,6 +65,9 @@ public class ClientServerCommunicationTest {
         secondClientThread.start();
     }
 
+    /**
+     * Creates Server and two Clients to check if reconstructed by Client board is equal to the original one.
+     */
     @Test
     public void testBoardConstruction() {
         try {
