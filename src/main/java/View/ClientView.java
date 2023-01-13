@@ -31,6 +31,7 @@ public class ClientView {
         borderPane.setCenter(clientStatusLabel);
 
         final Scene scene = new Scene(borderPane, 500, 500);
+        stage.setResizable(false);
         stage.setOnCloseRequest(e -> Platform.exit());
         stage.setTitle("Checkers client");
         stage.setScene(scene);
