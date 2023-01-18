@@ -103,6 +103,10 @@ public abstract class GameController {
         return "None";
     }
 
+    /**
+     * Preparing board and pawns method
+     */
+
     public void prepareBoard(){
         board.capturePossible.clear();
         if (playerTurn == PlayerTurn.Black) {

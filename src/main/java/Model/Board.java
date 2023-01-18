@@ -126,12 +126,25 @@ public class Board implements Cloneable {
         }
     }
 
+    /**
+     * Calculate possible moves for every field method
+     * @param signX -1 or 1
+     * @param signY -1 or 1
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     */
     public void calculatePossibleMoves(int signX,int signY,int x,int y){
         if (isFieldInBoard(x+signX,y+signY) && !fields[x + signX][y + signY].isOccupied()) {
             fields[x][y].addToPossibleMoves(fields[x + signX][y + signY]);
         }
     }
-
+    /**
+     * Calculate possible moves for every queen field method
+     * @param signX -1 or 1
+     * @param signY -1 or 1
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     */
     public void calculatePossibleMovesForQueen(int signX,int signY,int x,int y){
         int currx = x;
         int curry = y;
@@ -177,6 +190,13 @@ public class Board implements Cloneable {
             }
         }
 
+    /**
+     * Checks if selected field is inside board
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     * @return true if selected field is inside board
+     */
+
         public boolean isFieldInBoard(int x,int y){
             return x < getSize() && y < getSize() && x >= 0 && y >= 0;
         }
@@ -189,7 +209,13 @@ public class Board implements Cloneable {
             }
         }
 
-
+    /**
+     * Calculate possible moves for every field
+     * @param singX -1 or 1
+     * @param signY -1 or 1
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     */
         public void calculatePossibleFieldsForQueen(int singX,int signY,int x,int y){
             int currX = x;
             int currY = y;
@@ -247,16 +273,16 @@ public class Board implements Cloneable {
 
                 if (diffY == diffX || -diffY == diffX) {
                     if (diffY > 0 && diffX > 0) {
-                        capture(1,1,Math.abs(diffX),x1,y1);
+                        captureQueen(1,1,Math.abs(diffX),x1,y1);
                     }
                     if (diffY > 0 && diffX < 0) {
-                        capture(-1,1,Math.abs(diffX),x1,y1);
+                        captureQueen(-1,1,Math.abs(diffX),x1,y1);
                     }
                     if (diffY < 0 && diffX < 0) {
-                        capture(-1,-1,Math.abs(diffX),x1,y1);
+                        captureQueen(-1,-1,Math.abs(diffX),x1,y1);
                     }
                     if (diffY < 0 && diffX > 0) {
-                        capture(1,-1,Math.abs(diffX),x1,y1);
+                        captureQueen(1,-1,Math.abs(diffX),x1,y1);
                     }
                 }
             }
@@ -264,7 +290,16 @@ public class Board implements Cloneable {
         }
     }
 
-    public void capture(int signX,int signY,int diff,int x,int y){
+    /**
+     *
+     * @param signX -1 or 1
+     * @param signY -1 or 1
+     * @param diff difference
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     */
+
+    public void captureQueen(int signX, int signY, int diff, int x, int y){
         for (int i = 1; i < diff; i++) {
             if (this.getFields()[x + (signX*i)][y + (signY* i)].isOccupied()) {
                 this.getFields()[x + (signX*i)][y + (signY* i)].setPawn(null);

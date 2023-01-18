@@ -76,10 +76,22 @@ public class EnglishBoard extends Board {
     }
 
 
-
+    /**
+     * Check if field is in board
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     * @return true if selected field is inside board
+     */
     public boolean isFieldInBoard(int x,int y){
         return x < getSize() && y < getSize() && x >= 0 && y >= 0;
     }
+
+    /**
+     * Calculate possible moves for every field method
+     * @param signX 1 or -1
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     */
 
     public void calculatePossibleMoves(int signX,int x,int y) {
         if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
@@ -94,12 +106,26 @@ public class EnglishBoard extends Board {
 
     }
 
+    /**
+     * Calculate possible captures for every field method
+     * @param signX -1 or 1
+     * @param signY -1 or 1
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     */
     public void calculatePossibleMovesForQueen(int signX,int signY,int x,int y){
         if (isFieldInBoard(x+signX,y+signY) && !fields[x + signX][y + signY].isOccupied()) {
             fields[x][y].addToPossibleMoves(fields[x + signX][y + signY]);
         }
     }
 
+    /**
+     * Calculate possible captures for every queen field method
+     * @param signX -1 or 1
+     * @param signY -1 or 1
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     */
     public void calculatePossibleCapturesForQueen(int signX,int signY,int x,int y) {
         if (isFieldInBoard(x + 2 * signX, y + 2 * signY) && fields[x + signX][y + signY].isOccupied() && !fields[x + 2 * signX][y + 2 * signY].isOccupied()) {
             if (!fields[x + signX][y + signY].getPawnColor().equals(fields[x][y].getPawnColor())) {
@@ -108,6 +134,12 @@ public class EnglishBoard extends Board {
         }
     }
 
+    /**
+     * Caltulate possible captures for every field
+     * @param signX -1 or 1
+     * @param x x-coordinate of field
+     * @param y y-coordinate of field
+     */
     public  void calculatePossibleCaptures(int signX,int x,int y) {
         if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
             if (isFieldInBoard(x + 2 * signX, y - 2 ) && fields[x + signX][y -1].isOccupied() && !fields[x + 2 * signX][y - 2 ].isOccupied()) {
