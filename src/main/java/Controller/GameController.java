@@ -2,7 +2,6 @@ package Controller;
 
 import Model.Board;
 import Model.PlayerTurn;
-import javafx.scene.paint.Color;
 
 /**
  *Class responsible for controlling the game of checkers
@@ -13,7 +12,7 @@ public abstract class GameController {
     public PlayerTurn playerTurn;
     protected int numberOfWhitePawns;
     protected int numberOfBlackPawns;
-    protected boolean finishCapture;
+    protected boolean isCaptureFinished;
 
     protected abstract boolean makeMove(int x1, int y1, int x2, int y2);
     public abstract int getBoardSize();
@@ -23,7 +22,7 @@ public abstract class GameController {
      * Constructor of game controller
      */
     public GameController() {
-        finishCapture = false;
+        isCaptureFinished = false;
         playerTurn = PlayerTurn.White;
         numberOfBlackPawns = getBoardSize() / 2 * getPawnRows();
         numberOfWhitePawns = getBoardSize() / 2 * getPawnRows();
@@ -102,5 +101,18 @@ public abstract class GameController {
             return board.getGameVariant();
         }
         return "None";
+    }
+
+    /**
+     * Preparing board and pawns method
+     */
+
+    public void prepareBoard(){
+        board.capturePossible.clear();
+        if (playerTurn == PlayerTurn.Black) {
+            board.captureFieldList(board.blackPawns);
+        } else {
+            board.captureFieldList(board.whitePawns);
+        }
     }
 }
