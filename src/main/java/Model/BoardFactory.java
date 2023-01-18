@@ -7,13 +7,14 @@ package Model;
 public class BoardFactory {
     /**
      * Creates Board for given game variant.
+     *
      * @param gameVariant checkers variant
      * @return Board of given type or null if gameVariant is invalid
      */
     public Board createBoard(String gameVariant) {
         Board board;
 
-        switch(gameVariant) {
+        switch (gameVariant) {
             case "Polish":
                 board = new PolishBoard();
                 break;

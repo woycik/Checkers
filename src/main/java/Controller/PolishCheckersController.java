@@ -15,6 +15,7 @@ public class PolishCheckersController extends GameController {
 
     /**
      * Pawn move method
+     *
      * @param x1 x-coordinate of pawn starting position
      * @param y1 y-coordinate of pawn starting position
      * @param x2 x-coordinate of pawn ending position
@@ -47,24 +48,30 @@ public class PolishCheckersController extends GameController {
         }
         return false;
     }
+
     /**
      * Board size returning method
+     *
      * @return board size
      */
     @Override
     public int getBoardSize() {
         return 10;
     }
+
     /**
      * Number od pawn rows returning method
+     *
      * @return number of pawn rown
      */
     @Override
     public int getPawnRows() {
         return 4;
     }
+
     /**
      * Game variant returning method
+     *
      * @return game variant
      */
     @Override

@@ -47,6 +47,7 @@ public class EnglishCheckersController extends GameController {
 
     /**
      * Board size returning method
+     *
      * @return board size
      */
 
@@ -54,8 +55,10 @@ public class EnglishCheckersController extends GameController {
     public int getBoardSize() {
         return 8;
     }
+
     /**
      * Number od pawn rows returning method
+     *
      * @return number of pawn rown
      */
 
@@ -63,8 +66,10 @@ public class EnglishCheckersController extends GameController {
     public int getPawnRows() {
         return 3;
     }
+
     /**
      * Game variant returning method
+     *
      * @return game variant
      */
     @Override

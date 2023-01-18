@@ -17,6 +17,7 @@ public class EnglishBoard extends Board {
 
     /**
      * Returning game variant method
+     *
      * @return game variant
      */
     @Override
@@ -34,20 +35,20 @@ public class EnglishBoard extends Board {
                 fields[x][y].clearPossibleMove();
                 if (fields[x][y].isOccupied()) {
                     if (!fields[x][y].getPawn().isQueen()) {
-                        calculatePossibleMoves(1,x,y);
-
-                        calculatePossibleMoves(-1,x,y);
+                        calculatePossibleMoves(1, x, y);
+                        calculatePossibleMoves(-1, x, y);
 
                     } else {
-                        calculatePossibleMovesForQueen(1,-1,x,y);
-                        calculatePossibleMovesForQueen(-1,-1,x,y);
-                        calculatePossibleMovesForQueen(-1,1,x,y);
-                        calculatePossibleMovesForQueen(1,1,x,y);
+                        calculatePossibleMovesForQueen(1, -1, x, y);
+                        calculatePossibleMovesForQueen(-1, -1, x, y);
+                        calculatePossibleMovesForQueen(-1, 1, x, y);
+                        calculatePossibleMovesForQueen(1, 1, x, y);
                     }
                 }
             }
         }
     }
+
     /**
      * Method that assigns to each field tha fields it can move on after capturing
      */
@@ -62,13 +63,13 @@ public class EnglishBoard extends Board {
                         continue;
                     }
                     if (!fields[x][y].getPawn().isQueen()) {
-                        calculatePossibleCaptures(1,x,y);
-                        calculatePossibleCaptures(-1,x,y);
+                        calculatePossibleCaptures(1, x, y);
+                        calculatePossibleCaptures(-1, x, y);
                     } else {
-                        calculatePossibleCapturesForQueen(1,-1,x,y);
-                        calculatePossibleCapturesForQueen(-1,-1,x,y);
-                        calculatePossibleCapturesForQueen(1,1,x,y);
-                        calculatePossibleCapturesForQueen(-1,1,x,y);
+                        calculatePossibleCapturesForQueen(1, -1, x, y);
+                        calculatePossibleCapturesForQueen(-1, -1, x, y);
+                        calculatePossibleCapturesForQueen(1, 1, x, y);
+                        calculatePossibleCapturesForQueen(-1, 1, x, y);
                     }
                 }
             }
@@ -78,55 +79,39 @@ public class EnglishBoard extends Board {
 
     /**
      * Check if field is in board
+     *
      * @param x x-coordinate of field
      * @param y y-coordinate of field
      * @return true if selected field is inside board
      */
-    public boolean isFieldInBoard(int x,int y){
+    public boolean isFieldInBoard(int x, int y) {
         return x < getSize() && y < getSize() && x >= 0 && y >= 0;
     }
 
-    /**
-     * Calculate possible moves for every field method
-     * @param signX 1 or -1
-     * @param x x-coordinate of field
-     * @param y y-coordinate of field
-     */
-
-    public void calculatePossibleMoves(int signX,int x,int y) {
-        if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
-            if (isFieldInBoard(x + signX, y -1) && !fields[x + signX][y -1].isOccupied()) {
-                fields[x][y].addToPossibleMoves(fields[x + signX][y-1]); //jedne i obojetnie
-            }
-        } else {
-            if (isFieldInBoard(x - signX, y +1) && !fields[x - signX][y +1].isOccupied()) {
-                fields[x][y].addToPossibleMoves(fields[x - signX][y + 1]);
-            }
-        }
-
-    }
 
     /**
      * Calculate possible captures for every field method
+     *
      * @param signX -1 or 1
      * @param signY -1 or 1
-     * @param x x-coordinate of field
-     * @param y y-coordinate of field
+     * @param x     x-coordinate of field
+     * @param y     y-coordinate of field
      */
-    public void calculatePossibleMovesForQueen(int signX,int signY,int x,int y){
-        if (isFieldInBoard(x+signX,y+signY) && !fields[x + signX][y + signY].isOccupied()) {
+    public void calculatePossibleMovesForQueen(int signX, int signY, int x, int y) {
+        if (isFieldInBoard(x + signX, y + signY) && !fields[x + signX][y + signY].isOccupied()) {
             fields[x][y].addToPossibleMoves(fields[x + signX][y + signY]);
         }
     }
 
     /**
      * Calculate possible captures for every queen field method
+     *
      * @param signX -1 or 1
      * @param signY -1 or 1
-     * @param x x-coordinate of field
-     * @param y y-coordinate of field
+     * @param x     x-coordinate of field
+     * @param y     y-coordinate of field
      */
-    public void calculatePossibleCapturesForQueen(int signX,int signY,int x,int y) {
+    public void calculatePossibleCapturesForQueen(int signX, int signY, int x, int y) {
         if (isFieldInBoard(x + 2 * signX, y + 2 * signY) && fields[x + signX][y + signY].isOccupied() && !fields[x + 2 * signX][y + 2 * signY].isOccupied()) {
             if (!fields[x + signX][y + signY].getPawnColor().equals(fields[x][y].getPawnColor())) {
                 fields[x][y].addToPossibleCaptures(fields[x + 2 * signX][y + 2 * signY]);
@@ -136,21 +121,22 @@ public class EnglishBoard extends Board {
 
     /**
      * Caltulate possible captures for every field
+     *
      * @param signX -1 or 1
-     * @param x x-coordinate of field
-     * @param y y-coordinate of field
+     * @param x     x-coordinate of field
+     * @param y     y-coordinate of field
      */
-    public  void calculatePossibleCaptures(int signX,int x,int y) {
+    public void calculatePossibleCaptures(int signX, int x, int y) {
         if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
-            if (isFieldInBoard(x + 2 * signX, y - 2 ) && fields[x + signX][y -1].isOccupied() && !fields[x + 2 * signX][y - 2 ].isOccupied()) {
-                if (!fields[x + signX][y -1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                    fields[x][y].addToPossibleCaptures(fields[x + 2 * signX][y - 2 ]);
+            if (isFieldInBoard(x + 2 * signX, y - 2) && fields[x + signX][y - 1].isOccupied() && !fields[x + 2 * signX][y - 2].isOccupied()) {
+                if (!fields[x + signX][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
+                    fields[x][y].addToPossibleCaptures(fields[x + 2 * signX][y - 2]);
                 }
             }
         } else {
-            if (isFieldInBoard(x - 2 * signX, y + 2 ) && fields[x - signX][y +1].isOccupied() && !fields[x - 2 * signX][y + 2 ].isOccupied()) {
-                if (!fields[x - signX][y +1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                    fields[x][y].addToPossibleCaptures(fields[x - 2 * signX][y + 2 ]);
+            if (isFieldInBoard(x - 2 * signX, y + 2) && fields[x - signX][y + 1].isOccupied() && !fields[x - 2 * signX][y + 2].isOccupied()) {
+                if (!fields[x - signX][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
+                    fields[x][y].addToPossibleCaptures(fields[x - 2 * signX][y + 2]);
                 }
             }
         }
@@ -158,6 +144,7 @@ public class EnglishBoard extends Board {
 
     /**
      * Pawn capture method
+     *
      * @param x1 x-coordinate of starting position
      * @param y1 y-coordinate of starting position
      * @param x2 x-coordinate of ending position
