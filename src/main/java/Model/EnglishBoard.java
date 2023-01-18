@@ -34,40 +34,15 @@ public class EnglishBoard extends Board {
                 fields[x][y].clearPossibleMove();
                 if (fields[x][y].isOccupied()) {
                     if (!fields[x][y].getPawn().isQueen()) {
-                        if ((x + 1) < getSize() && (y - 1) >= 0 && !fields[x + 1][y - 1].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
-                                fields[x][y].addToPossibleMoves(fields[x + 1][y - 1]);
-                            }
-                        }
-                        if ((x - 1) >= 0 && (y - 1) >= 0 && !fields[x - 1][y - 1].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
-                                fields[x][y].addToPossibleMoves(fields[x - 1][y - 1]);
-                            }
-                        }
-                        if ((x - 1) >= 0 && (y + 1) < getSize() && !fields[x - 1][y + 1].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
-                                fields[x][y].addToPossibleMoves(fields[x - 1][y + 1]);
-                            }
-                        }
-                        if ((x + 1) < getSize() && (y + 1) < getSize() && !fields[x + 1][y + 1].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
-                                fields[x][y].addToPossibleMoves(fields[x + 1][y + 1]);
-                            }
-                        }
+                        calculatePossibleMoves(1,x,y);
+
+                        calculatePossibleMoves(-1,x,y);
 
                     } else {
-                        if ((x + 1) < getSize() && (y - 1) >= 0 && !fields[x + 1][y - 1].isOccupied()) {
-                            fields[x][y].addToPossibleMoves(fields[x + 1][y - 1]);
-                        }
-                        if ((x - 1) >= 0 && (y - 1) >= 0 && !fields[x - 1][y - 1].isOccupied()) {
-                            fields[x][y].addToPossibleMoves(fields[x - 1][y - 1]);
-                        }
-                        if ((x - 1) >= 0 && (y + 1) < getSize() && !fields[x - 1][y + 1].isOccupied()) {
-                            fields[x][y].addToPossibleMoves(fields[x - 1][y + 1]);
-                        }
-                        if ((x + 1) < getSize() && (y + 1) < getSize() && !fields[x + 1][y + 1].isOccupied()) {
-                            fields[x][y].addToPossibleMoves(fields[x + 1][y + 1]);
-                        }
+                        calculatePossibleMovesForQueen(1,-1,x,y);
+                        calculatePossibleMovesForQueen(-1,-1,x,y);
+                        calculatePossibleMovesForQueen(-1,1,x,y);
+                        calculatePossibleMovesForQueen(1,1,x,y);
                     }
                 }
             }
@@ -79,7 +54,6 @@ public class EnglishBoard extends Board {
     @Override
     public void addToPossibleCaptures(String color) {
         Color playerColor = getPlayerRGBColor(color);
-
         for (int x = 0; x < getSize(); x++) {
             for (int y = 0; y < getSize(); y++) {
                 fields[x][y].clearPossibleCaptures();
@@ -88,56 +62,63 @@ public class EnglishBoard extends Board {
                         continue;
                     }
                     if (!fields[x][y].getPawn().isQueen()) {
-                        if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
-                                if (!fields[x + 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                    fields[x][y].addToPossibleCaptures(fields[x + 2][y - 2]);
-                                }
-                            }
-                        }
-                        if ((x - 2) >= 0 && (y - 2) >= 0 && fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
-                                if (!fields[x - 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                    fields[x][y].addToPossibleCaptures(fields[x - 2][y - 2]);
-                                }
-                            }
-                        }
-                        if ((x + 2) < getSize() && (y + 2) < getSize() && fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
-                                if (!fields[x + 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                    fields[x][y].addToPossibleCaptures(fields[x + 2][y + 2]);
-                                }
-                            }
-                        }
-                        if ((x - 2) >= 0 && (y + 2) < getSize() && fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
-                                if (!fields[x - 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                    fields[x][y].addToPossibleCaptures(fields[x - 2][y + 2]);
-                                }
-                            }
-                        }
+                        calculatePossibleCaptures(1,x,y);
+                        calculatePossibleCaptures(-1,x,y);
                     } else {
-                        if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
-                            if (!fields[x + 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                fields[x][y].addToPossibleCaptures(fields[x + 2][y - 2]);
-                            }
-                        }
-                        if ((x - 2) >= 0 && (y - 2) >= 0 && fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
-                            if (!fields[x - 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                fields[x][y].addToPossibleCaptures(fields[x - 2][y - 2]);
-                            }
-                        }
-                        if ((x + 2) < getSize() && (y + 2) < getSize() && fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
-                            if (!fields[x + 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                fields[x][y].addToPossibleCaptures(fields[x + 2][y + 2]);
-                            }
-                        }
-                        if ((x - 2) >= 0 && (y + 2) < getSize() && fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
-                            if (!fields[x - 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                fields[x][y].addToPossibleCaptures(fields[x - 2][y + 2]);
-                            }
-                        }
+                        calculatePossibleCapturesForQueen(1,-1,x,y);
+                        calculatePossibleCapturesForQueen(-1,-1,x,y);
+                        calculatePossibleCapturesForQueen(1,1,x,y);
+                        calculatePossibleCapturesForQueen(-1,1,x,y);
                     }
+                }
+            }
+        }
+    }
+
+
+
+    public boolean isFieldInBoard(int x,int y){
+        return x < getSize() && y < getSize() && x >= 0 && y >= 0;
+    }
+
+    public void calculatePossibleMoves(int signX,int x,int y) {
+        if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
+            if (isFieldInBoard(x + signX, y -1) && !fields[x + signX][y -1].isOccupied()) {
+                fields[x][y].addToPossibleMoves(fields[x + signX][y-1]); //jedne i obojetnie
+            }
+        } else {
+            if (isFieldInBoard(x - signX, y +1) && !fields[x - signX][y +1].isOccupied()) {
+                fields[x][y].addToPossibleMoves(fields[x - signX][y + 1]);
+            }
+        }
+
+    }
+
+    public void calculatePossibleMovesForQueen(int signX,int signY,int x,int y){
+        if (isFieldInBoard(x+signX,y+signY) && !fields[x + signX][y + signY].isOccupied()) {
+            fields[x][y].addToPossibleMoves(fields[x + signX][y + signY]);
+        }
+    }
+
+    public void calculatePossibleCapturesForQueen(int signX,int signY,int x,int y) {
+        if (isFieldInBoard(x + 2 * signX, y + 2 * signY) && fields[x + signX][y + signY].isOccupied() && !fields[x + 2 * signX][y + 2 * signY].isOccupied()) {
+            if (!fields[x + signX][y + signY].getPawnColor().equals(fields[x][y].getPawnColor())) {
+                fields[x][y].addToPossibleCaptures(fields[x + 2 * signX][y + 2 * signY]);
+            }
+        }
+    }
+
+    public  void calculatePossibleCaptures(int signX,int x,int y) {
+        if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
+            if (isFieldInBoard(x + 2 * signX, y - 2 ) && fields[x + signX][y -1].isOccupied() && !fields[x + 2 * signX][y - 2 ].isOccupied()) {
+                if (!fields[x + signX][y -1].getPawnColor().equals(fields[x][y].getPawnColor())) {
+                    fields[x][y].addToPossibleCaptures(fields[x + 2 * signX][y - 2 ]);
+                }
+            }
+        } else {
+            if (isFieldInBoard(x - 2 * signX, y + 2 ) && fields[x - signX][y +1].isOccupied() && !fields[x - 2 * signX][y + 2 ].isOccupied()) {
+                if (!fields[x - signX][y +1].getPawnColor().equals(fields[x][y].getPawnColor())) {
+                    fields[x][y].addToPossibleCaptures(fields[x - 2 * signX][y + 2 ]);
                 }
             }
         }

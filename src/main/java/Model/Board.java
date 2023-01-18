@@ -110,76 +110,38 @@ public class Board implements Cloneable {
                 fields[x][y].clearPossibleMove();
                 if (fields[x][y].isOccupied()) {
                     if (!fields[x][y].getPawn().isQueen()) {
-                        if ((x + 1) < getSize() && (y - 1) >= 0 && !fields[x + 1][y - 1].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
-                                fields[x][y].addToPossibleMoves(fields[x + 1][y - 1]);
-                            }
-                        }
-                        if ((x - 1) >= 0 && (y - 1) >= 0 && !fields[x - 1][y - 1].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(255, 255, 255))) {
-                                fields[x][y].addToPossibleMoves(fields[x - 1][y - 1]);
-                            }
-                        }
-                        if ((x - 1) >= 0 && (y + 1) < getSize() && !fields[x - 1][y + 1].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
-                                fields[x][y].addToPossibleMoves(fields[x - 1][y + 1]);
-                            }
-                        }
-                        if ((x + 1) < getSize() && (y + 1) < getSize() && !fields[x + 1][y + 1].isOccupied()) {
-                            if (fields[x][y].getPawnColor().equals(Color.rgb(0, 0, 0))) {
-                                fields[x][y].addToPossibleMoves(fields[x + 1][y + 1]);
-                            }
-                        }
+                        calculatePossibleMoves(1,-1,x,y);
+                        calculatePossibleMoves(-1,-1,x,y);
+                        calculatePossibleMoves(1,1,x,y);
+                        calculatePossibleMoves(-1,1,x,y);
 
                     } else {
-                        int currx = x;
-                        int curry = y;
-                        while (currx > 0 && curry > 0) {
-                            currx--;
-                            curry--;
-                            if (!fields[currx][curry].isOccupied()) {
-                                fields[x][y].addToPossibleMoves(fields[currx][curry]);
-                            } else {
-                                break;
-                            }
-                        }
-
-                        currx = x;
-                        curry = y;
-                        while (currx < (getSize() - 1) && curry > 0) {
-                            currx++;
-                            curry--;
-                            if (!fields[currx][curry].isOccupied()) {
-                                fields[x][y].addToPossibleMoves(fields[currx][curry]);
-                            } else {
-                                break;
-                            }
-                        }
-                        currx = x;
-                        curry = y;
-                        while (currx < (getSize() - 1) && curry < (getSize() - 1)) {
-                            currx++;
-                            curry++;
-                            if (!fields[currx][curry].isOccupied()) {
-                                fields[x][y].addToPossibleMoves(fields[currx][curry]);
-                            } else {
-                                break;
-                            }
-                        }
-
-                        currx = x;
-                        curry = y;
-                        while (currx > 0 && curry < (getSize() - 1)) {
-                            currx--;
-                            curry++;
-                            if (!fields[currx][curry].isOccupied()) {
-                                fields[x][y].addToPossibleMoves(fields[currx][curry]);
-                            } else {
-                                break;
-                            }
-                        }
+                        calculatePossibleMovesForQueen(1,-1,x,y);
+                        calculatePossibleMovesForQueen(-1,-1,x,y);
+                        calculatePossibleMovesForQueen(-1,1,x,y);
+                        calculatePossibleMovesForQueen(1,1,x,y);
                     }
                 }
+            }
+        }
+    }
+
+    public void calculatePossibleMoves(int signX,int signY,int x,int y){
+        if (isFieldInBoard(x+signX,y+signY) && !fields[x + signX][y + signY].isOccupied()) {
+            fields[x][y].addToPossibleMoves(fields[x + signX][y + signY]);
+        }
+    }
+
+    public void calculatePossibleMovesForQueen(int signX,int signY,int x,int y){
+        int currx = x;
+        int curry = y;
+        while (isFieldInBoard(currx+signX,curry+signY)) {
+            currx=currx + signX;
+            curry=curry + signY;
+            if (!fields[currx][curry].isOccupied()) {
+                fields[x][y].addToPossibleMoves(fields[currx][curry]);
+            } else {
+                break;
             }
         }
     }
@@ -198,141 +160,60 @@ public class Board implements Cloneable {
                             continue;
                         }
                         if (!fields[x][y].getPawn().isQueen()) {
-                            if ((x + 2) < getSize() && (y - 2) >= 0 && fields[x + 1][y - 1].isOccupied() && !fields[x + 2][y - 2].isOccupied()) {
-                                if (!fields[x + 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                    fields[x][y].addToPossibleCaptures(fields[x + 2][y - 2]);
-                                }
-                            }
-                            if ((x - 2) >= 0 && (y - 2) >= 0 && fields[x - 1][y - 1].isOccupied() && !fields[x - 2][y - 2].isOccupied()) {
-                                if (!fields[x - 1][y - 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-
-                                    fields[x][y].addToPossibleCaptures(fields[x - 2][y - 2]);
-
-                                }
-                            }
-                            if ((x + 2) < getSize() && (y + 2) < getSize() && fields[x + 1][y + 1].isOccupied() && !fields[x + 2][y + 2].isOccupied()) {
-                                if (!fields[x + 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-
-                                    fields[x][y].addToPossibleCaptures(fields[x + 2][y + 2]);
-
-                                }
-                            }
-                            if ((x - 2) >= 0 && (y + 2) < getSize() && fields[x - 1][y + 1].isOccupied() && !fields[x - 2][y + 2].isOccupied()) {
-                                if (!fields[x - 1][y + 1].getPawnColor().equals(fields[x][y].getPawnColor())) {
-
-                                    fields[x][y].addToPossibleCaptures(fields[x - 2][y + 2]);
-
-                                }
-                            }
+                            this.calculatePossibleFields(1,-1,x,y);
+                            this.calculatePossibleFields(-1,-1,x,y);
+                            this.calculatePossibleFields(1,1,x,y);
+                            this.calculatePossibleFields(-1,1,x,y);
                         } else {
 
-                            int currx = x;
-                            int curry = y;
-                            int stateOfCaptures = 0;
-                            while (currx > 0 && curry > 0) {
-                                currx--;
-                                curry--;
-                                if (!fields[currx][curry].isOccupied() && stateOfCaptures == 0) {
-                                    continue;
-                                }
-                                if (!fields[currx][curry].isOccupied() && stateOfCaptures == 1) {
-
-                                    fields[x][y].addToPossibleCaptures(fields[currx][curry]);
-
-                                } else if (fields[currx][curry].isOccupied() && !fields[currx][curry].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                    if ((currx - 1) >= 0 && (curry - 1) >= 0 && !fields[currx - 1][curry - 1].isOccupied()) {
-                                        stateOfCaptures++;
-                                    }
-                                    else{
-                                        break;
-                                    }
-
-                                } else {
-                                    break;
-                                }
-                            }
-
-
-                            currx = x;
-                            curry = y;
-                            stateOfCaptures = 0;
-                            while (currx < (getSize() - 1) && curry > 0) {
-                                currx++;
-                                curry--;
-                                if (!fields[currx][curry].isOccupied() && stateOfCaptures == 0) {
-                                    continue;
-                                }
-                                if (!fields[currx][curry].isOccupied() && stateOfCaptures == 1) {
-
-                                    fields[x][y].addToPossibleCaptures(fields[currx][curry]);
-
-                                } else if (fields[currx][curry].isOccupied() && !fields[currx][curry].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                    if ((currx + 1) < getSize() && (curry - 1) >= 0 && !fields[currx + 1][curry - 1].isOccupied()) {
-                                        stateOfCaptures++;
-                                    }
-                                    else{
-                                        break;
-                                    }
-
-                                } else {
-                                    break;
-                                }
-                            }
-
-                            currx = x;
-                            curry = y;
-                            stateOfCaptures = 0;
-                            while (currx < (getSize() - 1) && curry < (getSize() - 1)) {
-                                currx++;
-                                curry++;
-                                if (!fields[currx][curry].isOccupied() && stateOfCaptures == 0) {
-                                    continue;
-                                }
-                                if (!fields[currx][curry].isOccupied() && stateOfCaptures == 1) {
-
-                                    fields[x][y].addToPossibleCaptures(fields[currx][curry]);
-
-                                } else if (fields[currx][curry].isOccupied() && !fields[currx][curry].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                    if ((currx + 1) < getSize() && (curry + 1) < getSize() && !fields[currx + 1][curry + 1].isOccupied()) {
-                                        stateOfCaptures++;
-                                    }
-                                    else{
-                                        break;
-                                    }
-
-                                } else {
-                                    break;
-                                }
-                            }
-
-                            currx = x;
-                            curry = y;
-                            stateOfCaptures = 0;
-                            while (currx > 0 && curry < (getSize() - 1)) {
-                                currx--;
-                                curry++;
-                                if (!fields[currx][curry].isOccupied() && stateOfCaptures == 0) {
-                                    continue;
-                                }
-                                if (!fields[currx][curry].isOccupied() && stateOfCaptures == 1) {
-
-                                    fields[x][y].addToPossibleCaptures(fields[currx][curry]);
-
-                                } else if (fields[currx][curry].isOccupied() && !fields[currx][curry].getPawnColor().equals(fields[x][y].getPawnColor())) {
-                                    if ((currx - 1) >= 0 && (curry + 1) < getSize() && !fields[currx - 1][curry + 1].isOccupied()) {
-                                        stateOfCaptures++;
-                                    }
-                                    else{
-                                        break;
-                                    }
-
-                                } else {
-                                    break;
-                                }
-                            }
+                            this.calculatePossibleFieldsForQueen(-1,-1,x,y);
+                            this.calculatePossibleFieldsForQueen(1,-1,x,y);
+                            this.calculatePossibleFieldsForQueen(1,1,x,y);
+                            this.calculatePossibleFieldsForQueen(-1,1,x,y);
 
                         }
                     }
+                }
+            }
+        }
+
+        public boolean isFieldInBoard(int x,int y){
+            return x < getSize() && y < getSize() && x >= 0 && y >= 0;
+        }
+
+        public void calculatePossibleFields(int signX,int signY,int x,int y){
+            if (isFieldInBoard(x+2*signX,y+2*signY) && fields[x + signX][y + signY].isOccupied() && !fields[x + 2*signX][y +2*signY].isOccupied()) {
+                if (!fields[x + signX][y + signY].getPawnColor().equals(fields[x][y].getPawnColor())) {
+                    fields[x][y].addToPossibleCaptures(fields[x + 2*signX][y + 2*signY]);
+                }
+            }
+        }
+
+
+        public void calculatePossibleFieldsForQueen(int singX,int signY,int x,int y){
+            int currX = x;
+            int currY = y;
+            int stateOfCaptures = 0;
+            while (isFieldInBoard(currX+singX,currY+signY)) {
+                currX = currX + singX;
+                currY = currY + signY;
+                if (!fields[currX][currY].isOccupied() && stateOfCaptures == 0) {
+                    continue;
+                }
+                if (!fields[currX][currY].isOccupied() && stateOfCaptures == 1) {
+
+                    fields[x][y].addToPossibleCaptures(fields[currX][currY]);
+
+                } else if (fields[currX][currY].isOccupied() && !fields[currX][currY].getPawnColor().equals(fields[x][y].getPawnColor())) {
+                    if (isFieldInBoard(currX+singX,currY+signY) && !fields[currX + singX][currY + signY].isOccupied()) {
+                        stateOfCaptures++;
+                    }
+                    else{
+                        break;
+                    }
+
+                } else {
+                    break;
                 }
             }
         }
@@ -366,40 +247,29 @@ public class Board implements Cloneable {
 
                 if (diffY == diffX || -diffY == diffX) {
                     if (diffY > 0 && diffX > 0) {
-                        for (int i = 1; i < diffX; i++) {
-                            if (this.getFields()[x1 + i][y1 + i].isOccupied()) {
-                                this.getFields()[x1 + i][y1 + i].setPawn(null);
-                                break;
-                            }
-                        }
+                        capture(1,1,Math.abs(diffX),x1,y1);
                     }
                     if (diffY > 0 && diffX < 0) {
-                        for (int i = 1; i < Math.abs(diffX); i++) {
-                            if (this.getFields()[x1 - i][y1 + i].isOccupied()) {
-                                this.getFields()[x1 - i][y1 + i].setPawn(null);
-                                break;
-                            }
-                        }
+                        capture(-1,1,Math.abs(diffX),x1,y1);
                     }
                     if (diffY < 0 && diffX < 0) {
-                        for (int i = 1; i < Math.abs(diffX); i++) {
-                            if (this.getFields()[x1 - i][y1 - i].isOccupied()) {
-                                this.getFields()[x1 - i][y1 - i].setPawn(null);
-                                break;
-                            }
-                        }
+                        capture(-1,-1,Math.abs(diffX),x1,y1);
                     }
                     if (diffY < 0 && diffX > 0) {
-                        for (int i = 1; i < diffX; i++) {
-                            if (this.getFields()[x1 + i][y1 - i].isOccupied()) {
-                                this.getFields()[x1 + i][y1 - i].setPawn(null);
-                                break;
-                            }
-                        }
+                        capture(1,-1,Math.abs(diffX),x1,y1);
                     }
                 }
             }
             this.createNewQueen(x2, y2);
+        }
+    }
+
+    public void capture(int signX,int signY,int diff,int x,int y){
+        for (int i = 1; i < diff; i++) {
+            if (this.getFields()[x + (signX*i)][y + (signY* i)].isOccupied()) {
+                this.getFields()[x + (signX*i)][y + (signY* i)].setPawn(null);
+                break;
+            }
         }
     }
 
@@ -498,17 +368,57 @@ public class Board implements Cloneable {
         return false;
     }
 
-    /**
-     *
-     * Method that removes from the list of captures all fields that do not make the best capture
-     * @param color
-     */
-    public void filterLongestCaptures(String color) {
-        List<Field> longestCaptures = getLongestCaptures(color);
 
-        for (Field field : capturePossible) {
-            field.getPossibleCaptures().removeIf(f -> !longestCaptures.contains(f));
+
+
+    /**
+     * Check whether move is possible
+     * @param x1 x-coordinate of pawn starting position
+     * @param y1 y-coordinate of pawn starting position
+     * @param x2 x-coordinate of pawn ending position
+     * @param y2 y-coordinate of pawn starting position
+     * @return true if this move is legal
+     */
+    public boolean isMoveLegal(int x1, int y1, int x2, int y2) {
+        if (this.getFields()[x1][y1].getPawn() != null) {
+            if (x2 < this.getSize() && x2 >= 0 && y2 < this.getSize() && y2 >= 0) {
+                if (!this.getFields()[x2][y2].isOccupied()) {
+                    return this.getFields()[x1][y1].getPossibleMoves().contains(this.getFields()[x2][y2]);
+                }
+            }
         }
+        return false;
+    }
+
+    /**
+     * Pawn move method
+     * @param x1 x-coordinate of pawn starting position
+     * @param y1 y-coordinate of pawn starting position
+     * @param x2 x-coordinate of pawn ending position
+     * @param y2 y-coordinate of pawn starting position
+     * @return true if move was done correctly
+     */
+
+    public boolean movePawn(int x1, int y1, int x2, int y2) {
+        if (this.getFields()[x1][y1].isOccupied()) {
+            this.getFields()[x2][y2].setPawn(this.getFields()[x1][y1].getPawn());
+            this.getFields()[x1][y1].setPawn(null);
+            this.createNewQueen(x2, y2);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check whether this pawn can capture one more time
+     * @param x x-coordinate of pawn position
+     * @param y y-coordinate of pawn position
+     * @param color pawn color
+     * @return true if capture is possible one more time
+     */
+    public boolean canICaptureOneMoreTime(int x, int y,String color) {
+        this.addToPossibleCaptures(color);
+        return (this.getFields()[x][y].getPossibleCaptures().size() > 0);
     }
 
     /**
@@ -560,53 +470,16 @@ public class Board implements Cloneable {
     }
 
     /**
-     * Check whether move is possible
-     * @param x1 x-coordinate of pawn starting position
-     * @param y1 y-coordinate of pawn starting position
-     * @param x2 x-coordinate of pawn ending position
-     * @param y2 y-coordinate of pawn starting position
-     * @return true if this move is legal
+     *
+     * Method that removes from the list of captures all fields that do not make the best capture
+     * @param color
      */
-    public boolean isMoveLegal(int x1, int y1, int x2, int y2) {
-        if (this.getFields()[x1][y1].getPawn() != null) {
-            if (x2 < this.getSize() && x2 >= 0 && y2 < this.getSize() && y2 >= 0) {
-                if (!this.getFields()[x2][y2].isOccupied()) {
-                    return this.getFields()[x1][y1].getPossibleMoves().contains(this.getFields()[x2][y2]);
-                }
-            }
+    public void filterLongestCaptures(String color) {
+        List<Field> longestCaptures = getLongestCaptures(color);
+
+        for (Field field : capturePossible) {
+            field.getPossibleCaptures().removeIf(f -> !longestCaptures.contains(f));
         }
-        return false;
-    }
-
-    /**
-     * Pawn move method
-     * @param x1 x-coordinate of pawn starting position
-     * @param y1 y-coordinate of pawn starting position
-     * @param x2 x-coordinate of pawn ending position
-     * @param y2 y-coordinate of pawn starting position
-     * @return true if move was done correctly
-     */
-
-    public boolean movePawn(int x1, int y1, int x2, int y2) {
-        if (this.getFields()[x1][y1].isOccupied()) {
-            this.getFields()[x2][y2].setPawn(this.getFields()[x1][y1].getPawn());
-            this.getFields()[x1][y1].setPawn(null);
-            this.createNewQueen(x2, y2);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Check whether this pawn can capture one more time
-     * @param x x-coordinate of pawn position
-     * @param y y-coordinate of pawn position
-     * @param color pawn color
-     * @return true if capture is possible one more time
-     */
-    public boolean canICaptureOneMoreTime(int x, int y,String color) {
-        this.addToPossibleCaptures(color);
-        return (this.getFields()[x][y].getPossibleCaptures().size() > 0);
     }
 
     /**
