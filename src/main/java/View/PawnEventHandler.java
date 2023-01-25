@@ -26,7 +26,8 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     /**
      * Default constructor. Controls are disabled by default.
-     * @param pawnView connected pawn view
+     *
+     * @param pawnView     connected pawn view
      * @param clientThread client thread instance
      */
     public PawnEventHandler(PawnView pawnView, ClientThread clientThread) {
@@ -40,6 +41,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     /**
      * Determines whether there are any captures available on given game board.
+     *
      * @param board board object representing current game state
      * @return true if there is at least one legal pawn capture and false otherwise
      */
@@ -56,7 +58,8 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     /**
      * Creates green rectangle and places it on field pawn can move on.
-     * @param f field on which the rectangle will be placed
+     *
+     * @param f    field on which the rectangle will be placed
      * @param size rectangle horizontal and vertical size in pixels
      */
     private void createRectangle(Field f, double size) {
@@ -71,14 +74,15 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     /**
      * Highlights fields on which selected pawn can move.
-     * @param event mouse event triggering handler
+     *
+     * @param event  mouse event triggering handler
      * @param parent board view
      */
     private void highlightFields(MouseEvent event, BoardView parent) {
         board = parent.getBoard();
         board.addToPossibleCaptures(clientThread.playerColor);
         board.addToPossibleMoves();
-        if(board instanceof PolishBoard) {
+        if (board instanceof PolishBoard) {
             board.filterLongestCaptures(clientThread.playerColor);
         }
 
@@ -93,6 +97,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     /**
      * Highlights all fields in List passed as parameter.
+     *
      * @param fields list of all fields to highlight
      */
     private void highlightFields(List<Field> fields) {
@@ -104,6 +109,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     /**
      * Moves pawn while dragging mouse.
+     *
      * @param event mouse dragged event
      */
     private void changePosition(MouseEvent event) {
@@ -122,6 +128,7 @@ public class PawnEventHandler implements EventHandler<MouseEvent> {
 
     /**
      * Handles mouse events.
+     *
      * @param event mouse dragged, released or pressed event
      */
     @Override

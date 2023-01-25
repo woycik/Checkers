@@ -19,8 +19,8 @@ public class BotThread extends Thread {
     String gameVariant;
     int boardSize;
 
-    public BotThread(int port){
-        this.port=port;
+    public BotThread(int port) {
+        this.port = port;
     }
 
     @Override
@@ -42,21 +42,21 @@ public class BotThread extends Thread {
             gameVariant = messageSplit[1];
             playerColor = messageSplit[2];
             boardSize = Integer.parseInt(messageSplit[3]);
-            BotLogic bot = new BotLogic(this,getBoard(gameVariant, messageSplit[4]));
-            bot.botMakeMove(getBoard(gameVariant, messageSplit[4]),playerColor);
+            BotLogic bot = new BotLogic(this, getBoard(gameVariant, messageSplit[4]));
+            bot.botMakeMove(getBoard(gameVariant, messageSplit[4]), playerColor);
             while (true) {
                 serverMessage = in.readLine();
                 messageSplit = serverMessage.split(";");
                 if (messageSplit[0].equals("update")) {
                     Board board = getBoard(gameVariant, messageSplit[2]);
-                    bot.botMakeMove(board,playerColor);
+                    bot.botMakeMove(board, playerColor);
                 } else if (messageSplit[0].equals("win")) {
                     break;
                 } else if (messageSplit[0].equals("disconnect")) {
                     break;
                 }
             }
-        }  catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             try {
                 socket.close();
@@ -69,7 +69,7 @@ public class BotThread extends Thread {
     public Board getBoard(String gameVariant, String message) {
         BoardFactory boardFactory = new BoardFactory();
         Board board = boardFactory.createBoard(gameVariant);
-        if(board == null) {
+        if (board == null) {
             return null;
         }
         String[] messageSplit = message.split(",");
@@ -97,6 +97,7 @@ public class BotThread extends Thread {
 
     /**
      * Sends request to perform a move to the server.
+     *
      * @param x1 starting field x coordinate
      * @param y1 starting field y coordinate
      * @param x2 landing field x coordinate

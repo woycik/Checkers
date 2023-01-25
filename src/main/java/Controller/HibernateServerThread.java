@@ -15,9 +15,9 @@ import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.List;
 
-public class HibernateServerThread extends  ServerThread{
+public class HibernateServerThread extends  ServerThread {
     public HibernateServerThread(int port, ServerView view, GameController gameController) {
-        super(port,view,gameController);
+        super(port, view, gameController);
     }
 
     @Override
@@ -47,8 +47,7 @@ public class HibernateServerThread extends  ServerThread{
 
             String clientMessage = "";
             while (!stopRequest && !gameController.isWhiteWinner() && !gameController.isBlackWinner()) { // main game loop
-                if (gameController.playerTurn == PlayerTurn.White || gameController.playerTurn==PlayerTurn.Black)
-                {
+                if (gameController.playerTurn == PlayerTurn.White || gameController.playerTurn == PlayerTurn.Black) {
                     clientMessage = firstIn.readLine();
                     if (clientMessage == null) {
                         continue;

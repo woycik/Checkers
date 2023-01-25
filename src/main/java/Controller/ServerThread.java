@@ -38,7 +38,7 @@ public class ServerThread extends Thread {
 
     SessionFactory sf;
     Session factory;
-    int moveNumber=0;
+    int moveNumber = 0;
     Set<HibernateMove> moves = new HashSet<HibernateMove>();
     HibernateGame game;
 
@@ -52,7 +52,7 @@ public class ServerThread extends Thread {
         this.prepareHibernate();
     }
 
-    public  void  prepareHibernate(){
+    public void prepareHibernate() {
         sf = HibernateUtil.getSessionFactory();
         if (sf == null) {
             System.out.println("Error: Initialize database from the file db.sql");
@@ -132,20 +132,22 @@ public class ServerThread extends Thread {
 
     /**
      * Sends game starting message to both players.
+     *
      * @param gameVariant Checkers variant
-     * @param boardSize Number of fields horizontally and vertically on Board
+     * @param boardSize   Number of fields horizontally and vertically on Board
      * @param boardString Initial state of Board
      */
     private void sendGameStartMessages(String gameVariant, int boardSize, String boardString) {
         // start;game.hbm.xml;color;boardSize;boardString
         firstOut.println("start;" + gameVariant + ";White;" + boardSize + ";" + boardString + ";false");
-        secondOut.println("start;" + gameVariant + ";Black;" + boardSize + ";" + boardString +";flase");
+        secondOut.println("start;" + gameVariant + ";Black;" + boardSize + ";" + boardString + ";flase");
         System.out.println("Sent game start message to both players");
     }
 
     /**
      * Handles player's move request. Parses message into starting and landing fields' coordinates,
      * verifies whether move is legal, performs move on board and sends update messages to both players.
+     *
      * @param message move request in format move;x1;y1;x2;y2
      */
     private void handleMoveRequest(String message) {
@@ -190,13 +192,14 @@ public class ServerThread extends Thread {
 
     /**
      * Converts Board object into String message to send to Client.
+     *
      * @param board Checkers board object to convert
      * @return String representation of current board state. Each character represents one field:
-     *                w - white pawn
-     *                b - black pawn
-     *                W - white queen
-     *                B - black queen
-     *                0 - empty field
+     * w - white pawn
+     * b - black pawn
+     * W - white queen
+     * B - black queen
+     * 0 - empty field
      */
     protected String getSocketPrintableFormat(Board board) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -227,6 +230,7 @@ public class ServerThread extends Thread {
 
     /**
      * Prepares a update message to inform players about current game board state.
+     *
      * @return String in format of update;playerColor;board
      */
     protected String getUpdateMessage() {
@@ -244,6 +248,7 @@ public class ServerThread extends Thread {
 
     /**
      * Determines whether client socket is still connected with server. Pings client and awaits response.
+     *
      * @param socket Client socket
      * @return true if socket is connected and false otherwise
      */
@@ -292,7 +297,7 @@ public class ServerThread extends Thread {
         stopRequest = true;
     }
 
-    public void addMoves(String message){
+    public void addMoves(String message) {
         moveNumber++;
         String[] messageSplit = message.split(";");
         // move;x1;y1;x2;y2
@@ -300,12 +305,12 @@ public class ServerThread extends Thread {
         int y1 = Integer.parseInt(messageSplit[2]);
         int x2 = Integer.parseInt(messageSplit[3]);
         int y2 = Integer.parseInt(messageSplit[4]);
-        HibernateMove move = new HibernateMove(moveNumber,x1, y1, x2, y2, gameController.playerTurn.toString(),game);
+        HibernateMove move = new HibernateMove(moveNumber, x1, y1, x2, y2, gameController.playerTurn.toString(), game);
         moves.add(move);
     }
 
-    public void saveInDataBase(){
-        game.setMoves( moves);
+    public void saveInDataBase() {
+        game.setMoves(moves);
         factory.persist(game);
         factory.getTransaction().commit();
         HibernateUtil.shutdown();
