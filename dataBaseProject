@@ -1,0 +1,21 @@
+
+CREATE DATABASE Checkers;
+
+CREATE TABLE game(
+    id INT NOT NULL AUTO_INCREMENT,
+    gameVariant VARCHAR(50),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE move(
+    id  INT NOT NULL AUTO_INCREMENT,
+    gameId INT NOT NULL,
+    moveNumber INT NOT NULL,
+    beginX INT NOT NULL,
+    beginY INT NOT NULL,
+    endX INT NOT NULL,
+    endY INT NOT NULL,
+    playerTurn VARCHAR(50),
+    PRIMARY KEY(id),
+    FOREIGN KEY (gameId) REFERENCES game(id)
+);
