@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Resources/Resources Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="Model.HibernateGame" table="game">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="gameVariant" column="gameVariant" length="50"/>
+        <set name="moves" inverse="true" cascade="all">
+            <key column="gameId" not-null="true" />
+            <one-to-many class="Model.HibernateMove"/>
+        </set>
+    </class>
+</hibernate-mapping>
