@@ -1,33 +1,47 @@
 package Controller;
 
-import Model.Board;
-import Model.Field;
-import Model.Pawn;
-import Model.PlayerTurn;
+import Model.*;
 import View.ServerView;
 import javafx.application.Platform;
-
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 import static javafx.scene.paint.Color.rgb;
 
 public class ServerThread extends Thread {
-    private boolean stopRequest;
-    private final int port;
-    private final ServerView view;
-    private final GameController gameController;
-    private ServerSocket serverSocket;
-    private Socket firstPlayerSocket;
-    private Socket secondPlayerSocket;
-    private BufferedReader firstIn;
-    private PrintWriter firstOut;
-    private BufferedReader secondIn;
-    private PrintWriter secondOut;
+    protected boolean stopRequest;
+    protected final int port;
+    protected final ServerView view;
+    protected final GameController gameController;
+    protected ServerSocket serverSocket;
+    protected Socket firstPlayerSocket;
+    protected Socket secondPlayerSocket;
+    protected BufferedReader firstIn;
+    protected PrintWriter firstOut;
+    protected BufferedReader secondIn;
+    protected PrintWriter secondOut;
+
+
+    SessionFactory sf;
+    Session factory;
+    int moveNumber=0;
+    Set<HibernateMove> moves = new HashSet<HibernateMove>();
+    HibernateGame game;
+
 
     public ServerThread(int port, ServerView view, GameController gameController) {
         this.port = port;
@@ -35,8 +49,20 @@ public class ServerThread extends Thread {
         this.gameController = gameController;
         this.firstPlayerSocket = null;
         this.secondPlayerSocket = null;
-        this.stopRequest = false;
+        this.prepareHibernate();
     }
+
+    public  void  prepareHibernate(){
+        sf = HibernateUtil.getSessionFactory();
+        if (sf == null) {
+            System.out.println("Error: Initialize database from the file db.sql");
+            return;
+        }
+        factory = sf.openSession();
+        factory.beginTransaction();
+        game = new HibernateGame(gameController.getGameVariant());
+    }
+
 
     /**
      * Opens ServerSocket, waits for both players to connect, prepares and starts a checkers game.
@@ -46,7 +72,6 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         System.out.println("Server is listening on port " + port);
-
         try {
             serverSocket = new ServerSocket(port);
             do {
@@ -92,6 +117,7 @@ public class ServerThread extends Thread {
                     String[] messageSplit = clientMessage.split(";");
                     if (messageSplit[0].equals("move")) { // player wants to make a move
                         handleMoveRequest(clientMessage);
+                        addMoves(clientMessage);
                     }
                 }
                 clientMessage = "";
@@ -111,9 +137,9 @@ public class ServerThread extends Thread {
      * @param boardString Initial state of Board
      */
     private void sendGameStartMessages(String gameVariant, int boardSize, String boardString) {
-        // start;gameVariant;color;boardSize;boardString
-        firstOut.println("start;" + gameVariant + ";White;" + boardSize + ";" + boardString);
-        secondOut.println("start;" + gameVariant + ";Black;" + boardSize + ";" + boardString);
+        // start;game.hbm.xml;color;boardSize;boardString
+        firstOut.println("start;" + gameVariant + ";White;" + boardSize + ";" + boardString + ";false");
+        secondOut.println("start;" + gameVariant + ";Black;" + boardSize + ";" + boardString +";flase");
         System.out.println("Sent game start message to both players");
     }
 
@@ -172,7 +198,7 @@ public class ServerThread extends Thread {
      *                B - black queen
      *                0 - empty field
      */
-    private String getSocketPrintableFormat(Board board) {
+    protected String getSocketPrintableFormat(Board board) {
         StringBuilder stringBuilder = new StringBuilder();
         Field[][] fields = board.getFields();
         Pawn pawn;
@@ -203,7 +229,7 @@ public class ServerThread extends Thread {
      * Prepares a update message to inform players about current game board state.
      * @return String in format of update;playerColor;board
      */
-    private String getUpdateMessage() {
+    protected String getUpdateMessage() {
         String playerColor;
         if (gameController.playerTurn == PlayerTurn.White) {
             playerColor = "White";
@@ -221,7 +247,7 @@ public class ServerThread extends Thread {
      * @param socket Client socket
      * @return true if socket is connected and false otherwise
      */
-    private boolean isConnected(Socket socket) {
+    protected boolean isConnected(Socket socket) {
         try {
             if (socket == null || socket.isClosed() || !socket.isConnected()
                     || socket.isInputShutdown() || socket.isOutputShutdown()) {
@@ -251,6 +277,7 @@ public class ServerThread extends Thread {
             }
 
             if (serverSocket != null && !serverSocket.isClosed()) {
+                saveInDataBase();
                 serverSocket.close();
             }
         } catch (Exception e) {
@@ -263,5 +290,24 @@ public class ServerThread extends Thread {
      */
     public void requestStop() {
         stopRequest = true;
+    }
+
+    public void addMoves(String message){
+        moveNumber++;
+        String[] messageSplit = message.split(";");
+        // move;x1;y1;x2;y2
+        int x1 = Integer.parseInt(messageSplit[1]);
+        int y1 = Integer.parseInt(messageSplit[2]);
+        int x2 = Integer.parseInt(messageSplit[3]);
+        int y2 = Integer.parseInt(messageSplit[4]);
+        HibernateMove move = new HibernateMove(moveNumber,x1, y1, x2, y2, gameController.playerTurn.toString(),game);
+        moves.add(move);
+    }
+
+    public void saveInDataBase(){
+        game.setMoves( moves);
+        factory.persist(game);
+        factory.getTransaction().commit();
+        HibernateUtil.shutdown();
     }
 }

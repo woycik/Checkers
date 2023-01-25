@@ -71,9 +71,9 @@ public class ClientView {
      * Initializes and displays game board for the first time.
      * @param boardSize Number of fields horizontally and vertically on the board.
      */
-    public void showBoard(int boardSize) {
+    public void showBoard(int boardSize,boolean isRepeated) {
         Scene scene = stage.getScene();
-        boardView = new BoardView(boardSize, client);
+        boardView = new BoardView(boardSize, client,isRepeated);
         scene.setRoot(boardView);
     }
 

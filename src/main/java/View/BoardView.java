@@ -3,6 +3,8 @@ package View;
 import Controller.Client;
 import Model.Board;
 import Model.Field;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -17,13 +19,16 @@ public class BoardView extends Pane {
     private final ArrayList<PawnView> pawnViews;
     final double size;
     Board board ;
+    boolean isRepeated;
 
-    public BoardView(int boardSize, Client client) {
+    public BoardView(int boardSize, Client client,boolean isRepeated) {
         super();
+        this.isRepeated = isRepeated;
         board = new Board(boardSize);
         this.client = client;
         this.pawnViews = new ArrayList<>();
-        size= 500.0/boardSize;
+        size = 500.0 / boardSize;
+        System.out.println(isRepeated);
 
         Rectangle[][] rectangles = new Rectangle[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
@@ -45,6 +50,9 @@ public class BoardView extends Pane {
                 }
                 getChildren().add(rectangles[i][j]);
             }
+        }
+        if(isRepeated){
+            setOnMouseClicked(new BoardEventHandler(client.thread));
         }
     }
 
@@ -81,7 +89,12 @@ public class BoardView extends Pane {
                 }
             }
         }
-        activateClientMovement(color);
+        if(isRepeated){
+            disactivateClientMovement();
+        }
+        else {
+            activateClientMovement(color);
+        }
     }
 
     public Board getBoard(){
@@ -103,6 +116,12 @@ public class BoardView extends Pane {
                     pawn.setControlsEnabled(true);
                 }
             }
+        }
+    }
+
+    public void disactivateClientMovement(){
+        for (PawnView pawn : pawnViews) {
+            pawn.setControlsEnabled(false);
         }
     }
 

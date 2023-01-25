@@ -27,14 +27,19 @@ public class Server extends Application {
      * Creates proper GameController and starts ServerThread.
      * @param type checkers variant
      */
-    public void prepareGame(String type) {
+    public void prepareGame(String type,boolean isReapeted) {
         System.out.println("Preparing " + type + " checkers...");
         CheckersControllerFactory checkersControllerFactory = new CheckersControllerFactory();
         GameController gameController = checkersControllerFactory.createGameController(type);
         if(gameController == null) {
             return;
         }
-        thread = new ServerThread(port, view, gameController);
+        if(!isReapeted) {
+            thread = new ServerThread(port, view, gameController);
+        }
+        else{
+            thread = new HibernateServerThread(port,view,gameController);
+        }
         thread.start();
     }
 

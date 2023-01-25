@@ -62,16 +62,14 @@ public class ClientThread extends Thread {
             String gameVariant = messageSplit[1];
             playerColor = messageSplit[2];
             int boardSize = Integer.parseInt(messageSplit[3]);
-
-            Platform.runLater(() -> view.showBoard(boardSize));
+            boolean isRepeated = messageSplit[5].equals("true");
+            Platform.runLater(() -> view.showBoard(boardSize,isRepeated));
             Platform.runLater(() -> view.flipBoard());
             Board initBoard = getBoard(gameVariant, messageSplit[4]);
             Platform.runLater(() -> view.updateBoard(initBoard, "White"));
-
             while (true) {
                 serverMessage = in.readLine();
                 messageSplit = serverMessage.split(";");
-
                 if (messageSplit[0].equals("update")) {
                     String playerTurn = messageSplit[1];
                     Board board = getBoard(gameVariant, messageSplit[2]);
