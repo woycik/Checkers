@@ -7,7 +7,8 @@ public class HibernateGame {
     int id;
     String gameVariant;
     Set<HibernateMove> moves;
-    public HibernateGame(String gameVariant){
+
+    public HibernateGame(String gameVariant) {
         this.gameVariant = gameVariant;
     }
 

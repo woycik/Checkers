@@ -26,11 +26,9 @@ public class HibernateUtil {
                 sessionFactory = metadata.getSessionFactoryBuilder().build();
             }
             return sessionFactory;
-        }
-        catch(ServiceException ex){
+        } catch (ServiceException ex) {
             return null;
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }

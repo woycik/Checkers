@@ -14,11 +14,12 @@ public class PawnView extends Circle {
 
     /**
      * PawnView constructor. Calls Circle constructor.
-     * @param x center horizontal position in pixels
-     * @param y center vertical position in pixels
-     * @param radius pawn radius in pixels
-     * @param color pawn color
-     * @param boardSize number of fields horizontally and vertically on the game board
+     *
+     * @param x            center horizontal position in pixels
+     * @param y            center vertical position in pixels
+     * @param radius       pawn radius in pixels
+     * @param color        pawn color
+     * @param boardSize    number of fields horizontally and vertically on the game board
      * @param clientThread client thread instance
      */
     PawnView(int x, int y, int radius, Color color, int boardSize, ClientThread clientThread) {
@@ -37,6 +38,7 @@ public class PawnView extends Circle {
 
     /**
      * Updates pawn center horizontal position
+     *
      * @param x new center horizontal position in pixels
      */
     public void changeX(double x) {
@@ -45,6 +47,7 @@ public class PawnView extends Circle {
 
     /**
      * Updates pawn center vertical position
+     *
      * @param y new center vertical position in pixels
      */
     public void changeY(double y) {
@@ -53,6 +56,7 @@ public class PawnView extends Circle {
 
     /**
      * Enables or disables pawns moving depending on players turn.
+     *
      * @param controlsEnabled flag defining whether pawn controls should be enabled or disabled
      */
     public void setControlsEnabled(boolean controlsEnabled) {
@@ -61,6 +65,7 @@ public class PawnView extends Circle {
 
     /**
      * Calculates field's position in game board fields array according to screen position in pixels.
+     *
      * @return horizontal field cooridinate in game board fields array
      */
     public int getFieldX() {
@@ -71,6 +76,7 @@ public class PawnView extends Circle {
 
     /**
      * Calculates field's position in game board fields array according to screen position in pixels.
+     *
      * @return vertical field cooridinate in game board fields array
      */
     public int getFieldY() {
@@ -81,6 +87,7 @@ public class PawnView extends Circle {
 
     /**
      * Returns pawn color
+     *
      * @return pawn color
      */
     public Color getColor() {

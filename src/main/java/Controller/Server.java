@@ -15,6 +15,7 @@ public class Server extends Application {
 
     /**
      * Creates and initializes view.
+     *
      * @param stage
      */
     @Override
@@ -25,20 +26,20 @@ public class Server extends Application {
 
     /**
      * Creates proper GameController and starts ServerThread.
+     *
      * @param type checkers variant
      */
-    public void prepareGame(String type,boolean isReapeted) {
+    public void prepareGame(String type, boolean isReapeted) {
         System.out.println("Preparing " + type + " checkers...");
         CheckersControllerFactory checkersControllerFactory = new CheckersControllerFactory();
         GameController gameController = checkersControllerFactory.createGameController(type);
-        if(gameController == null) {
+        if (gameController == null) {
             return;
         }
-        if(!isReapeted) {
+        if (!isReapeted) {
             thread = new ServerThread(port, view, gameController);
-        }
-        else{
-            thread = new HibernateServerThread(port,view,gameController);
+        } else {
+            thread = new HibernateServerThread(port, view, gameController);
         }
         thread.start();
     }

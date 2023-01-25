@@ -11,15 +11,18 @@ public class Pawn {
 
     /**
      * Constructor
+     *
      * @param color pawn color
      */
     public Pawn(Color color) {
         this.color = color;
         this.isQueen = false;
     }
+
     /**
      * Constructor
-     * @param color pawn color
+     *
+     * @param color   pawn color
      * @param isQueen true if pawn is a queen
      */
 
@@ -30,6 +33,7 @@ public class Pawn {
 
     /**
      * Color returning method
+     *
      * @return Color
      */
 
@@ -39,6 +43,7 @@ public class Pawn {
 
     /**
      * Check if pawn is a queen
+     *
      * @return boolaen
      */
 

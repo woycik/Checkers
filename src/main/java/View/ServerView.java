@@ -53,7 +53,7 @@ public class ServerView {
         menu.add(polishButton, 0, 1);
         menu.add(russianButton, 1, 1);
         menu.add(englishButton, 2, 1);
-        menu.add(latestGameButton,3,1);
+        menu.add(latestGameButton, 3, 1);
         menu.setHgap(10);
         menu.setVgap(20);
         menu.setAlignment(Pos.CENTER);
@@ -85,7 +85,7 @@ public class ServerView {
             }
             Session session = sf.openSession();
             Transaction tx = session.beginTransaction();
-            q= session.createQuery("select gameVariant from Model.HibernateGame WHERE id IN (select max(id) from Model.HibernateGame)");
+            q = session.createQuery("select gameVariant from Model.HibernateGame WHERE id IN (select max(id) from Model.HibernateGame)");
             List<String> list = q.list();
             tx.commit();
             viewGameAgain(scene, list.get(0));
@@ -99,8 +99,9 @@ public class ServerView {
 
     /**
      * Prepares and starts checkers game of proper variant.
+     *
      * @param scene main scene
-     * @param type checkers variant
+     * @param type  checkers variant
      */
     public void startGame(Scene scene, String type) {
         final BorderPane borderPane = new BorderPane();
@@ -118,13 +119,14 @@ public class ServerView {
         vbox.getChildren().add(stopButton);
         borderPane.setCenter(vbox);
         scene.setRoot(borderPane);
-        server.prepareGame(type,false);
+        server.prepareGame(type, false);
     }
 
     /**
      * Prepares and starts checkers game of proper variant.
+     *
      * @param scene main scene
-     * @param type checkers variant
+     * @param type  checkers variant
      */
     public void viewGameAgain(Scene scene, String type) {
         final BorderPane borderPane = new BorderPane();
@@ -142,17 +144,18 @@ public class ServerView {
         vbox.getChildren().add(stopButton);
         borderPane.setCenter(vbox);
         scene.setRoot(borderPane);
-        server.prepareGame(type,true);
+        server.prepareGame(type, true);
     }
 
     /**
      * Displays information about game and announces winner.
+     *
      * @param winner color of winning player
      */
     public void announceWinner(String winner) {
         Scene scene = stage.getScene();
         Label serverStatusLabel = (Label) scene.lookup("#serverStatusLabel");
-        if(serverStatusLabel == null) {
+        if (serverStatusLabel == null) {
             serverStatusLabel = new Label();
             serverStatusLabel.setId("serverStatusLabel");
         }
@@ -165,7 +168,7 @@ public class ServerView {
     public void bothPlayersConnected() {
         Scene scene = stage.getScene();
         Label serverStatusLabel = (Label) scene.lookup("#serverStatusLabel");
-        if(serverStatusLabel == null) {
+        if (serverStatusLabel == null) {
             serverStatusLabel = new Label();
             serverStatusLabel.setId("serverStatusLabel");
         }

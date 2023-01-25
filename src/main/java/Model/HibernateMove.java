@@ -1,16 +1,16 @@
 package Model;
 
 public class HibernateMove {
-    private int  id;
+    private int id;
     private int moveNumber;
     private int beginX;
     private int beginY;
     private int endX;
     private int endY;
-    private String  playerColor;
+    private String playerColor;
     private HibernateGame gameId;
 
-    public HibernateMove(int move_number, int beginX, int beginY, int endX, int endY,String playerColor,HibernateGame gameId) {
+    public HibernateMove(int move_number, int beginX, int beginY, int endX, int endY, String playerColor, HibernateGame gameId) {
         this.moveNumber = move_number;
         this.beginX = beginX;
         this.beginY = beginY;
@@ -55,6 +55,7 @@ public class HibernateMove {
     public String getPlayerColor() {
         return playerColor;
     }
+
     public void setId(int id) {
         this.id = id;
     }

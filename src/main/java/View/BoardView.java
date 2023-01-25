@@ -18,10 +18,10 @@ public class BoardView extends Pane {
     private final Client client;
     private final ArrayList<PawnView> pawnViews;
     final double size;
-    Board board ;
+    Board board;
     boolean isRepeated;
 
-    public BoardView(int boardSize, Client client,boolean isRepeated) {
+    public BoardView(int boardSize, Client client, boolean isRepeated) {
         super();
         this.isRepeated = isRepeated;
         board = new Board(boardSize);
@@ -51,7 +51,7 @@ public class BoardView extends Pane {
                 getChildren().add(rectangles[i][j]);
             }
         }
-        if(isRepeated){
+        if (isRepeated) {
             setOnMouseClicked(new BoardEventHandler(client.thread));
         }
     }
@@ -66,22 +66,19 @@ public class BoardView extends Pane {
             for (int j = 0; j < board.getSize(); j++) {
                 if (fields[i][j].isOccupied()) {
                     Image img;
-                    PawnView pawnView = new PawnView((int)size * i + (int)Math.floor(size/2), (int)size * j + (int)Math.floor(size/2), 20, fields[i][j].getPawnColor(), board.getSize(), client.thread);
+                    PawnView pawnView = new PawnView((int) size * i + (int) Math.floor(size / 2), (int) size * j + (int) Math.floor(size / 2), 20, fields[i][j].getPawnColor(), board.getSize(), client.thread);
                     pawnViews.add(pawnView);
 
-                    if(!fields[i][j].getPawn().isQueen() && fields[i][j].getPawnColor().equals(Color.rgb(255,255,255))){
+                    if (!fields[i][j].getPawn().isQueen() && fields[i][j].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                         img = new Image("file:whitePawn.jpg");
                         pawnView.setFill(new ImagePattern(img));
-                    }
-                    else if(!fields[i][j].getPawn().isQueen() && fields[i][j].getPawnColor().equals(Color.rgb(0,0,0))){
+                    } else if (!fields[i][j].getPawn().isQueen() && fields[i][j].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                         img = new Image("file:blackPawn.jpg");
                         pawnView.setFill(new ImagePattern(img));
-                    }
-                    else if( fields[i][j].getPawnColor().equals(Color.rgb(255,255,255))){
+                    } else if (fields[i][j].getPawnColor().equals(Color.rgb(255, 255, 255))) {
                         img = new Image("file:whiteQueenPawn.jpg");
                         pawnView.setFill(new ImagePattern(img));
-                    }
-                    else if(fields[i][j].getPawnColor().equals(Color.rgb(0,0,0))){
+                    } else if (fields[i][j].getPawnColor().equals(Color.rgb(0, 0, 0))) {
                         img = new Image("file:blackQueenPawn.jpg");
                         pawnView.setFill(new ImagePattern(img));
                     }
@@ -89,15 +86,14 @@ public class BoardView extends Pane {
                 }
             }
         }
-        if(isRepeated){
+        if (isRepeated) {
             disactivateClientMovement();
-        }
-        else {
+        } else {
             activateClientMovement(color);
         }
     }
 
-    public Board getBoard(){
+    public Board getBoard() {
         return board;
     }
 
@@ -119,15 +115,15 @@ public class BoardView extends Pane {
         }
     }
 
-    public void disactivateClientMovement(){
+    public void disactivateClientMovement() {
         for (PawnView pawn : pawnViews) {
             pawn.setControlsEnabled(false);
         }
     }
 
-    public void flipScene(){
-        if(client.thread.playerColor.equals("Black")){
-            Rotate rotate = new Rotate(180,250,250);
+    public void flipScene() {
+        if (client.thread.playerColor.equals("Black")) {
+            Rotate rotate = new Rotate(180, 250, 250);
             this.getTransforms().addAll(rotate);
         }
     }

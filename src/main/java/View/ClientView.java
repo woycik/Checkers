@@ -69,16 +69,18 @@ public class ClientView {
 
     /**
      * Initializes and displays game board for the first time.
+     *
      * @param boardSize Number of fields horizontally and vertically on the board.
      */
-    public void showBoard(int boardSize,boolean isRepeated) {
+    public void showBoard(int boardSize, boolean isRepeated) {
         Scene scene = stage.getScene();
-        boardView = new BoardView(boardSize, client,isRepeated);
+        boardView = new BoardView(boardSize, client, isRepeated);
         scene.setRoot(boardView);
     }
 
     /**
      * Informs about game end and announces winning player.
+     *
      * @param winner Winner's color
      */
     public void announceWinner(String winner) {
@@ -92,7 +94,8 @@ public class ClientView {
 
     /**
      * Updates current game board state.
-     * @param board Board object reconstructed from server's message
+     *
+     * @param board       Board object reconstructed from server's message
      * @param playerColor Color of player allowed to make next move
      */
     public void updateBoard(Board board, String playerColor) {
@@ -102,7 +105,7 @@ public class ClientView {
     /**
      * Flips board vertically to place player's pawns on the bottom of the board.
      */
-    public void flipBoard(){
+    public void flipBoard() {
         boardView.flipScene();
     }
 }

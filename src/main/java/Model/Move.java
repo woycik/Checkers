@@ -10,9 +10,10 @@ public class Move {
 
     /**
      * Constructor
+     *
      * @param startField start field
-     * @param endField end field
-     * @param length length
+     * @param endField   end field
+     * @param length     length
      */
     Move(Field startField, Field endField, int length) {
         this.startField = startField;
@@ -22,6 +23,7 @@ public class Move {
 
     /**
      * Returns end field of the move
+     *
      * @return Field
      */
     public Field getEndField() {
