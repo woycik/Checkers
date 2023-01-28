@@ -4,6 +4,8 @@ import Model.CheckersControllerFactory;
 import View.ServerView;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Server side checkers application.
@@ -55,6 +57,8 @@ public class Server extends Application {
     }
 
     public static void main(String[] args) {
+        BasicConfigurator.configure();
+        PropertyConfigurator.configure("log4j.properties");
         launch(args);
     }
 }
