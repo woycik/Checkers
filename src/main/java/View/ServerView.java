@@ -73,13 +73,13 @@ public class ServerView {
 
         // setting button on click actions to prepare and start adequate game
         polishButton.setOnAction(event -> {
-            startGame(scene, "Polish");
+            choosePlayers(scene, "Polish");
         });
         russianButton.setOnAction(event -> {
-            startGame(scene, "Russian");
+            choosePlayers(scene, "Russian");
         });
         englishButton.setOnAction(event -> {
-            startGame(scene, "English");
+            choosePlayers(scene, "English");
         });
         latestGameButton.setOnAction(event -> {
             sf = HibernateUtil.getSessionFactory();
@@ -102,12 +102,43 @@ public class ServerView {
     }
 
     /**
-     * Prepares and starts checkers game of proper variant.
+     * Allows to choose Player vs Player or Player vs Computer game variant.
      *
      * @param scene main scene
      * @param type  checkers variant
      */
-    public void startGame(Scene scene, String type) {
+    public void choosePlayers(Scene scene, String type) {
+        final BorderPane borderPane = new BorderPane();
+        final VBox vbox = new VBox(20);
+        Label serverStatusLabel = new Label("Selected " + type + " Checkers. Select number of players.");
+        serverStatusLabel.setId("serverStatusLabel");
+
+        Button pvpButton = new Button("Player vs Player");
+        pvpButton.setStyle("-fx-background-color: lightblue; -fx-text-fill: white; -fx-padding: 15px;");
+        pvpButton.setOnAction(event -> {
+            startGame(scene, type, false);
+        });
+
+        Button pvcButton = new Button("Player vs Computer");
+        pvcButton.setStyle("-fx-background-color: lightblue; -fx-text-fill: white; -fx-padding: 15px;");
+        pvcButton.setOnAction(event -> {
+            startGame(scene, type, true);
+        });
+
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(pvpButton, pvcButton);
+        borderPane.setCenter(vbox);
+        scene.setRoot(borderPane);
+    }
+
+    /**
+     * Prepares and starts checkers game of proper variant.
+     *
+     * @param scene main scene
+     * @param type  checkers variant
+     * @param computerPlayer player vs computer game if true and player vs player game otherwise
+     */
+    public void startGame(Scene scene, String type, boolean computerPlayer) {
         final BorderPane borderPane = new BorderPane();
         final VBox vbox = new VBox(20);
         Label serverStatusLabel = new Label("Selected " + type + " Checkers. Waiting for players to connect.");
@@ -123,7 +154,7 @@ public class ServerView {
         vbox.getChildren().add(stopButton);
         borderPane.setCenter(vbox);
         scene.setRoot(borderPane);
-        server.prepareGame(type, false);
+        server.prepareGame(type, false, computerPlayer);
     }
 
     /**
@@ -148,7 +179,7 @@ public class ServerView {
         vbox.getChildren().add(stopButton);
         borderPane.setCenter(vbox);
         scene.setRoot(borderPane);
-        server.prepareGame(type, true);
+        server.prepareGame(type, true, false);
     }
 
     /**
