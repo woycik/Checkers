@@ -1,19 +1,14 @@
 package Controller;
 
-import Model.HibernateUtil;
 import Model.PlayerTurn;
 import View.ServerView;
 import javafx.application.Platform;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.SocketException;
-import java.util.List;
 
 public class HibernateServerThread extends  ServerThread {
     public HibernateServerThread(int port, ServerView view, GameController gameController) {

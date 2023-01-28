@@ -1,5 +1,9 @@
-
+DROP DATABASE Checkers;
 CREATE DATABASE Checkers;
+USE Checkers;
+
+CREATE USER IF NOT EXISTS server@localhost IDENTIFIED BY server;
+GRANT ALL PRIVILEGES ON Checkers.* TO server@localhost;
 
 CREATE TABLE game(
     id INT NOT NULL AUTO_INCREMENT,
