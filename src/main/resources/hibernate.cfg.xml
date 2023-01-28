@@ -20,11 +20,11 @@
         </property>
 
         <property name = "hibernate.connection.username">
-            root
+            server
         </property>
 
         <property name = "hibernate.connection.password">
-            Bureczek123.
+            server
         </property>
 
         <!-- List of XML mapping files -->

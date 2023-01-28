@@ -57,7 +57,7 @@ public class ClientServerCommunicationTest {
     @Before
     public void initializeThreads() {
         GameController controller = new PolishCheckersController();
-        serverThread = new ServerThread(4444, null, controller);
+        serverThread = new ServerThread(4444, null, controller, false);
         serverThread.start();
         firstClientThread = new ClientThread(4444, null);
         firstClientThread.start();

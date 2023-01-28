@@ -4,6 +4,8 @@ import Model.CheckersControllerFactory;
 import View.ServerView;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Server side checkers application.
@@ -28,18 +30,19 @@ public class Server extends Application {
      * Creates proper GameController and starts ServerThread.
      *
      * @param type checkers variant
+     * @param computerPlayer player vs computer game if true and player vs player game otherwise
      */
-    public void prepareGame(String type, boolean isReapeted) {
-        System.out.println("Preparing " + type + " checkers...");
+    public void prepareGame(String type, boolean isRepeated, boolean computerPlayer) {
+        System.out.println("Preparing " + type + " checkers for " + (computerPlayer ? "one player" : "two players") + "...");
         CheckersControllerFactory checkersControllerFactory = new CheckersControllerFactory();
         GameController gameController = checkersControllerFactory.createGameController(type);
         if (gameController == null) {
             return;
         }
-        if (!isReapeted) {
-            thread = new ServerThread(port, view, gameController);
-        } else {
+        if (isRepeated) {
             thread = new HibernateServerThread(port, view, gameController);
+        } else {
+            thread = new ServerThread(port, view, gameController, computerPlayer);
         }
         thread.start();
     }
@@ -54,6 +57,8 @@ public class Server extends Application {
     }
 
     public static void main(String[] args) {
+        BasicConfigurator.configure();
+        PropertyConfigurator.configure("log4j.properties");
         launch(args);
     }
 }

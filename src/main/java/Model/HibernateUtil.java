@@ -1,6 +1,5 @@
 package Model;
 
-
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -9,7 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.spi.ServiceException;
 
 public class HibernateUtil {
-    private static SessionFactory sessionFactory = buildSessionFactory();
+    private static SessionFactory sessionFactory;
 
     private static SessionFactory buildSessionFactory() {
         try {
@@ -34,10 +33,7 @@ public class HibernateUtil {
     }
 
     public static SessionFactory getSessionFactory() {
+        sessionFactory = buildSessionFactory();
         return sessionFactory;
-    }
-
-    public static void shutdown() {
-        getSessionFactory().close();
     }
 }

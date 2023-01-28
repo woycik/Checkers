@@ -1,23 +1,18 @@
 package Controller;
 
-import Model.HibernateUtil;
 import Model.PlayerTurn;
 import View.ServerView;
 import javafx.application.Platform;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.SocketException;
-import java.util.List;
 
 public class HibernateServerThread extends  ServerThread {
     public HibernateServerThread(int port, ServerView view, GameController gameController) {
-        super(port, view, gameController);
+        super(port, view, gameController, false);
     }
 
     @Override
@@ -55,13 +50,10 @@ public class HibernateServerThread extends  ServerThread {
                 }
 
                 System.out.println("Received message : " + clientMessage);
-
                 if (clientMessage != null && !clientMessage.isEmpty()) {
-                    System.out.println("Jestem tutaj");
                     String[] messageSplit = clientMessage.split(";");
                     if (messageSplit[0].equals("move")) { // player wants to make a move
                         handleMoveRequest(clientMessage);
-                        System.out.println("a ja tutaj");
                     }
                 }
                 clientMessage = "";
