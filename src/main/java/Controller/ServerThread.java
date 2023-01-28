@@ -33,7 +33,7 @@ public class ServerThread extends Thread {
     SessionFactory sf;
     Session factory;
     int moveNumber = 0;
-    Set<HibernateMove> moves = new HashSet<HibernateMove>();
+    Set<HibernateMove> moves = new HashSet<>();
     HibernateGame game;
 
 
@@ -49,7 +49,7 @@ public class ServerThread extends Thread {
     public void prepareHibernate() {
         sf = HibernateUtil.getSessionFactory();
         if (sf == null) {
-            System.out.println("Error: Initialize database from the file db.sql");
+            System.out.println("Session Factory is null.");
             return;
         }
         factory = sf.openSession();

@@ -84,7 +84,7 @@ public class ServerView {
         latestGameButton.setOnAction(event -> {
             sf = HibernateUtil.getSessionFactory();
             if (sf == null) {
-                System.out.println("Error: Initialize database from the file db.sql");
+                System.out.println("Session Factory is null.");
                 return;
             }
             Session session = sf.openSession();
