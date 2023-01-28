@@ -50,13 +50,10 @@ public class HibernateServerThread extends  ServerThread {
                 }
 
                 System.out.println("Received message : " + clientMessage);
-
                 if (clientMessage != null && !clientMessage.isEmpty()) {
-                    System.out.println("Jestem tutaj");
                     String[] messageSplit = clientMessage.split(";");
                     if (messageSplit[0].equals("move")) { // player wants to make a move
                         handleMoveRequest(clientMessage);
-                        System.out.println("a ja tutaj");
                     }
                 }
                 clientMessage = "";

@@ -31,12 +31,11 @@ public class ServerThread extends Thread {
     protected boolean computerPlayer;
     protected BotThread botThread;
 
-
-    SessionFactory sf;
-    Session factory;
-    int moveNumber = 0;
-    Set<HibernateMove> moves = new HashSet<>();
-    HibernateGame game;
+    protected SessionFactory sessionFactory;
+    protected Session session;
+    protected int moveNumber = 0;
+    protected Set<HibernateMove> moves = new HashSet<>();
+    protected HibernateGame game;
 
 
     public ServerThread(int port, ServerView view, GameController gameController, boolean computerPlayer) {
@@ -46,17 +45,17 @@ public class ServerThread extends Thread {
         this.firstPlayerSocket = null;
         this.secondPlayerSocket = null;
         this.computerPlayer = computerPlayer;
-        this.prepareHibernate();
+        prepareHibernate();
     }
 
     public void prepareHibernate() {
-        sf = HibernateUtil.getSessionFactory();
-        if (sf == null) {
+        sessionFactory = HibernateUtil.getSessionFactory();
+        if (sessionFactory == null) {
             System.out.println("Session Factory is null.");
             return;
         }
-        factory = sf.openSession();
-        factory.beginTransaction();
+        session = sessionFactory.openSession();
+        session.beginTransaction();
         game = new HibernateGame(gameController.getGameVariant());
     }
 
@@ -125,10 +124,13 @@ public class ServerThread extends Thread {
                 clientMessage = "";
             }
             sendWinnerMessage();
+            saveInDatabase();
         } catch (SocketException se) {
             System.out.println("Server socket closed");
+            saveInDatabase();
         } catch (Exception e) {
             e.printStackTrace();
+            saveInDatabase();
         }
     }
 
@@ -140,9 +142,9 @@ public class ServerThread extends Thread {
      * @param boardString Initial state of Board
      */
     private void sendGameStartMessages(String gameVariant, int boardSize, String boardString) {
-        // start;game.hbm.xml;color;boardSize;boardString
+        // start;gameVariant;color;boardSize;boardString;isRepeated
         firstOut.println("start;" + gameVariant + ";White;" + boardSize + ";" + boardString + ";false");
-        secondOut.println("start;" + gameVariant + ";Black;" + boardSize + ";" + boardString + ";flase");
+        secondOut.println("start;" + gameVariant + ";Black;" + boardSize + ";" + boardString + ";false");
         System.out.println("Sent game start message to both players");
     }
 
@@ -288,7 +290,7 @@ public class ServerThread extends Thread {
             }
 
             if (serverSocket != null && !serverSocket.isClosed()) {
-                saveInDataBase();
+                saveInDatabase();
                 serverSocket.close();
             }
         } catch (Exception e) {
@@ -315,10 +317,12 @@ public class ServerThread extends Thread {
         moves.add(move);
     }
 
-    public void saveInDataBase() {
-        game.setMoves(moves);
-        factory.persist(game);
-        factory.getTransaction().commit();
-        HibernateUtil.shutdown();
+    public void saveInDatabase() {
+        if(session.isOpen()) {
+            game.setMoves(moves);
+            session.persist(game);
+            session.getTransaction().commit();
+            session.close();
+        }
     }
 }

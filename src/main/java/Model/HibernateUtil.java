@@ -8,7 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.spi.ServiceException;
 
 public class HibernateUtil {
-    private static SessionFactory sessionFactory = buildSessionFactory();
+    private static SessionFactory sessionFactory;
 
     private static SessionFactory buildSessionFactory() {
         try {
@@ -33,6 +33,7 @@ public class HibernateUtil {
     }
 
     public static SessionFactory getSessionFactory() {
+        sessionFactory = buildSessionFactory();
         return sessionFactory;
     }
 

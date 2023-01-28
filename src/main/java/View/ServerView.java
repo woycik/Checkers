@@ -1,7 +1,6 @@
 package View;
 
 import Controller.Server;
-import Model.HibernateGame;
 import Model.HibernateUtil;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
@@ -10,10 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,10 +24,8 @@ import java.util.List;
  * Displays game server controls and displays information about connection.
  */
 public class ServerView {
-    final Server server;
-    final Stage stage;
-    SessionFactory sf;
-    Query q;
+    private final Server server;
+    private final Stage stage;
 
     public ServerView(Server server, Stage stage) {
         this.server = server;
@@ -47,7 +42,6 @@ public class ServerView {
         Button russianButton = new Button("Russian mode");
         Button englishButton = new Button("English mode");
         Button latestGameButton = new Button("Latest game");
-
 
         //adding labels and buttons into GridPane
         Label chooseModeLabel = new Label("Choose mode:");;
@@ -82,17 +76,7 @@ public class ServerView {
             choosePlayers(scene, "English");
         });
         latestGameButton.setOnAction(event -> {
-            sf = HibernateUtil.getSessionFactory();
-            if (sf == null) {
-                System.out.println("Session Factory is null.");
-                return;
-            }
-            Session session = sf.openSession();
-            Transaction tx = session.beginTransaction();
-            q = session.createQuery("select gameVariant from Model.HibernateGame WHERE id IN (select max(id) from Model.HibernateGame)");
-            List<String> list = q.list();
-            tx.commit();
-            viewGameAgain(scene, list.get(0));
+            replayLastGame(scene);
         });
 
         stage.setOnCloseRequest(e -> Platform.exit());
@@ -142,16 +126,10 @@ public class ServerView {
         final BorderPane borderPane = new BorderPane();
         final VBox vbox = new VBox(20);
         Label serverStatusLabel = new Label("Selected " + type + " Checkers. Waiting for players to connect.");
-        Button stopButton = new Button("Stop");
-        stopButton.setStyle("-fx-background-color: darkred; -fx-text-fill: white; -fx-padding: 15px;");
-        stopButton.setOnAction(event -> {
-            server.stop();
-            init();
-        });
         serverStatusLabel.setId("serverStatusLabel");
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().add(serverStatusLabel);
-        vbox.getChildren().add(stopButton);
+        vbox.getChildren().add(getStopButton());
         borderPane.setCenter(vbox);
         scene.setRoot(borderPane);
         server.prepareGame(type, false, computerPlayer);
@@ -166,17 +144,12 @@ public class ServerView {
     public void viewGameAgain(Scene scene, String type) {
         final BorderPane borderPane = new BorderPane();
         final VBox vbox = new VBox(20);
-        Label serverStatusLabel = new Label("You have chosen to watch previous game.");
-        Button stopButton = new Button("Stop");
-        stopButton.setStyle("-fx-background-color: darkred; -fx-text-fill: white; -fx-padding: 15px;");
-        stopButton.setOnAction(event -> {
-            server.stop();
-            init();
-        });
+        Label serverStatusLabel = new Label("Replaying latest game. Waiting for spectator to connect...");
+
         serverStatusLabel.setId("serverStatusLabel");
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().add(serverStatusLabel);
-        vbox.getChildren().add(stopButton);
+        vbox.getChildren().add(getStopButton());
         borderPane.setCenter(vbox);
         scene.setRoot(borderPane);
         server.prepareGame(type, true, false);
@@ -208,5 +181,38 @@ public class ServerView {
             serverStatusLabel.setId("serverStatusLabel");
         }
         serverStatusLabel.setText("Both players connected. Starting game.");
+    }
+
+    /**
+     * Replays last saved game.
+     * @param scene main scene
+     */
+    public void replayLastGame(Scene scene) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        if (sessionFactory == null) {
+            System.out.println("Session Factory is null.");
+            return;
+        }
+        try {
+            Session session = sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
+            Query query = session.createQuery("select gameVariant from Model.HibernateGame WHERE id IN (select max(id) from Model.HibernateGame)");
+            List<String> list = query.list();
+            tx.commit();
+            viewGameAgain(scene, list.get(0));
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Button getStopButton() {
+        Button stopButton = new Button("Stop");
+        stopButton.setStyle("-fx-background-color: darkred; -fx-text-fill: white; -fx-padding: 15px;");
+        stopButton.setOnAction(event -> {
+            server.stop();
+            init();
+        });
+        return stopButton;
     }
 }
