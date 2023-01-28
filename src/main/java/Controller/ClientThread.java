@@ -18,15 +18,14 @@ import static javafx.scene.paint.Color.rgb;
  * and it updates the view according to Server's response.
  */
 public class ClientThread extends Thread {
-    final int port;
     public String playerColor;
-    final ClientView view;
-    Socket socket;
-    PrintWriter out;
-    BufferedReader in;
+    protected final int port;
+    protected final ClientView view;
+    protected Socket socket;
+    protected PrintWriter out;
+    protected String gameVariant;
 
     /**
-     *
      * @param port port on which the server listens
      * @param view ClientView which must be connected with this thread's logic
      */
@@ -45,8 +44,9 @@ public class ClientThread extends Thread {
         try {
             socket = new Socket("localhost", port);
             out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            Platform.runLater(() -> view.waitingForOpponent());
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            updateViewWaitingForOpponent();
 
             String serverMessage;
             String[] messageSplit;
@@ -59,32 +59,30 @@ public class ClientThread extends Thread {
             } while (!serverMessage.split(";")[0].equals("start"));
 
             messageSplit = serverMessage.split(";");
-            String gameVariant = messageSplit[1];
+            gameVariant = messageSplit[1];
             playerColor = messageSplit[2];
             int boardSize = Integer.parseInt(messageSplit[3]);
             boolean isRepeated = messageSplit[5].equals("true");
-            Platform.runLater(() -> view.showBoard(boardSize,isRepeated));
-            Platform.runLater(() -> view.flipBoard());
+            updateViewShowBoard(boardSize, isRepeated);
+            updateViewFlipBoard();
             Board initBoard = getBoard(gameVariant, messageSplit[4]);
-            Platform.runLater(() -> view.updateBoard(initBoard, "White"));
+            updateViewUpdateBoard(initBoard, "White");
             while (true) {
                 serverMessage = in.readLine();
                 messageSplit = serverMessage.split(";");
                 if (messageSplit[0].equals("update")) {
-                    String playerTurn = messageSplit[1];
-                    Board board = getBoard(gameVariant, messageSplit[2]);
-                    Platform.runLater(() -> view.updateBoard(board, playerTurn));
+                    handleUpdate(messageSplit);
                 } else if (messageSplit[0].equals("win")) {
                     String winner = messageSplit[1];
-                    Platform.runLater(() -> view.announceWinner(winner));
+                    updateViewAnnounceWinner(winner);
                     break;
                 } else if (messageSplit[0].equals("disconnect")) {
-                    Platform.runLater(() -> view.serverDisconnected());
+                    updateViewServerDisconnected();
                     break;
                 }
             }
         } catch (IOException ioe) {
-            Platform.runLater(() -> view.connectionFailed());
+            updateViewConnectionFailed();
         } catch (Exception e) {
             e.printStackTrace();
             try {
@@ -96,8 +94,90 @@ public class ClientThread extends Thread {
     }
 
     /**
+     * Handles server message with board update.
+     *
+     * @param messageSplit server message divided in Strings
+     */
+    protected void handleUpdate(String[] messageSplit) {
+        String playerTurn = messageSplit[1];
+        Board board = getBoard(gameVariant, messageSplit[2]);
+        updateViewUpdateBoard(board, playerTurn);
+    }
+
+    /**
+     * Updates view and sets scene to Waiting for opponent if view is not null.
+     */
+    protected void updateViewWaitingForOpponent() {
+        if (view != null) {
+            Platform.runLater(() -> view.waitingForOpponent());
+        }
+    }
+
+    /**
+     * Updates view and shows board if view is not null.
+     *
+     * @param boardSize  number of fields horizontally and vertically
+     * @param isRepeated is this a replay of game
+     */
+    protected void updateViewShowBoard(int boardSize, boolean isRepeated) {
+        if (view != null) {
+            Platform.runLater(() -> view.showBoard(boardSize, isRepeated));
+        }
+    }
+
+    /**
+     * Updates view and flips board according to player's color if view is not null.
+     */
+    protected void updateViewFlipBoard() {
+        if (view != null) {
+            Platform.runLater(() -> view.flipBoard());
+        }
+    }
+
+    /**
+     * Updates view and displays current board state if view is not null.
+     *
+     * @param board      current board state
+     * @param playerTurn color of player allowed to make next move
+     */
+    protected void updateViewUpdateBoard(Board board, String playerTurn) {
+        if (view != null) {
+            Platform.runLater(() -> view.updateBoard(board, playerTurn));
+        }
+    }
+
+    /**
+     * Updates view and sets scene to Announce Winner if view is not null.
+     *
+     * @param winner color of winning player
+     */
+    protected void updateViewAnnounceWinner(String winner) {
+        if (view != null) {
+            Platform.runLater(() -> view.announceWinner(winner));
+        }
+    }
+
+    /**
+     * Updates view and sets scene to Server Disconnected if view is not null.
+     */
+    protected void updateViewServerDisconnected() {
+        if (view != null) {
+            Platform.runLater(() -> view.serverDisconnected());
+        }
+    }
+
+    /**
+     * Updates view and sets scene to Connection Failed if view is not null.
+     */
+    protected void updateViewConnectionFailed() {
+        if (view != null) {
+            Platform.runLater(() -> view.connectionFailed());
+        }
+    }
+
+    /**
      * Reconstructs game board basing on server message
-     * @param gameVariant type of checkers game
+     *
      * @param message String of fields separated with commas. Each character represents one field:
      *                w - white pawn
      *                b - black pawn
@@ -106,10 +186,10 @@ public class ClientThread extends Thread {
      *                0 - empty field
      * @return Board reconstructed from server's message
      */
-    private Board getBoard(String gameVariant, String message) {
+    protected Board getBoard(String gameVariant, String message) {
         BoardFactory boardFactory = new BoardFactory();
         Board board = boardFactory.createBoard(gameVariant);
-        if(board == null) {
+        if (board == null) {
             return null;
         }
 
@@ -138,6 +218,7 @@ public class ClientThread extends Thread {
 
     /**
      * Sends request to perform a move to the server.
+     *
      * @param x1 starting field x coordinate
      * @param y1 starting field y coordinate
      * @param x2 landing field x coordinate

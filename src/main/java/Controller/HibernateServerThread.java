@@ -12,7 +12,7 @@ import java.net.SocketException;
 
 public class HibernateServerThread extends  ServerThread {
     public HibernateServerThread(int port, ServerView view, GameController gameController) {
-        super(port, view, gameController);
+        super(port, view, gameController, false);
     }
 
     @Override

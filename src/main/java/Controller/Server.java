@@ -42,7 +42,7 @@ public class Server extends Application {
         if (isRepeated) {
             thread = new HibernateServerThread(port, view, gameController);
         } else {
-            thread = new ServerThread(port, view, gameController);
+            thread = new ServerThread(port, view, gameController, computerPlayer);
         }
         thread.start();
     }

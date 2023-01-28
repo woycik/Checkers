@@ -28,6 +28,8 @@ public class ServerThread extends Thread {
     protected PrintWriter firstOut;
     protected BufferedReader secondIn;
     protected PrintWriter secondOut;
+    protected boolean computerPlayer;
+    protected BotThread botThread;
 
 
     SessionFactory sf;
@@ -37,12 +39,13 @@ public class ServerThread extends Thread {
     HibernateGame game;
 
 
-    public ServerThread(int port, ServerView view, GameController gameController) {
+    public ServerThread(int port, ServerView view, GameController gameController, boolean computerPlayer) {
         this.port = port;
         this.view = view;
         this.gameController = gameController;
         this.firstPlayerSocket = null;
         this.secondPlayerSocket = null;
+        this.computerPlayer = computerPlayer;
         this.prepareHibernate();
     }
 
@@ -68,10 +71,15 @@ public class ServerThread extends Thread {
         System.out.println("Server is listening on port " + port);
         try {
             serverSocket = new ServerSocket(port);
+
             do {
                 if (!isConnected(firstPlayerSocket)) {
                     firstPlayerSocket = serverSocket.accept();
                 } else if (!isConnected(secondPlayerSocket)) {
+                    if (computerPlayer) { // if this is a Player vs Computer game - create bot thread and accept as second player
+                        botThread = new BotThread(port);
+                        botThread.start();
+                    }
                     secondPlayerSocket = serverSocket.accept();
                 }
                 System.out.println("Client connected");
@@ -267,6 +275,10 @@ public class ServerThread extends Thread {
      */
     public void closeServerSocket() {
         try {
+            if (botThread != null) {
+                botThread.stop();
+            }
+
             if (firstOut != null) {
                 firstOut.println("disconnect");
             }

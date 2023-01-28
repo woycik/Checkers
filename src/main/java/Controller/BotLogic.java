@@ -1,4 +1,4 @@
-package Bot;
+package Controller;
 
 import Model.Board;
 import Model.Field;
@@ -8,27 +8,26 @@ import java.util.List;
 import java.util.Random;
 
 public class BotLogic {
-    BotThread bot;
-    Board board;
-    Field fieldBegin;
-    Field fieldEnd;
+    private static final Random random = new Random();
+    private final BotThread botThread;
 
-    public BotLogic(BotThread bot, Board board) {
-        this.bot = bot;
-        this.board = board;
+    public BotLogic(BotThread botThread) {
+        this.botThread = botThread;
     }
 
-    public void botMakeMove(Board board, String color) throws InterruptedException {
-        Thread.sleep(100);
-        Random rand = new Random();
-        this.prepareBoard(board, color);
+    public void botMakeMove(Board board, String color) {
+        prepareBoard(board, color);
+
+        Field fieldBegin = null;
+        Field fieldEnd = null;
+
         if (!board.capturePossible.isEmpty()) {
-            fieldBegin = board.capturePossible.get(rand.nextInt(board.capturePossible.size()));
+            fieldBegin = board.capturePossible.get(random.nextInt(board.capturePossible.size()));
             fieldEnd = fieldBegin.getPossibleCaptures().get(0);
         } else {
             board.addToPossibleMoves();
             while (fieldBegin == null) {
-                Field randField = board.getFields()[rand.nextInt(bot.boardSize)][rand.nextInt(bot.boardSize)];
+                Field randField = board.getFields()[random.nextInt(board.getSize())][random.nextInt(board.getSize())];
                 if (color.equals("Black")) {
                     if (randField.isOccupied() && randField.getPawnColor().equals(Color.rgb(0, 0, 0)) && randField.getPossibleMoves().size() > 0) {
                         fieldBegin = randField;
@@ -41,13 +40,12 @@ public class BotLogic {
             }
 
             List<Field> f = fieldBegin.getPossibleMoves();
-            fieldEnd = f.get(rand.nextInt(f.size()));
+            fieldEnd = f.get(random.nextInt(f.size()));
         }
-        bot.makeMove(fieldBegin.getX(), fieldBegin.getY(), fieldEnd.getX(), fieldEnd.getY());
+        botThread.makeMove(fieldBegin.getX(), fieldBegin.getY(), fieldEnd.getX(), fieldEnd.getY());
     }
 
     private void prepareBoard(Board board, String color) {
-        fieldBegin = null;
         board.capturePossible.clear();
         board.setMyPawns();
         board.addToPossibleCaptures(color);
