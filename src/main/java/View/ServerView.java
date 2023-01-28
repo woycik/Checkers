@@ -4,13 +4,16 @@ import Controller.Server;
 import Model.HibernateGame;
 import Model.HibernateUtil;
 import javafx.application.Platform;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -47,9 +50,10 @@ public class ServerView {
 
 
         //adding labels and buttons into GridPane
-        Label chooseModeLabel = new Label("Choose mode:");
+        Label chooseModeLabel = new Label("Choose mode:");;
         GridPane menu = new GridPane();
-        menu.add(chooseModeLabel, 1, 0);
+        menu.add(chooseModeLabel, 1, 0, 2, 1);
+        GridPane.setHalignment(chooseModeLabel, HPos.CENTER);
         menu.add(polishButton, 0, 1);
         menu.add(russianButton, 1, 1);
         menu.add(englishButton, 2, 1);

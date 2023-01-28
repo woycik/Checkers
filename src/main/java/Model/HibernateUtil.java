@@ -1,6 +1,5 @@
 package Model;
 
-
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
