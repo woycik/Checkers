@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.EnglishBoard;
-import Model.PlayerTurn;
 
 public class EnglishCheckersController extends GameController {
     /**

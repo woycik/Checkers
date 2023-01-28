@@ -3,7 +3,6 @@ package Controller;
 import Model.*;
 import View.ServerView;
 import javafx.application.Platform;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import java.io.BufferedReader;
@@ -12,13 +11,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
-
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import static javafx.scene.paint.Color.rgb;
 

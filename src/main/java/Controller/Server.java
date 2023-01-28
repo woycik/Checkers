@@ -39,10 +39,10 @@ public class Server extends Application {
         if (gameController == null) {
             return;
         }
-        if (!isRepeated) {
-            thread = new ServerThread(port, view, gameController);
-        } else {
+        if (isRepeated) {
             thread = new HibernateServerThread(port, view, gameController);
+        } else {
+            thread = new ServerThread(port, view, gameController);
         }
         thread.start();
     }
