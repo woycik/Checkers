@@ -73,7 +73,6 @@ public class HibernateServerThread extends  ServerThread {
     }
 
     private void handleMoveRequest(String message) {
-        System.out.println("Jestem w srodku funkcji");
         String[] messageSplit = message.split(";");
         // move;x1;y1;x2;y2
         int x1 = Integer.parseInt(messageSplit[1]);
